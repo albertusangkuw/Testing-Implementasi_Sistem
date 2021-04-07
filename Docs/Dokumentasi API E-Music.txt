@@ -1,0 +1,30 @@
+API for E-Music
+Rev 0.1
+
+POST	 localhost/registrasi => email,password ==> username potong dari email sampai @
+GET 	 localhost/login => email, password
+
+GET	 localhost/user/:iduser
+PUT 	 localhost/user/:iduser/update
+DELETE 	 localhost/user/:iduser/delete
+POST 	 localhost/user/:iduser/following/:iduser -> add like album
+DELETE   localhost/user/:iduser/following/:iduser/remove -> remove like album
+
+GET 	 localhost/music/:idmusic -> returnnya file mp3 lagu
+POST	 localhost/music/:idmusic/likes/:iduser -> add like song
+DELETE	 localhost/music/:idmusic/likes/:iduser/remove -> remove like song
+
+GET	 localhost/album/:idalbum ->
+GET 	 localhost/album/?userid=9 -> return json daftar album array dan detail album 
+POST 	 localhost/album/:idalbum/likes/:iduser -> add like album
+DELETE   localhost/album/:idalbum/likes/:iduser/remove -> remove like album
+
+
+POST 	 localhost/playlist -> create new playlist
+GET  	 localhost/playlist/:idplaylist -> return json detail playlist
+DELETE   localhost/playlist/:idplaylist/remove -> remove playlist
+PUT  	 localhost/playlist/:idplaylist/update -> update playlist
+GET 	 localhost/playlist/?userid=9 -> return json daftar playlist array dan 
+
+
+
