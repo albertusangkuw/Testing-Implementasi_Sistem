@@ -1,4 +1,4 @@
-package com.albertusangkuw.emusic.ui.notifications
+package com.tubes.emusic.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

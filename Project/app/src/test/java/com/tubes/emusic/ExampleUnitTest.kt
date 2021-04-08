@@ -1,4 +1,4 @@
-package com.albertusangkuw.emusic
+package com.tubes.emusic
 
 import org.junit.Test
 
