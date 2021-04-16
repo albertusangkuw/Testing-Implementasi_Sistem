@@ -12,7 +12,7 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_library"
         android:icon="@drawable/ic_library_logo"
         android:title="Your Library" />
 

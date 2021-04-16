@@ -1,49 +1,50 @@
 package com.tubes.emusic
 
 import android.os.Bundle
-import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    //#1 Defining a BottomSheetBehavior instance
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    lateinit var navView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //#2 Initializing the BottomSheetBehavior
-        bottomSheetBehavior =  BottomSheetBehavior.from( findViewById(R.id.bottomSheet))
 
-        //#3 Listening to State Changes of BottomSheet
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                TODO("Not yet implemented")
-            }
-
-
-        })
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+        navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+        val appBarConfiguration = AppBarConfiguration.Builder(setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_library)).build()
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // To remove title in apps
         supportActionBar?.hide()
+    }
+    public fun openFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager
+        transaction.beginTransaction()
+        .replace(R.id.nav_host_fragment, fragment).commit()
+    }
+    // Source https://stackoverflow.com/questions/31590919/replace-fragment-with-another-on-back-button
+    override fun onBackPressed() {
+        // note: you can also use 'getSupportFragmentManager()'
+        val transaction = supportFragmentManager
+        if (transaction.getBackStackEntryCount() === 0) {
+            // No backstack to pop, so calling super
+            super.onBackPressed()
+        } else {
+            transaction.popBackStack()
+        }
     }
 }
