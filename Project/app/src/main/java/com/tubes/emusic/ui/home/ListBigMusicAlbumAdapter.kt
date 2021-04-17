@@ -29,11 +29,9 @@ class ListBigMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>):
                     //val commit = fm.beginTransaction().add(R.id.navigation_home, ldf).commit()
 
                     //Insialisisasi Bundle
-                    val args = Bundle()
-                    args.putString("id", thumb.id)
-                    args.putString("type", thumb.type)
-                    args.putString("title", thumb.title)
-                    args.putString("urlImage", thumb.urlImage)
+                    val args =  (context as MainActivity).setBundle(thumb)
+
+
                     val ldf = DetailPlaylistAlbum()
                     // Menaruh data ke dalam fragment yang dikirim
                     ldf.setArguments(args)

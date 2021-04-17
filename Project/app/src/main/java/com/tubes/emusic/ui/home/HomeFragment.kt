@@ -1,14 +1,22 @@
 package com.tubes.emusic.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.component.DetailPlaylistAlbum
+import com.tubes.emusic.ui.playbar.PlaybarFragment
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class HomeFragment : Fragment()  {
@@ -22,6 +30,15 @@ class HomeFragment : Fragment()  {
         rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
         rv_bigmusicalbum.setHasFixedSize(true)
         showRecyclerListBigMusicAlbum()
+
+        //Change greetings
+        view.findViewById<TextView>(R.id.text_home_greeting).setText(dayGreeting())
+        view.findViewById<Button>(R.id.btn_testing_playbar).setOnClickListener {
+            Log.e("Abstract", "Playbar excecuted")
+            val ldf = PlaybarFragment()
+            // Menaruh data ke dalam fragment yang dikirim
+            (context as MainActivity).openFragment(ldf)
+        }
         return view
     }
 
@@ -36,5 +53,27 @@ class HomeFragment : Fragment()  {
         rv_bigmusicalbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         val listHeroAdapter = ListBigMusicAlbumAdapter(list)
         rv_bigmusicalbum.adapter = listHeroAdapter
+    }
+
+    fun dayGreeting(): String {
+
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH")
+        val formatted = current.format(formatter)
+        val hour: Int? =  formatted.toInt()
+        var status = "Good Day"
+        if (hour != null) {
+            if(hour > 18){
+                status ="Good evening"
+                Log.e("Abstract", "Good evening " + formatted)
+            }else if(hour > 12){
+                status ="Good afternoon"
+                Log.e("Abstract", "Good afternoon " + formatted)
+            }else{
+                status ="Good morning"
+                Log.e("Abstract", "Good morning " + formatted)
+           }
+        }
+        return status
     }
 }

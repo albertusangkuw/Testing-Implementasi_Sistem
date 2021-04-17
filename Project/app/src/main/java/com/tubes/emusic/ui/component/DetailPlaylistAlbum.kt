@@ -34,6 +34,7 @@ class DetailPlaylistAlbum : Fragment() {
         var view = inflater.inflate(R.layout.fragment_detail_playlist_album, container, false)
         var tvdesc =  view.findViewById<TextView>(R.id.tv_detail_playlist_description)
 
+
         Glide.with(view.context).load(arguments?.getString("urlImage")).into(view.findViewById<ImageView>(R.id.img_detail_musicalbum_photo))
         rv_music = view.findViewById<RecyclerView>(R.id.rv_item_music)
         rv_music.setHasFixedSize(true)

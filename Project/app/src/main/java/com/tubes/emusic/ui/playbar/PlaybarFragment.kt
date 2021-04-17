@@ -1,16 +1,18 @@
 package com.tubes.emusic.ui.playbar
 
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.fragment.app.Fragment
 import com.tubes.emusic.R
+import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,43 +20,99 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PlaybarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var runnable:Runnable
+    private var handler: Handler = Handler()
+    private var pause:Boolean = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_playbar, container, false)
+       var view = inflater.inflate(R.layout.fragment_playbar, container, false)
+
+       var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)
+       var pauseBtn : ImageButton = view.findViewById(R.id.img_repeat_icon)
+
+       // Start the media player
+       playBtn.setOnClickListener{
+           val url = "https://archive.org/details/NathanielConteDemoSongs/01_Al_Sol.mp3" // your URL here
+           if(pause){
+               mediaPlayer.seekTo(mediaPlayer.currentPosition)
+               mediaPlayer.start()
+               pause = false
+           }else{
+/*
+               mediaPlayer = MediaPlayer().apply {
+                   setAudioAttributes(
+                           AudioAttributes.Builder()
+                                   .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                   .setUsage(AudioAttributes.USAGE_MEDIA)
+                                   .build()
+                   )
+                   setDataSource(url)
+                   prepareAsync() // might take long! (for buffering, etc)
+                   start()
+               }
+*/              playMp3(url)
+               Log.e("Abstract", "Playbar is running")
+
+           }
+           playBtn.isEnabled = false
+           pauseBtn.isEnabled = true
+
+           mediaPlayer.setOnCompletionListener {
+               playBtn.isEnabled = true
+               pauseBtn.isEnabled = false
+           }
+       }
+       // Pause the media player
+       pauseBtn.setOnClickListener {
+           if(mediaPlayer.isPlaying){
+               mediaPlayer.pause()
+               pause = true
+               playBtn.isEnabled = true
+               pauseBtn.isEnabled = false
+
+
+           }
+       }
+       return  view
+   }
+
+    // Creating an extension property to get the media player time duration in seconds
+    val MediaPlayer.seconds:Int
+        get() {
+            return this.duration / 1000
+        }
+    // Creating an extension property to get media player current position in seconds
+    val MediaPlayer.currentSeconds:Int
+        get() {
+            return this.currentPosition/1000
+        }
+
+    fun playMp3(_link: String?) {
+        mediaPlayer.reset()
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        try {
+            mediaPlayer.setDataSource(_link)
+            //mediaPlayer.prepare(); // might take long! (for buffering, etc)   //@@
+            mediaPlayer.prepareAsync()
+        } catch (e: IllegalArgumentException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        } catch (e: SecurityException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        } catch (e: IllegalStateException) {
+            // TODO Auto-generated catch block///
+            e.printStackTrace()
+        } catch (e: IOException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlaybarFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlaybarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
