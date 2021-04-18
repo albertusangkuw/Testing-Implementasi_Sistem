@@ -10,6 +10,7 @@
     android:paddingRight="17dp"
     android:background="@color/black"
     android:orientation="vertical"
+    android:clickable="true"
     tools:context=".ui.component.DetailPlaylistAlbum">
 
 

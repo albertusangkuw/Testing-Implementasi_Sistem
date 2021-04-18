@@ -64,4 +64,9 @@
     <string name="date_of_birth_text">Day/Month/Year</string>
     <string name="cancel_text">CANCEL</string>
     <string name="save_text">SAVE</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

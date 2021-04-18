@@ -7,9 +7,10 @@
     android:background="@color/black"
     android:orientation="vertical"
     android:paddingLeft="60dp"
-    android:paddingTop="@dimen/fragment_vertical_padding"
     android:paddingRight="60dp"
-    tools:context=".ui.login.LoginFragment">
+    android:clickable="true"
+    android:focusable="true"
+    >
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -33,7 +34,7 @@
         android:id="@+id/tv_music_for_everyone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:text="@string/music_for_everyone_text"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -120,7 +121,7 @@
         android:id="@+id/tv_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30sp"
+        android:layout_marginTop="20sp"
         android:gravity="center"
         android:text="@string/dont_have_account_text"
         android:textColor="@color/white"/>

@@ -1,5 +1,6 @@
 package com.tubes.emusic.ui.playbar
 
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -9,8 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.tubes.emusic.R
+import com.tubes.emusic.entity.Music
 import java.io.IOException
 
 
@@ -20,10 +25,11 @@ import java.io.IOException
  * create an instance of this fragment.
  */
 class PlaybarFragment : Fragment() {
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var runnable:Runnable
-    private var handler: Handler = Handler()
-    private var pause:Boolean = false
+    companion object{
+        private lateinit var mediaPlayer: MediaPlayer
+        private var pause:Boolean = false
+        private var isPlaying :Boolean = false
+    }
 
 
     override fun onCreateView(
@@ -31,57 +37,69 @@ class PlaybarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       var view = inflater.inflate(R.layout.fragment_playbar, container, false)
+        var view = inflater.inflate(R.layout.fragment_playbar, container, false)
 
-       var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)
-       var pauseBtn : ImageButton = view.findViewById(R.id.img_repeat_icon)
+        val dummyMusic = Music("1","1","The Days","https://mir-s3-cdn-cf.behance.net/project_modules/disp/e705a534040642.56c2206da74cf.jpg","http://18.140.59.14:8081/music/17/data","Avicii","Electronic")
+
+
+        Glide.with(view.context).load( dummyMusic.urlAlbumPhoto).into(view.findViewById<ImageView>(R.id.img_cover))
+
+        var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)
+
+        //var beginTimeTv : TextView = view.findViewById(R.id.tv_begin_time)
+        //var endTimeTv : TextView = view.findViewById(R.id.tv_end_time)
+
+        view.findViewById<TextView>(R.id.tv_title_playbar_song).setText(dummyMusic.title)
+        view.findViewById<TextView>(R.id.tv_artist_playbar_name).setText(dummyMusic.artistName)
+        //view.findViewById<com.google.android.material.slider.Slider>(R.id.icon_seekbar_progress).setPadding(0,0,0,0)
+       /*
+       var shuflleBtn : ImageButton = view.findViewById(R.id.img_shuffle_icon)
+       var previousBtn : ImageButton = view.findViewById(R.id.img_previous_icon)
+       var nextBtn : ImageButton = view.findViewById(R.id.img_next_icon)
+       var repeatBtn : ImageButton = view.findViewById(R.id.img_repeat_icon)
+       */
+
+           startMusic(dummyMusic.urlsongs)
+          // beginTimeTv.setText(mediaPlayer.currentSeconds)
+           //endTimeTv.setText(mediaPlayer.seconds)
 
        // Start the media player
        playBtn.setOnClickListener{
-           val url = "https://archive.org/details/NathanielConteDemoSongs/01_Al_Sol.mp3" // your URL here
            if(pause){
                mediaPlayer.seekTo(mediaPlayer.currentPosition)
                mediaPlayer.start()
                pause = false
-           }else{
-/*
-               mediaPlayer = MediaPlayer().apply {
-                   setAudioAttributes(
-                           AudioAttributes.Builder()
-                                   .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                   .setUsage(AudioAttributes.USAGE_MEDIA)
-                                   .build()
-                   )
-                   setDataSource(url)
-                   prepareAsync() // might take long! (for buffering, etc)
-                   start()
-               }
-*/              playMp3(url)
-               Log.e("Abstract", "Playbar is running")
-
-           }
-           playBtn.isEnabled = false
-           pauseBtn.isEnabled = true
-
-           mediaPlayer.setOnCompletionListener {
-               playBtn.isEnabled = true
-               pauseBtn.isEnabled = false
-           }
-       }
-       // Pause the media player
-       pauseBtn.setOnClickListener {
-           if(mediaPlayer.isPlaying){
+               playBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
+               Log.e("Abstract", "Resuming Playbar")
+           }else if(isPlaying){
                mediaPlayer.pause()
                pause = true
-               playBtn.isEnabled = true
-               pauseBtn.isEnabled = false
-
-
+               playBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+               Log.e("Abstract", "Pausing Playbar")
            }
-       }
-       return  view
+           mediaPlayer.setOnCompletionListener {
+               playBtn.isEnabled = true
+           }
+      }
+
+      return  view
    }
 
+    private fun startMusic(url :String?){
+        mediaPlayer = MediaPlayer().apply {
+            setAudioAttributes(
+                    AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            )
+            setDataSource(url)
+            prepare() // might take long! (for buffering, etc)
+            start()
+        }
+        isPlaying = true
+        Log.e("Abstract", "Playbar is running")
+    }
     // Creating an extension property to get the media player time duration in seconds
     val MediaPlayer.seconds:Int
         get() {
@@ -93,26 +111,6 @@ class PlaybarFragment : Fragment() {
             return this.currentPosition/1000
         }
 
-    fun playMp3(_link: String?) {
-        mediaPlayer.reset()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        try {
-            mediaPlayer.setDataSource(_link)
-            //mediaPlayer.prepare(); // might take long! (for buffering, etc)   //@@
-            mediaPlayer.prepareAsync()
-        } catch (e: IllegalArgumentException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        } catch (e: SecurityException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        } catch (e: IllegalStateException) {
-            // TODO Auto-generated catch block///
-            e.printStackTrace()
-        } catch (e: IOException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        }
-    }
+
 
 }

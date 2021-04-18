@@ -81,6 +81,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_playlist_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -121,6 +122,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_album_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -161,6 +163,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_song_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -201,6 +204,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_artist_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -241,6 +245,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_logout_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"

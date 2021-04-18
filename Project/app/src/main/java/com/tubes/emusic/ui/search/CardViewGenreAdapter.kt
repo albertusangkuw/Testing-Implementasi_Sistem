@@ -33,12 +33,11 @@ class CardViewGenreAdapter(private val listThumbnail: ArrayList<Thumbnail>): Rec
 
                    // Frament destination
                    // Otw digantgi jadi format di my library
-                   val ldf = DetailPlaylistAlbum()
+                   val ldf = GenrePlaylistAdapter()
                    // Menaruh data ke dalam fragment yang dikirim
                    ldf.setArguments(args)
                    (context as MainActivity).openFragment(ldf)
 
-                   //Toast.makeText(itemView.context, "Kamu memilih $thumb.title}", Toast.LENGTH_SHORT).show()
                }
            }
        }

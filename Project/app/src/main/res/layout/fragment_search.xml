@@ -24,6 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_text_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -33,25 +34,21 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
         <com.google.android.material.textfield.TextInputEditText
+
             android:layout_width="match_parent"
+            android:imeOptions="actionGo"
             android:layout_height="wrap_content"
             app:expandedHintEnabled="true"
+            android:inputType="text"
             android:hint="Artist, song, or playlist"
             android:textSize="17sp"
              />
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
+
+    <FrameLayout
+        android:id="@+id/child_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Genres"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="22sp"
-        android:textColor="@color/white"
-    />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_card_genre_search"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_genre_card"/>
+        android:layout_height="match_parent">
+    </FrameLayout>
+
 </LinearLayout>

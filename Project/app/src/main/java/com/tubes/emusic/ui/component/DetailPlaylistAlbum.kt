@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.home.ListBigMusicAlbumAdapter
@@ -32,19 +33,19 @@ class DetailPlaylistAlbum : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_detail_playlist_album, container, false)
+        var bundleData = (context as MainActivity).getBundle(this)
         var tvdesc =  view.findViewById<TextView>(R.id.tv_detail_playlist_description)
 
 
-        Glide.with(view.context).load(arguments?.getString("urlImage")).into(view.findViewById<ImageView>(R.id.img_detail_musicalbum_photo))
+        Glide.with(view.context).load(bundleData.urlImage).into(view.findViewById<ImageView>(R.id.img_detail_musicalbum_photo))
         rv_music = view.findViewById<RecyclerView>(R.id.rv_item_music)
         rv_music.setHasFixedSize(true)
 
-        tvdesc.setText(arguments?.getString("id"))
+        tvdesc.setText(bundleData.description)
+
         showRecyclerListMusic()
 
-
         return view
-
     }
 
     private fun showRecyclerListMusic() {
