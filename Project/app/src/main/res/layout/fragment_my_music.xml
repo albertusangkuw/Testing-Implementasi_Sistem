@@ -26,18 +26,18 @@
             android:src="@drawable/ic_baseline_arrow_back_ios_24"/>
 
         <TextView
-            android:id="@+id/tv_my_artist"
+            android:id="@+id/tv_my_music"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/my_artist_text"
+            android:text="@string/my_music_text"
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/white" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_item_artist_music"
+        android:id="@+id/rv_item_my_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"

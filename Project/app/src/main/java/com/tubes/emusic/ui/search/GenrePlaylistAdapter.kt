@@ -1,9 +1,11 @@
 package com.tubes.emusic.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +15,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
+import com.tubes.emusic.ui.library.LibraryFragment
 
 class GenrePlaylistAdapter: Fragment()  {
     private lateinit var rv_genre_music_list : RecyclerView
@@ -23,12 +26,13 @@ class GenrePlaylistAdapter: Fragment()  {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_genre, container, false)
         var bundleData = (context as MainActivity).getBundle(this)
-
+        view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
+            Log.e("Abstract", "Back to Stack")
+            (context as MainActivity).openFragment(SearchFragment())
+        }
         rv_genre_music_list = view.findViewById(R.id.rv_item_genre_music)
         rv_genre_music_list.setHasFixedSize(true)
-
         view.findViewById<TextView>(R.id.tv_genre_title).setText("Genre " + bundleData.title)
-
         showRecyclerViewGenreMusicView()
         return view
     }

@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <RelativeLayout
+                android:id="@+id/rl_my_profile"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
@@ -42,15 +43,17 @@
 
                 <ImageView
                     android:id="@+id/img_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="10dp"
                     android:padding="10dp"
-                    android:src="@drawable/ic_baseline_face_24"/>
+                    android:src="@drawable/ic_sample_user_icon"
+                    android:background="@color/white"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginLeft="135dp"
                     android:orientation="vertical">
                     <TextView
@@ -66,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/email_name_text"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                         android:textColor="@color/up_bright_gray"/>
 
                     <TextView
@@ -74,7 +77,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_profile_text"
-                        android:layout_marginTop="5dp"
                         android:textColor="@color/white"
                         android:textStyle="bold"/>
                 </LinearLayout>
@@ -93,10 +95,10 @@
 
                 <ImageView
                     android:id="@+id/img_playlist_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_baseline_face_24"/>
+                    android:src="@drawable/ic_baseline_play_lesson_24"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -134,10 +136,10 @@
 
                 <ImageView
                     android:id="@+id/img_album_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_baseline_face_24"/>
+                    android:src="@drawable/ic_baseline_album_24"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -163,7 +165,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_song_library"
+                android:id="@+id/rl_music_library"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -175,10 +177,10 @@
 
                 <ImageView
                     android:id="@+id/img_song_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_baseline_face_24"/>
+                    android:src="@drawable/ic_baseline_library_music_24"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -189,7 +191,7 @@
                         android:id="@+id/tv_song"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/song_text"
+                        android:text="@string/music_text"
                         android:textColor="@color/white"
                         android:textSize="20sp"/>
 
@@ -197,7 +199,7 @@
                         android:id="@+id/tv_detail_song"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/detail_song_text"
+                        android:text="@string/detail_music_text"
                         android:textColor="@color/white"
                         android:textStyle="bold"/>
                 </LinearLayout>

@@ -13,37 +13,31 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
-import com.tubes.emusic.ui.home.ListBigMusicAlbumAdapter
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MyAlbumFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MyAlbumFragment : Fragment() {
-    private lateinit var rv_listAlbum : RecyclerView
+class MyMusicFragment : Fragment() {
+    private lateinit var rv_listMusic : RecyclerView
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.fragment_my_album, container, false)
+        var view = inflater.inflate(R.layout.fragment_my_music, container, false)
         view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
-        rv_listAlbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_album_music)
-        rv_listAlbum.setHasFixedSize(true)
-        showRecyclerListAlbum()
+        rv_listMusic = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_my_music)
+        rv_listMusic.setHasFixedSize(true)
+        showRecyclerListMusic()
         return view
     }
 
-    private fun showRecyclerListAlbum() {
+    private fun showRecyclerListMusic() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
+        val hero1 = Thumbnail( "sfhskwe","MusicNoCover", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
         list.add(hero1)
         list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
+        val hero2 = Thumbnail( "3242ddwe","MusicNoCover", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
         list.add(hero2)
         list.add(hero1)
         list.add(hero2)
@@ -52,8 +46,8 @@ class MyAlbumFragment : Fragment() {
         list.add(hero1)
         list.add(hero1)
         list.add(hero1)
-        rv_listAlbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        rv_listMusic.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
-        rv_listAlbum.adapter = listHeroAdapter
+        rv_listMusic.adapter = listHeroAdapter
     }
 }

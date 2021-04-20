@@ -96,7 +96,8 @@
             android:id="@+id/text_input_create_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_gray"/>
+            android:background="@color/dark_gray"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
