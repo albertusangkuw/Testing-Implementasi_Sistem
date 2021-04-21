@@ -25,5 +25,4 @@
             android:maxLines="1"
             android:text="Album / Song"
     />
-
 </LinearLayout>

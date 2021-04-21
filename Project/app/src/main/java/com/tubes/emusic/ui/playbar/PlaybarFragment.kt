@@ -37,7 +37,6 @@ class PlaybarFragment : Fragment() {
 
         val dummyMusic = Music("1","1","The Days","https://mir-s3-cdn-cf.behance.net/project_modules/disp/e705a534040642.56c2206da74cf.jpg","http://18.140.59.14:8081/music/17/data","Avicii","Electronic")
 
-
         Glide.with(view.context).load( dummyMusic.urlAlbumPhoto).into(view.findViewById<ImageView>(R.id.img_cover))
 
         var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)

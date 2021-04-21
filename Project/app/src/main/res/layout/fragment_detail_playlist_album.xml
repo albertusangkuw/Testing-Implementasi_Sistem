@@ -20,8 +20,7 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-        android:src="@mipmap/ic_launcher"
-    />
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_detail_playlist_title"
@@ -59,7 +58,7 @@
         android:id="@+id/btn_shuffleplay"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="SHUFFLE PLAY"
+        android:text="@string/shuffleplay_text"
         android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/theme_color_primary"

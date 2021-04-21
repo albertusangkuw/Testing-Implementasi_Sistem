@@ -10,6 +10,8 @@
     android:paddingTop="@dimen/fragment_vertical_padding"
     android:paddingRight="17dp"
     android:background="@color/black"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
@@ -70,8 +72,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             tools:listitem="@layout/item_big_musicalbum_list" />
-
     </LinearLayout>
+
     <Button
         android:id="@+id/btn_testing_playbar"
         android:layout_width="wrap_content"
@@ -79,6 +81,7 @@
         android:textColor="@color/white"
         android:text="Start Playbar"
     />
+
 
     <Button
         android:id="@+id/btn_testing_login"

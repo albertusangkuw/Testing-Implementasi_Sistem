@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.search.GenrePlaylistAdapter
 
 
 class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): RecyclerView.Adapter<ListMusicAlbumAdapter.ListViewHolder> () {
@@ -25,25 +26,29 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                     "MusicNoCover" -> {
                         findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).setVisibility(View.GONE)
                     }
-
+                    "LibraryListMusic" -> {
+                        findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).layoutParams.width = 250
+                        findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).layoutParams.height = 250
+                    }
+                    "LibraryListAlbum" -> {
+                        findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).layoutParams.width = 250
+                        findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).layoutParams.height = 250
+                    }
                 }
 
                 itemView.setOnClickListener {
                     Log.e("Abstract", "List Music item clicked")
-
-                    //Insialisisasi Bundle
-                    /*
-                    val args = Bundle()
-                    args.putString("id", thumb.id)
-                    args.putString("type", thumb.type)
-                    args.putString("title", thumb.title)
-                    args.putString("urlImage", thumb.urlImage)
-                    val ldf = DetailPlaylistAlbum()
-                    // Menaruh data ke dalam fragment yang dikirim
-                    ldf.setArguments(args)
-                    (context as MainActivity).openFragment(ldf)
-                    */
-
+                    when(thumb.type){
+                        "LibraryListAlbum" -> {
+                            //Insialisisasi Bundle
+                            val args =  (context as MainActivity).setBundle(thumb)
+                            // Frament destination
+                            // Otw digantgi jadi format di my library
+                            val ldf = DetailPlaylistAlbum()
+                            ldf.setArguments(args)
+                            (context as MainActivity).openFragment(ldf)
+                        }
+                    }
                 }
                 val button = itemView.findViewById<ImageButton>(R.id.btn_more_music_album_item)
                 button.setOnClickListener { v: View ->
