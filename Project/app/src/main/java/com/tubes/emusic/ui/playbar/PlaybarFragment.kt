@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Music
+import com.tubes.emusic.entity.Playbar
 import java.io.IOException
 
 
@@ -25,9 +26,7 @@ import java.io.IOException
  * create an instance of this fragment.
  */
 class PlaybarFragment : Fragment() {
-    private lateinit var mediaPlayer: MediaPlayer
-    private var pause:Boolean = false
-    private var isPlaying :Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,26 +54,35 @@ class PlaybarFragment : Fragment() {
        var repeatBtn : ImageButton = view.findViewById(R.id.img_repeat_icon)
        */
 
+       if(Playbar.mediaPlayer == null){
            startMusic(dummyMusic.urlsongs)
+       }else{
+           //Stop Already Played Music
+           Playbar.mediaPlayer!!.release()
+           startMusic(dummyMusic.urlsongs)
+       }
+
           // beginTimeTv.setText(mediaPlayer.currentSeconds)
            //endTimeTv.setText(mediaPlayer.seconds)
 
        // Start the media player
        playBtn.setOnClickListener{
-           if(pause){
-               mediaPlayer.seekTo(mediaPlayer.currentPosition)
-               mediaPlayer.start()
-               pause = false
-               playBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
-               Log.e("Abstract", "Resuming Playbar")
-           }else if(isPlaying){
-               mediaPlayer.pause()
-               pause = true
-               playBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
-               Log.e("Abstract", "Pausing Playbar")
-           }
-           mediaPlayer.setOnCompletionListener {
-               playBtn.isEnabled = true
+           if(Playbar.mediaPlayer != null) {
+               if (Playbar.pause) {
+                   Playbar.mediaPlayer!!.seekTo(Playbar.mediaPlayer!!.currentPosition)
+                   Playbar.mediaPlayer!!.start()
+                   Playbar.pause = false
+                   playBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
+                   Log.e("Abstract", "Resuming Playbar")
+               } else if (Playbar.isPlaying) {
+                   Playbar.mediaPlayer!!.pause()
+                   Playbar.pause = true
+                   playBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+                   Log.e("Abstract", "Pausing Playbar")
+               }
+               Playbar.mediaPlayer!!.setOnCompletionListener {
+                   playBtn.isEnabled = true
+               }
            }
       }
 
@@ -82,7 +90,7 @@ class PlaybarFragment : Fragment() {
    }
 
     private fun startMusic(url :String?){
-        mediaPlayer = MediaPlayer().apply {
+        Playbar.mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
                     AudioAttributes.Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -93,7 +101,7 @@ class PlaybarFragment : Fragment() {
             prepare() // might take long! (for buffering, etc)
             start()
         }
-        isPlaying = true
+        Playbar.isPlaying = true
         Log.e("Abstract", "Playbar is running")
     }
     // Creating an extension property to get the media player time duration in seconds

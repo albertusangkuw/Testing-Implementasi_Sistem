@@ -1,6 +1,7 @@
 package com.tubes.emusic.ui.home
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.SessionApi
+import com.tubes.emusic.api.UserApi
 import com.tubes.emusic.entity.Thumbnail
-import com.tubes.emusic.ui.component.DetailPlaylistAlbum
+import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.playbar.PlaybarFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -38,6 +44,21 @@ class HomeFragment : Fragment()  {
             val ldf = PlaybarFragment()
             // Menaruh data ke dalam fragment yang dikirim
             (context as MainActivity).openFragment(ldf)
+        }
+        view.findViewById<Button>(R.id.btn_testing_login).setOnClickListener {
+            Log.e("Abstract", "Playbar excecuted")
+
+
+            GlobalScope.launch(Dispatchers.IO) {
+                Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
+                Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
+                //Mendapat User
+                val loggedUser =  UserApi.getSingleUser("albertus@gmail.com")
+                Log.e("Abstract", "Status username : " + loggedUser?.username)
+                SessionApi.logoutUser()
+                Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
+            }
+
         }
         return view
     }
@@ -76,4 +97,7 @@ class HomeFragment : Fragment()  {
         }
         return status
     }
+
+
+
 }
