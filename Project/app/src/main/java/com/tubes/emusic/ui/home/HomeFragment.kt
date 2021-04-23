@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.MusicApi
+import com.tubes.emusic.api.PlaylistApi
 import com.tubes.emusic.api.SessionApi
 import com.tubes.emusic.api.UserApi
 import com.tubes.emusic.entity.Thumbnail
@@ -49,15 +51,34 @@ class HomeFragment : Fragment()  {
             Log.e("Abstract", "Playbar excecuted")
 
             GlobalScope.launch(Dispatchers.IO) {
+                //Example API Session API
                 Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
                 Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
-                Log.e("Abstract", "Status Delete : " + UserApi.deleteSingleUser("cf68014801de95baaa0a0c8638451459"))
-                //Mendapat User
-                val loggedUser =  UserApi.getSingleUser("albertus@gmail.com")
-                Log.e("Abstract", "Status username : " + loggedUser?.username)
-
                 //SessionApi.logoutUser()
                 //Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
+
+                //Example User  API
+                Log.e("Abstract", "Status Get Detail User : " + UserApi.getDetailSingleUser("f68baf7d0802d43f43018dabc72c2cf4"))
+                Log.e("Abstract", "Status Search User : " + UserApi.searchUser("ber"))
+                //Log.e("Abstract", "Status Following User : " + UserApi.addFollowingUser("c2d14ceeb62257774d6ea9d74025d085","db219aa2ce3a3dc57fadbb26a538cb37"))
+                Log.e("Abstract", "Status Delete Following User : " + UserApi.deleteFollowingUser("c2d14ceeb62257774d6ea9d74025d085","db219aa2ce3a3dc57fadbb26a538cb37"))
+                val user =  UserApi.getSingleUser("BolXYSAang@gmail.com")
+                if(user != null){
+                    Log.e("Abstract", "Status username dulu : " + user.username)
+                    user.username="New Bolang from Android"
+                    Log.e("Abstract", "Status Update User : " + UserApi.updateUser(user,""))
+                }
+
+                //Example Playlist
+                Log.e("Abstract", "Status Get Detail Playlist : " + PlaylistApi.getPlaylistById(3))
+                Log.e("Abstract", "Status Add Song Playlist : " + PlaylistApi.deleteSongPlaylist(3,11))
+                Log.e("Abstract", "Status FollowingPlaylist : " + PlaylistApi.deleteFollowingPlaylist(3,"10d00d99a73f94be3710f8f0de952e17"))
+
+                // Example Music
+                Log.e("Abstract", "Status Get Detail Music : " + MusicApi.getMusicById(11))
+
+                // Example Album
+                Log.e("Abstract", "Status Get Detail Album : " + MusicApi.getMusicById(1))
             }
 
         }
