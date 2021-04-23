@@ -48,15 +48,16 @@ class HomeFragment : Fragment()  {
         view.findViewById<Button>(R.id.btn_testing_login).setOnClickListener {
             Log.e("Abstract", "Playbar excecuted")
 
-
             GlobalScope.launch(Dispatchers.IO) {
                 Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
                 Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
+                Log.e("Abstract", "Status Delete : " + UserApi.deleteSingleUser("cf68014801de95baaa0a0c8638451459"))
                 //Mendapat User
                 val loggedUser =  UserApi.getSingleUser("albertus@gmail.com")
                 Log.e("Abstract", "Status username : " + loggedUser?.username)
-                SessionApi.logoutUser()
-                Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
+
+                //SessionApi.logoutUser()
+                //Log.e("Abstract", "Status Cookie : " + SessionApi.checkCookie())
             }
 
         }

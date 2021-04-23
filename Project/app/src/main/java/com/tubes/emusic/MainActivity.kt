@@ -10,8 +10,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tubes.emusic.api.SessionApi
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.login.LoginActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,14 +25,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val statusCookie = true
-        if(!statusCookie){
-            Log.e("Abstract", "Dipulangin lagi :(")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }else {
-            startMainActivity()
+        GlobalScope.launch() {
+            //Check is user can access api
+            var statusCookie  = SessionApi.checkCookie()
+            statusCookie  = true
+            if(!statusCookie){
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(intent)
+            }
         }
+        startMainActivity()
     }
 
     public fun startMainActivity(){
@@ -40,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_library)).build()
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        Log.e("Abstract", "Yeayyyyy masuk :>")
+        Log.e("Abstract", "Main Activity Started")
         // To remove title in apps
         supportActionBar?.hide()
     }
@@ -51,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     }
     // Source https://stackoverflow.com/questions/31590919/replace-fragment-with-another-on-back-button
     override fun onBackPressed() {
-        // note: you can also use 'getSupportFragmentManager()'
         val transaction = supportFragmentManager
         if (transaction.getBackStackEntryCount() === 0) {
             // No backstack to pop, so calling super
