@@ -9,7 +9,7 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
  class DatabaseContract {
      class AlbumDB : BaseColumns {
          companion object {
-             const val TABLE_NAME = "album"
+             const val TABLE_NAME  = "album"
              const val ID= "_id"
              const val DATERELEASE = "daterelease"
              const val NAMEALBUM = "namealbum"

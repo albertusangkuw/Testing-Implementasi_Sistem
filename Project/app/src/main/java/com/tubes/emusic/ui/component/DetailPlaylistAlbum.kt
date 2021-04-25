@@ -17,7 +17,10 @@ import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.helper.MappingHelper.mapListAlbumToArrayList
+import com.tubes.emusic.helper.MappingHelper.mapListPlaylistSongToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListsongToArrayList
 import com.tubes.emusic.ui.home.ListBigMusicAlbumAdapter
 import kotlinx.coroutines.GlobalScope
@@ -35,37 +38,19 @@ import kotlinx.coroutines.launch
 class DetailPlaylistAlbum : Fragment() {
     private lateinit var rv_music: RecyclerView
     private val list = ArrayList<Thumbnail>()
-
+    private lateinit var bundleData : Thumbnail
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_detail_playlist_album, container, false)
-        var bundleData = (context as MainActivity).getBundle(this)
+        bundleData = (context as MainActivity).getBundle(this)
         var tvdesc =  view.findViewById<TextView>(R.id.tv_detail_playlist_description)
 
 
         Glide.with(view.context).load(bundleData.urlImage).into(view.findViewById<ImageView>(R.id.img_detail_musicalbum_photo))
         rv_music = view.findViewById<RecyclerView>(R.id.rv_item_music)
         rv_music.setHasFixedSize(true)
-
-        bundleData.id = "" + 2
-        /*
-        GlobalScope.launch{
-            if (bundleData.type == "Album"){
-
-            }else if(bundleData.type == "Playlist"){
-                val rawResult = com.tubes.emusic.api.PlaylistApi.getPlaylistById(3)
-                if(rawResult != null){
-                    android.util.Log.e("Abstract", "Status Get Detail Playlist : " + rawResult.toString())
-                    tvdesc.setText("" + rawResult.data[0].userfollowing.size + " FOLLOWERS"  )
-                    rawResult.data[0].userfollowing.size
-                }
-            }
-
-
-        }
-        */
 
         return view
     }
@@ -74,20 +59,29 @@ class DetailPlaylistAlbum : Fragment() {
         showRecyclerListMusic()
     }
     private fun laucherWaiting(){
-        MainActivity.db?.open()
-        val mapData = mapListsongToArrayList(MainActivity.db?.queryAll())
+        var mapData : List<Listsong> = mapListsongToArrayList(MainActivity.db?.queryAll(DatabaseContract.SongDB.TABLE_NAME))
+        var id = bundleData.id
+        var addOn = ""
+        if(bundleData.type == "Album" && id != null){
+            val rawAlbum = mapListAlbumToArrayList(
+                MainActivity.db?.queryCustomById(
+                        id,
+                        DatabaseContract.AlbumDB.ID,
+                        DatabaseContract.AlbumDB.TABLE_NAME
+                )
+            )
+            mapData = rawAlbum.get(0).listsong!!
+            addOn = "NoCover"
+        }else if(bundleData.type == "Playlist" && id != null ){
+            val rawPlaylist =   mapListPlaylistSongToArrayList(
+                MainActivity.db?.queryById(id ,DatabaseContract.PlaylistDB.TABLE_NAME)
+            )
+            mapData = rawPlaylist.get(0).listsong!!
+        }
         for (i in mapData){
-            val thumb = Thumbnail(i.idsong.toString(), "Music", "",  HTTPClientManager.host + "album/" + i.idalbum + "/photo", i.title,  i.genre)
+            val thumb = Thumbnail(i.idsong.toString(), "Music", addOn,  HTTPClientManager.host + "album/" +  i.idalbum + "/photo", i.title,  i.genre)
             list.add(thumb)
         }
-        /*
-        val hero1 = Thumbnail( "song1","Music","", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Sunset ", "Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "song2","MusicNoCover", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Yes or Yes", "Twice")
-        list.add(hero2)
-        list.add(hero1)
-       */
     }
 
     private fun showRecyclerListMusic() {

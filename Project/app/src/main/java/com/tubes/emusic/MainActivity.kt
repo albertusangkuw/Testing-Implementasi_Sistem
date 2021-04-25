@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch{
             //Check is user can access api
             var statusCookie  = SessionApi.checkCookie()
-            //statusCookie  = true
+            statusCookie  = true
             if(!statusCookie){
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
-            //Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
-            //currentUser = UserApi.getSingleUser("Twice@gmail.com")
+            Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
+            currentUser = UserApi.getSingleUser("Twice@gmail.com")
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }
         startMainActivity()

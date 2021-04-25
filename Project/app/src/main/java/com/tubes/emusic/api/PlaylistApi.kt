@@ -29,12 +29,12 @@ data class Listsong (
 data class Userfollowing (
 
         @SerializedName("iduser") var iduser : String,
-        @SerializedName("username") var username : String,
-        @SerializedName("email") var email : String,
-        @SerializedName("country") var country : String,
-        @SerializedName("urlphotoprofile") var urlphotoprofile : String,
-        @SerializedName("datejoin") var datejoin : String,
-        @SerializedName("categories") var categories : Int
+        @SerializedName("username") var username : String?,
+        @SerializedName("email") var email : String?,
+        @SerializedName("country") var country : String?,
+        @SerializedName("urlphotoprofile") var urlphotoprofile : String?,
+        @SerializedName("datejoin") var datejoin : String?,
+        @SerializedName("categories") var categories : Int?
 
 )
 data class PlaylistData (

@@ -5,7 +5,9 @@ import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.helper.CheckObjectDB.searchDataAlbum
 import com.tubes.emusic.helper.CheckObjectDB.searchDataSong
 import com.tubes.emusic.helper.MappingHelper
 import cz.msebera.android.httpclient.Header
@@ -28,8 +30,8 @@ data class AlbumData (
         @SerializedName("urlimagecover") var urlimagecover : String,
         @SerializedName("genre") var genre : String,
         @SerializedName("daterelease") var daterelease : String,
-        @SerializedName("listsong") var listsong : List<Listsong>,
-        @SerializedName("userfollowing") var userfollowing : List<Userfollowing>
+        @SerializedName("listsong") var listsong : List<Listsong>?,
+        @SerializedName("userfollowing") var userfollowing : List<Userfollowing>?
 
 )
 
@@ -52,19 +54,35 @@ class AlbumApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
                         var data = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseAlbum::class.java)
                         resultAlbum = data
-                        //Database Insert to Song
+
+                        val values = ContentValues()
+                        values.put(DatabaseContract.AlbumDB.ID, data.data[0].idalbum)
+                        values.put(DatabaseContract.AlbumDB.DATERELEASE, data.data[0].daterelease)
+                        values.put(DatabaseContract.AlbumDB.GENRE, data.data[0].genre)
+                        values.put(DatabaseContract.AlbumDB.NAMEALBUM, data.data[0].namealbum)
+                        values.put(DatabaseContract.AlbumDB.URLIMAGECOVER, data.data[0].urlimagecover)
+                        values.put(DatabaseContract.AlbumDB.IDUSER, data.data[0].iduser)
+                        //Database Insert to Table Album
+                        if(searchDataAlbum(data.data[0].idalbum)){
+                            MainActivity.db?.insert(values,DatabaseContract.AlbumDB.TABLE_NAME)
+                        }else{
+                            MainActivity.db?.update(data.data[0].idalbum.toString(), values, DatabaseContract.AlbumDB.TABLE_NAME)
+                        }
+                        //Database Insert to Table Song
                         var listSong = data.data[0].listsong
-                        for(i in listSong){
-                            val values = ContentValues()
-                            values.put(DatabaseContract.SongDB.ID, i.idsong)
-                            values.put(DatabaseContract.SongDB.IDALBUM, i.idalbum)
-                            values.put(DatabaseContract.SongDB.GENRE, i.genre)
-                            values.put(DatabaseContract.SongDB.TITLE, i.title)
-                            values.put(DatabaseContract.SongDB.URLSONGS, i.urlsongs)
-                            if(searchDataSong(i.idsong)){
-                                MainActivity.db?.insert(values)
-                            }else{
-                                MainActivity.db?.update(i.idsong.toString(), values)
+                        if (listSong != null) {
+                            for(i in listSong){
+                                val values = ContentValues()
+                                values.put(DatabaseContract.SongDB.ID, i.idsong)
+                                values.put(DatabaseContract.SongDB.IDALBUM, i.idalbum)
+                                values.put(DatabaseContract.SongDB.GENRE, i.genre)
+                                values.put(DatabaseContract.SongDB.TITLE, i.title)
+                                values.put(DatabaseContract.SongDB.URLSONGS, i.urlsongs)
+                                if(searchDataSong(i.idsong)){
+                                    MainActivity.db?.insert(values,DatabaseContract.SongDB.TABLE_NAME)
+                                }else{
+                                    MainActivity.db?.update(i.idsong.toString(), values,DatabaseContract.SongDB.TABLE_NAME)
+                                }
                             }
                         }
                         Log.d("API", "Success Get Album by id" )

@@ -10,7 +10,7 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
 
 class DBManager(context: Context) {
     companion object {
-        public var DATABASE_TABLE = TABLE_NAME
+        //public var DATABASE_TABLE: String = TABLE_NAME
         private lateinit var dataBaseHelper: DatabaseContract.DatabaseHelper
         private lateinit var database: SQLiteDatabase
         private var INSTANCE:DBManager? = null
@@ -34,9 +34,9 @@ class DBManager(context: Context) {
             database.close()
     }
 
-    fun queryAll(): Cursor {
+    fun queryAll( table_name : String): Cursor {
         return database.query(
-            DATABASE_TABLE,
+                table_name,
             null,
             null,
             null,
@@ -45,9 +45,9 @@ class DBManager(context: Context) {
             "${BaseColumns._ID} ASC")
     }
 
-    fun queryById(id: String): Cursor {
+    fun queryById(id: String, table_name : String): Cursor {
         return database.query(
-            DATABASE_TABLE,
+                table_name,
             null,
             "${BaseColumns._ID} = ?",
             arrayOf(id),
@@ -57,16 +57,28 @@ class DBManager(context: Context) {
             null)
     }
 
-    fun insert(values: ContentValues?): Long {
-        return database.insert(DATABASE_TABLE, null, values)
+    fun queryCustomById(value: String,column: String, table_name : String): Cursor {
+        return database.query(
+                table_name,
+                null,
+                "${column} = ?", arrayOf(value),
+                null,
+                null,
+                null,
+                null)
     }
 
-    fun update(id: String, values: ContentValues?): Int {
-        return database.update(DATABASE_TABLE, values, "${BaseColumns._ID} = ?",
+
+    fun insert(values: ContentValues?, table_name : String): Long {
+        return database.insert(table_name, null, values)
+    }
+
+    fun update(id: String, values: ContentValues?, table_name : String ): Int {
+        return database.update(table_name, values, "${BaseColumns._ID} = ?",
             arrayOf(id))
     }
 
-    fun deleteById(id: String): Int {
-        return database.delete(DATABASE_TABLE, "${BaseColumns._ID} = '$id'", null)
+    fun deleteById(id: String, table_name : String): Int {
+        return database.delete(table_name, "${BaseColumns._ID} = '$id'", null)
     }
 }

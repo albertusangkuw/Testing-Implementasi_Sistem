@@ -77,7 +77,10 @@ class HomeFragment : Fragment()  {
             for (i in recentlList){
                 val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
                 if(data != null) {
-                    val thumb = Thumbnail(data.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i + "/photo", data.genre,  " followers")
+                    val thumb = Thumbnail(id= data.idalbum.toString(), type="Album",
+                            addOn = "",  urlImage = HTTPClientManager.host + "album/" + i + "/photo",
+                            title = data.namealbum,
+                            description = " followers")
                     list.add(thumb)
                 }
             }
