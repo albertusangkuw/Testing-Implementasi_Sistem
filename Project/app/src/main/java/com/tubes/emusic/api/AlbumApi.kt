@@ -58,7 +58,6 @@ class AlbumApi {
                             val values = ContentValues()
                             values.put(DatabaseContract.SongDB.ID, i.idsong)
                             values.put(DatabaseContract.SongDB.IDALBUM, i.idalbum)
-                            values.put(DatabaseContract.SongDB.IDUSER, i.idalbum)
                             values.put(DatabaseContract.SongDB.GENRE, i.genre)
                             values.put(DatabaseContract.SongDB.TITLE, i.title)
                             values.put(DatabaseContract.SongDB.URLSONGS, i.urlsongs)
