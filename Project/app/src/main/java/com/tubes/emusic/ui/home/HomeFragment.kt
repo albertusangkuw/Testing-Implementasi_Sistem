@@ -2,6 +2,7 @@ package com.tubes.emusic.ui.home
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,70 @@ class HomeFragment : Fragment()  {
             // Menaruh data ke dalam fragment yang dikirim
             (context as MainActivity).openFragment(ldf)
         }
+/*
+        laucherWaiting()
+
+        Handler().postDelayed({
+            Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+            showRecyclerListBigMusicAlbum()
+        }, 10000)
+*/
+        return view
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        laucherWaiting()
+        Thread.sleep(1100 )
+        Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+        Thread.sleep((500* recentlList.size).toLong())
+        showRecyclerListBigMusicAlbum()
+
+
+    }
+    private fun laucherWaiting(){
+        GlobalScope.launch{
+            delay(1000)
+            Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
+            for (i in recentlList){
+             val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
+                if(data != null) {
+                    val thumb = Thumbnail(data.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i + "/photo", data.genre,  " followers")
+                    list.add(thumb)
+                }
+            }
+        }
+    }
+
+    private fun showRecyclerListBigMusicAlbum() {
+        rv_bigmusicalbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        val listHeroAdapter = ListBigMusicAlbumAdapter(list)
+        rv_bigmusicalbum.adapter = listHeroAdapter
+    }
+
+    fun dayGreeting(): String {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH")
+        val formatted = current.format(formatter)
+        val hour: Int? =  formatted.toInt()
+        var status = "Good Day"
+        if (hour != null) {
+            if(hour > 18){
+                status ="Good evening"
+                Log.e("Abstract", "Good evening " + formatted)
+            }else if(hour > 12){
+                status ="Good afternoon"
+                Log.e("Abstract", "Good afternoon " + formatted)
+            }else{
+                status ="Good morning"
+                Log.e("Abstract", "Good morning " + formatted)
+           }
+        }
+        return status
+    }
+
+    fun testingBtn(view: View){
         view.findViewById<Button>(R.id.btn_testing_login).setOnClickListener {
             Log.e("Abstract", "Playbar excecuted")
 
@@ -86,55 +151,5 @@ class HomeFragment : Fragment()  {
             }
 
         }
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        laucherWaiting()
-        Thread.sleep(1100 )
-        Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
-        Thread.sleep((500* recentlList.size).toLong())
-        showRecyclerListBigMusicAlbum()
-    }
-    private fun laucherWaiting(){
-        GlobalScope.launch{
-            delay(1000)
-            Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
-            for (i in recentlList){
-             val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
-
-                if(data != null) {
-                    val thumb = Thumbnail(data.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i + "/photo", data.genre,  " followers")
-                    list.add(thumb)
-                }
-            }
-        }
-    }
-
-    private fun showRecyclerListBigMusicAlbum() {
-        rv_bigmusicalbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-        val listHeroAdapter = ListBigMusicAlbumAdapter(list)
-        rv_bigmusicalbum.adapter = listHeroAdapter
-    }
-
-    fun dayGreeting(): String {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH")
-        val formatted = current.format(formatter)
-        val hour: Int? =  formatted.toInt()
-        var status = "Good Day"
-        if (hour != null) {
-            if(hour > 18){
-                status ="Good evening"
-                Log.e("Abstract", "Good evening " + formatted)
-            }else if(hour > 12){
-                status ="Good afternoon"
-                Log.e("Abstract", "Good afternoon " + formatted)
-            }else{
-                status ="Good morning"
-                Log.e("Abstract", "Good morning " + formatted)
-           }
-        }
-        return status
     }
 }

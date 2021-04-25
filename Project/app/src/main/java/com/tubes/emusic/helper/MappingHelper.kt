@@ -11,7 +11,7 @@ object MappingHelper {
             while (moveToNext()) {
                 list.add(
                     Listsong(
-                        idsong = getInt(getColumnIndexOrThrow(DatabaseContract.SongDB.IDUSER)) ,
+                        idsong = getInt(getColumnIndexOrThrow(DatabaseContract.SongDB.ID)) ,
                         idalbum =  getInt(getColumnIndexOrThrow(DatabaseContract.SongDB.IDALBUM)),
                         title = getString(getColumnIndexOrThrow(DatabaseContract.SongDB.TITLE)),
                         urlsongs = getString(getColumnIndexOrThrow(DatabaseContract.SongDB.URLSONGS))   ,
