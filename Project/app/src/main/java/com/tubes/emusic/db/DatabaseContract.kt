@@ -131,49 +131,49 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
          companion object {
              private const val DATABASE_NAME = "dbemusic"
              private const val DATABASE_VERSION = 1
-             private val SQL_CREATE_TABLE_ALBUM =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_ALBUM =  "CREATE TABLE " + DatabaseContract.AlbumDB.TABLE_NAME+
                      " (${DatabaseContract.AlbumDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.AlbumDB.DATERELEASE} TEXT ," +
                      " ${DatabaseContract.AlbumDB.NAMEALBUM} TEXT ," +
                      " ${DatabaseContract.AlbumDB.URLIMAGECOVER} TEXT ," +
                      " ${DatabaseContract.AlbumDB.GENRE} TEXT ," +
                      " ${DatabaseContract.AlbumDB.IDUSER} TEXT )"
-             private val SQL_CREATE_TABLE_ALBUM_FOLLOWING =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_ALBUM_FOLLOWING =  "CREATE TABLE " + DatabaseContract.AlbumFollowingDB.TABLE_NAME+
                      " (${DatabaseContract.AlbumFollowingDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.AlbumFollowingDB.IDALBUM} INTEGER ," +
                      " ${DatabaseContract.AlbumFollowingDB.IDUSER} TEXT )"
-             private val SQL_CREATE_TABLE_ARTIST =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_ARTIST =  "CREATE TABLE " + DatabaseContract.ArtistDB.TABLE_NAME+
                      " (${DatabaseContract.ArtistDB.ID} TEXT  PRIMARY KEY ," +
                      " ${DatabaseContract.ArtistDB.BIO} TEXT )"
-             private val SQL_CREATE_TABLE_PLAYLIST =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_PLAYLIST =  "CREATE TABLE " + DatabaseContract.PlaylistDB.TABLE_NAME+
                      " (${DatabaseContract.PlaylistDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.PlaylistDB.DATECREATED} TEXT ," +
                      " ${DatabaseContract.PlaylistDB.IDUSER} TEXT ," +
                      " ${DatabaseContract.PlaylistDB.NAMEPLAYLIST} TEXT ," +
                      " ${DatabaseContract.PlaylistDB.URLIMAGECOVER} TEXT )"
-             private val SQL_CREATE_TABLE_PLAYLIST_FOLLOWING =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_PLAYLIST_FOLLOWING =  "CREATE TABLE " + DatabaseContract.PlaylistFollowingDB.TABLE_NAME+
                      " (${DatabaseContract.PlaylistFollowingDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.PlaylistFollowingDB.IDPLAYLIST} INTEGER ," +
                      " ${DatabaseContract.PlaylistFollowingDB.IDUSER} TEXT )"
-             private val SQL_CREATE_TABLE_PLAYLIST_SONG =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_PLAYLIST_SONG =  "CREATE TABLE " + DatabaseContract.PlaylistSongDB.TABLE_NAME+
                      " (${DatabaseContract.PlaylistSongDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.PlaylistSongDB.IDSONG} INTEGER ," +
                      " ${DatabaseContract.PlaylistSongDB.IDPLAYLIST} INTEGER )"
-             private val SQL_CREATE_TABLE_REGULAR_USER =  "CREATE TABLE $TABLE_NAME" +
-                     " ${DatabaseContract.RegularUserDB.DATEOFBIRTH} DATE ," +
+             private val SQL_CREATE_TABLE_REGULAR_USER =  "CREATE TABLE "  + DatabaseContract.RegularUserDB.TABLE_NAME+
+                     " (${DatabaseContract.RegularUserDB.DATEOFBIRTH} TEXT ," +
                      " ${DatabaseContract.RegularUserDB.GENDER} TEXT ," +
-                     " (${DatabaseContract.RegularUserDB.ID} TEXT  PRIMARY KEY )"
-             private val SQL_CREATE_TABLE_SONG =  "CREATE TABLE $TABLE_NAME" +
+                     " ${DatabaseContract.RegularUserDB.ID} TEXT  PRIMARY KEY )"
+             private val SQL_CREATE_TABLE_SONG =  "CREATE TABLE " + DatabaseContract.SongDB.TABLE_NAME+
                      " (${DatabaseContract.SongDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.SongDB.IDALBUM} INTEGER ," +
                      " ${DatabaseContract.SongDB.TITLE} TEXT ," +
                      " ${DatabaseContract.SongDB.URLSONGS} TEXT ," +
                      " ${DatabaseContract.SongDB.GENRE} TEXT )"
-             private val SQL_CREATE_TABLE_SONG_LIKE =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_SONG_LIKE =  "CREATE TABLE "+ DatabaseContract.SongLikeDB.TABLE_NAME+
                      " (${DatabaseContract.SongLikeDB.ID} INTEGER  PRIMARY KEY ," +
                      " ${DatabaseContract.SongLikeDB.IDUSER} TEXT ," +
                      " ${DatabaseContract.SongLikeDB.IDSONG} INTEGER )"
-             private val SQL_CREATE_TABLE_USER =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_USER =  "CREATE TABLE " + DatabaseContract.UserDB.TABLE_NAME +
                      " (${DatabaseContract.UserDB.ID} TEXT PRIMARY KEY ," +
                      " ${DatabaseContract.UserDB.USERNAME} TEXT ," +
                      " ${DatabaseContract.UserDB.EMAIL} TEXT ," +
@@ -181,15 +181,15 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
                      " ${DatabaseContract.UserDB.URLPHOTOPROFILE} TEXT ," +
                      " ${DatabaseContract.UserDB.DATEJOIN} TEXT ," +
                      " ${DatabaseContract.UserDB.CATEGORIES} INTEGER )"
-             private val SQL_CREATE_TABLE_USER_FOLLOWING =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_USER_FOLLOWING =  "CREATE TABLE "  + DatabaseContract.UserFollowingDB.TABLE_NAME +
                      " (${DatabaseContract.UserFollowingDB.ID} INTEGER PRIMARY KEY ," +
                      " ${DatabaseContract.UserFollowingDB.USERID} TEXT ," +
                      " ${DatabaseContract.UserFollowingDB.FOLLOWINGUSERID} TEXT )"
-             private val SQL_CREATE_TABLE_USER_HISTORY =  "CREATE TABLE $TABLE_NAME" +
+             private val SQL_CREATE_TABLE_USER_HISTORY =  "CREATE TABLE "  + DatabaseContract.UserHistoryDB.TABLE_NAME +
                      " (${DatabaseContract.UserHistoryDB.ID} INTEGER PRIMARY KEY ," +
                      " ${DatabaseContract.UserHistoryDB.IDUSER} TEXT ," +
                      " ${DatabaseContract.UserHistoryDB.IDLIST} INTEGER ," +
-                     " ${DatabaseContract.UserHistoryDB.TYPE} INTEGER ," +                                                         " ${DatabaseContract.UserHistoryDB.IDLIST} INTEGER ," +
+                     " ${DatabaseContract.UserHistoryDB.TYPE} INTEGER ," +
                      " ${DatabaseContract.UserHistoryDB.DATE} TEXT )"
          }
          override fun onCreate(db: SQLiteDatabase) {

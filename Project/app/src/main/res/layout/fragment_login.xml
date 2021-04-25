@@ -60,7 +60,8 @@
             android:imeOptions="actionGo"
             app:expandedHintEnabled="true"
             android:layout_height="wrap_content"
-            android:background="@color/dark_gray"/>
+            android:background="@color/dark_gray"
+            app:hintTextColor="@color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
