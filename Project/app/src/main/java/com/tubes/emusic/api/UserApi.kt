@@ -87,18 +87,32 @@ class UserApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
 
                         var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseUser::class.java)
+                        if(mUser.regularuser != null) {
+                            for (i in mUser.regularuser) {
+                                user = User(i.iduser,
+                                        i.username,
+                                        i.email,
+                                        i.country,
+                                        i.urlphotoprofile,
+                                        i.datejoin,
+                                        2)
+                                break
+                            }
 
-                        for (i in mUser.regularuser) {
-                            user = User(i.iduser,
-                                    i.username,
-                                    i.email,
-                                    i.country,
-                                    i.urlphotoprofile,
-                                    i.datejoin,
-                                    2)
-                            break
+                        }else if(mUser.artist != null){
+                            for (i in mUser.artist) {
+                                user = User(i.iduser,
+                                        i.username,
+                                        i.email,
+                                        i.country,
+                                        i.urlphotoprofile,
+                                        i.datejoin,
+                                        2)
+                                break
+                            }
                         }
                         Log.d("API", "Success Get Single User with ID " + user!!.iduser)
+
                         status = true
                     } else {
                         Log.d("API", "Failed Get Single User")
@@ -125,10 +139,9 @@ class UserApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return user
         }
-
 
         public suspend fun searchUser(username: String): ResponseUser?{
             var url =  HTTPClientManager.host + "users?username="+ username
@@ -166,7 +179,7 @@ class UserApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return resultUser
         }
 
@@ -214,10 +227,9 @@ class UserApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return cookieStatus
         }
-
 
         public suspend fun updateUser(user: User,password : String) : Boolean{
             var url =  HTTPClientManager.host + "users/"+ user.iduser + "/update"
@@ -260,7 +272,7 @@ class UserApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return cookieStatus
         }
 
@@ -298,7 +310,7 @@ class UserApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return cookieStatus
         }
 
@@ -336,7 +348,7 @@ class UserApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return cookieStatus
         }
 
@@ -380,7 +392,7 @@ class UserApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultDetailUser
         }
 

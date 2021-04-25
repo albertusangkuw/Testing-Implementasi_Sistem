@@ -46,7 +46,7 @@ class SessionApi {
                 }
             })
 
-            delay(1000L)
+            delay(300L)
             return  status
         }
 
@@ -120,7 +120,7 @@ class SessionApi {
 
             })
 
-            delay(500L)
+            delay(300L)
             return cookieStatus
         }
 

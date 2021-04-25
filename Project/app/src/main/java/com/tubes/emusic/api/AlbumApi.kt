@@ -1,8 +1,12 @@
 package com.tubes.emusic.api
 
+import android.content.ContentValues
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
+import com.tubes.emusic.MainActivity
+import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.helper.MappingHelper
 import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 
@@ -47,6 +51,33 @@ class AlbumApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
                         var data = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseAlbum::class.java)
                         resultAlbum = data
+                        //Database Insert to Song
+                        var listSong = data.data[0].listsong
+                        MainActivity.db?.open()
+
+                        for(i in listSong){
+                            //Check is data already in db
+                            var rs =  MappingHelper.mapListsongToArrayList(MainActivity.db?.queryById(i.idsong.toString()))
+                            /*
+                            val check = rs.find{
+                                it.idsong == i.idsong
+                            }
+
+                            if (check == null ){
+                                continue
+                            }
+                            Log.d("DB", "Skip " + check.idsong )
+*/
+                            val values = ContentValues()
+                            values.put(DatabaseContract.SongDB.ID, i.idsong)
+                            values.put(DatabaseContract.SongDB.IDALBUM, i.idalbum)
+                            values.put(DatabaseContract.SongDB.IDUSER, i.idalbum)
+                            values.put(DatabaseContract.SongDB.GENRE, i.genre)
+                            values.put(DatabaseContract.SongDB.TITLE, i.title)
+                            values.put(DatabaseContract.SongDB.URLSONGS, i.urlsongs)
+                            MainActivity.db?.insert(values)
+                        }
+                        MainActivity.db?.close()
                         Log.d("API", "Success Get Album by id" )
                         status = true
                     } else {
@@ -74,7 +105,7 @@ class AlbumApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultAlbum
         }
         public suspend fun searchAlbumByName(nameAlbum: String) : ResponseAlbum? {
@@ -117,7 +148,7 @@ class AlbumApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultAlbum
         }
 
@@ -155,7 +186,7 @@ class AlbumApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
         public suspend fun deleteFollowingAlbum(id: Int, idUser :String): Boolean{
@@ -192,7 +223,7 @@ class AlbumApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
 

@@ -32,15 +32,19 @@
             android:textStyle="bold"
         />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_fab"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:foregroundGravity="right"
             android:layout_gravity="right"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:backgroundTint="@color/white"
-            android:src="@drawable/ic_sample_user_icon"
-        />
+            tools:src="@android:color/darker_gray"
+            android:src="@drawable/ic_sample_user_icon"/>
+
+
     </LinearLayout>
 
     <LinearLayout

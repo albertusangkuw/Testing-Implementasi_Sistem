@@ -65,7 +65,7 @@ class MusicApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultMusic
         }
 
@@ -109,7 +109,7 @@ class MusicApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultMusic
         }
 
@@ -148,7 +148,7 @@ class MusicApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
 
@@ -187,7 +187,7 @@ class MusicApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
     }

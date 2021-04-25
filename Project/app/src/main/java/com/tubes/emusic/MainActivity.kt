@@ -11,21 +11,28 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tubes.emusic.api.SessionApi
+import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.db.DBManager
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.login.LoginActivity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
-
+    companion object{
+        public var currentUser : User? = null
+        var db : DBManager? = null
+    }
     lateinit var navView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        GlobalScope.launch() {
+        db = DBManager(this)
+        db?.open()
+        GlobalScope.launch{
             //Check is user can access api
             var statusCookie  = SessionApi.checkCookie()
             statusCookie  = true
@@ -33,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
+            Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
+            currentUser = UserApi.getSingleUser("Twice@gmail.com")
         }
         startMainActivity()
     }
@@ -79,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     public fun getBundle(f: Fragment): Thumbnail{
         return Thumbnail(f.arguments?.getString("id")
         ,f.arguments?.getString("type")
+                ,f.arguments?.getString("addon")
         ,f.arguments?.getString("urlImage")
         ,f.arguments?.getString("title")
         ,f.arguments?.getString("desctiption"))

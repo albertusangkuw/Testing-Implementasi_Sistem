@@ -95,7 +95,7 @@ class PlaylistApi {
                 }
             })
 
-            delay(1000L)
+            delay(500L)
             return resultPlaylist
         }
 
@@ -139,7 +139,7 @@ class PlaylistApi {
                 }
 
             })
-            delay(1000L)
+            delay(500L)
             return status
         }
 
@@ -177,7 +177,7 @@ class PlaylistApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
 
@@ -215,7 +215,7 @@ class PlaylistApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
         public suspend fun deleteSongPlaylist(id: Int,idMusic :Int): Boolean{
@@ -252,7 +252,7 @@ class PlaylistApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
 
@@ -290,7 +290,7 @@ class PlaylistApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
         public suspend fun deleteFollowingPlaylist(id: Int, idUser :String): Boolean{
@@ -327,7 +327,7 @@ class PlaylistApi {
 
             })
 
-            delay(1000L)
+            delay(500L)
             return status
         }
     }

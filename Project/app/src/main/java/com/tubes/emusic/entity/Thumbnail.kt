@@ -7,11 +7,13 @@ import android.os.Parcelable
 data class Thumbnail (
         var id: String?,
         var type: String?, // Music,Album,Playlist,Artist,Regular
+        var addOn: String?,
         var urlImage: String?,
         var title:String?,
         var description: String?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),

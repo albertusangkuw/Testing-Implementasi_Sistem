@@ -29,7 +29,7 @@ class ListGenreFragment : Fragment() {
 
     private fun showRecyclerCardGenreView() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail("", "Genre", "" , "EDM", "")
+        val hero1 = Thumbnail("", "Genre", "", "" , "EDM", "")
         list.add(hero1)
         list.add(hero1)
         list.add(hero1)

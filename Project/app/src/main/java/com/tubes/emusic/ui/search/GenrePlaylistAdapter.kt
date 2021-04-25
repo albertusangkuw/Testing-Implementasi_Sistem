@@ -38,10 +38,10 @@ class GenrePlaylistAdapter: Fragment()  {
     }
     private fun showRecyclerViewGenreMusicView() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "song1","Music", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Sunset ", "Avicii")
+        val hero1 = Thumbnail( "song1","Music", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Sunset ", "Avicii")
         list.add(hero1)
         list.add(hero1)
-        val hero2 = Thumbnail( "song2","Music", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Yes or Yes", "Twice")
+        val hero2 = Thumbnail( "song2","Music", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Yes or Yes", "Twice")
         list.add(hero2)
         list.add(hero1)
 

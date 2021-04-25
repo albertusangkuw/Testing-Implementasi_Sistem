@@ -34,10 +34,10 @@ class MyMusicFragment : Fragment() {
 
     private fun showRecyclerListMusic() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","MusicNoCover", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
+        val hero1 = Thumbnail( "sfhskwe","MusicNoCover", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
         list.add(hero1)
         list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","MusicNoCover", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
+        val hero2 = Thumbnail( "3242ddwe","MusicNoCover", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
         list.add(hero2)
         list.add(hero1)
         list.add(hero2)

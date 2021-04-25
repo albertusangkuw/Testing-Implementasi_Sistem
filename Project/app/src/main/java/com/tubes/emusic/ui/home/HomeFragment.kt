@@ -11,24 +11,29 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
-import com.tubes.emusic.api.MusicApi
-import com.tubes.emusic.api.PlaylistApi
-import com.tubes.emusic.api.SessionApi
-import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 class HomeFragment : Fragment()  {
+    companion object{
+        var responseAlbum: ResponseAlbum? = null
+    }
     private lateinit var rv_bigmusicalbum : RecyclerView
+
+    private val list = ArrayList<Thumbnail>()
+    private val recentlList = intArrayOf(1,5,10)
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -37,7 +42,6 @@ class HomeFragment : Fragment()  {
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
         rv_bigmusicalbum.setHasFixedSize(true)
-        showRecyclerListBigMusicAlbum()
 
         //Change greetings
         view.findViewById<TextView>(R.id.text_home_greeting).setText(dayGreeting())
@@ -85,21 +89,35 @@ class HomeFragment : Fragment()  {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        laucherWaiting()
+        Thread.sleep(1100 )
+        Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+        Thread.sleep((500* recentlList.size).toLong())
+        showRecyclerListBigMusicAlbum()
+    }
+    private fun laucherWaiting(){
+        GlobalScope.launch{
+            delay(1000)
+            Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
+            for (i in recentlList){
+             val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
+
+                if(data != null) {
+                    val thumb = Thumbnail(data.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i + "/photo", data.genre,  " followers")
+                    list.add(thumb)
+                }
+            }
+        }
+    }
+
     private fun showRecyclerListBigMusicAlbum() {
-        val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","Album", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","Album", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
-        list.add(hero2)
-        list.add(hero1)
         rv_bigmusicalbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         val listHeroAdapter = ListBigMusicAlbumAdapter(list)
         rv_bigmusicalbum.adapter = listHeroAdapter
     }
 
     fun dayGreeting(): String {
-
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH")
         val formatted = current.format(formatter)
@@ -119,7 +137,4 @@ class HomeFragment : Fragment()  {
         }
         return status
     }
-
-
-
 }
