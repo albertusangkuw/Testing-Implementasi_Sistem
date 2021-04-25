@@ -102,7 +102,7 @@ class AlbumApi {
             }
 
              */
-            //delay(500L)
+            delay(500L)
             return resultAlbum
         }
         public suspend fun searchAlbumByName(nameAlbum: String) : ResponseAlbum? {
