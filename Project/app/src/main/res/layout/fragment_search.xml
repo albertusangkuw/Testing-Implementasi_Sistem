@@ -31,10 +31,10 @@
         app:boxBackgroundColor="@color/white"
         app:startIconDrawable="@drawable/ic_baseline_black_search_24"
         app:hintEnabled="false"
+
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         >
         <com.google.android.material.textfield.TextInputEditText
-
             android:layout_width="match_parent"
             android:imeOptions="actionGo"
             android:layout_height="wrap_content"

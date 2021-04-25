@@ -2,7 +2,6 @@ package com.tubes.emusic.ui.home
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.Thumbnail
-import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,9 +34,9 @@ class HomeFragment : Fragment()  {
     private val list = ArrayList<Thumbnail>()
     private val recentlList = intArrayOf(1,5,10)
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
@@ -52,34 +50,32 @@ class HomeFragment : Fragment()  {
             // Menaruh data ke dalam fragment yang dikirim
             (context as MainActivity).openFragment(ldf)
         }
-/*
+        testingButton(view)
+
         laucherWaiting()
 
-        Handler().postDelayed({
-            Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
-            showRecyclerListBigMusicAlbum()
-        }, 10000)
-*/
+        val handler: Handler = Handler()
+        val run = object : Runnable {
+            override fun run() {
+                if(MainActivity.currentUser?.urlphotoprofile != "") {
+                    Glide.with(view.context).load(HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+                }else{
+                    Glide.with(view.context).load("https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+                }
+                Thread.sleep((200* recentlList.size).toLong())
+                showRecyclerListBigMusicAlbum()
+            }
+        }
+        handler.postDelayed(run,(3000).toLong())
         return view
     }
 
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        laucherWaiting()
-        Thread.sleep(1100 )
-        Glide.with(view.context).load(   HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
-        Thread.sleep((500* recentlList.size).toLong())
-        showRecyclerListBigMusicAlbum()
-
-
-    }
     private fun laucherWaiting(){
         GlobalScope.launch{
             delay(1000)
             Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
             for (i in recentlList){
-             val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
+                val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
                 if(data != null) {
                     val thumb = Thumbnail(data.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i + "/photo", data.genre,  " followers")
                     list.add(thumb)
@@ -110,12 +106,12 @@ class HomeFragment : Fragment()  {
             }else{
                 status ="Good morning"
                 Log.e("Abstract", "Good morning " + formatted)
-           }
+            }
         }
         return status
     }
 
-    fun testingBtn(view: View){
+    fun testingButton(view: View){
         view.findViewById<Button>(R.id.btn_testing_login).setOnClickListener {
             Log.e("Abstract", "Playbar excecuted")
 

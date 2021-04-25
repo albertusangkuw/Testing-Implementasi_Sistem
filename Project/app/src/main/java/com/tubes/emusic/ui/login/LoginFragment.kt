@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.SessionApi
+import com.tubes.emusic.api.UserApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +45,8 @@ class LoginFragment  : Fragment() {
                 status  = SessionApi.loginUser(email, password)
                 Log.e("Abstract", "Testing login  : " + status)
                 if(status){
-                    Log.e("Abstract", "Redirect Mainactivit")
+                    Log.e("Abstract", "Redirect Mainactivity")
+                    MainActivity.currentUser = UserApi.getSingleUser(email)
                     startActivity(Intent(context,MainActivity::class.java))
                     //(context as MainActivity).startMainActivity()
                 }else{
