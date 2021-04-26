@@ -65,11 +65,15 @@ data class ResponseDetailUser (
         @SerializedName("message") var message : String,
         @SerializedName("id") var id : String,
         @SerializedName("datafollowers") var datafollowers : List<String>,
-        @SerializedName("datafollowing") var datafollowing : List<String>,
-        @SerializedName("dataplaylist") var dataplaylist : List<String>,
+        @SerializedName("datafollowingartis") var datafollowingartis : String,
+        @SerializedName("datalikedsong") var datalikedsong : String,
+        @SerializedName("datafollowingregular") var datafollowingregular : List<String>,
+        @SerializedName("dataplaylistowned") var dataplaylistowned : List<String>,
+        @SerializedName("dataplaylistliked") var dataplaylistliked : String,
         @SerializedName("dataalbum") var dataalbum : List<String>
 
 )
+
 class UserApi {
     companion object{
         //Shared Variable
@@ -448,7 +452,7 @@ class UserApi {
                         resultDetailUser = mUser
                         Log.d("API", "Success Get Detail Single User with ID ")
                         status = true
-                        for( i in mUser.datafollowing){
+                        for( i in mUser.datafollowingregular){
                            val tempUser =  MappingHelper.mapListRegularUserToArrayList(MainActivity.db?.queryById(i,DatabaseContract.UserDB.TABLE_NAME))
                            if (tempUser.isEmpty()){
 

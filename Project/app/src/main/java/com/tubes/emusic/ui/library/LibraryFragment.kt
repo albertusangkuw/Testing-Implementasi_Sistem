@@ -1,6 +1,5 @@
 package com.tubes.emusic.ui.library
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,14 +10,11 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
-import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.UserProfileFragment
 import com.tubes.emusic.ui.login.LoginActivity
-import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,8 +34,8 @@ class LibraryFragment : Fragment() {
                 Log.e("Abstract", "ID Usernow Library : " + idUser)
                 detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
                 var playlistUserTemp :ArrayList<PlaylistData> =ArrayList<PlaylistData>()
-                if(detailUser!!.dataplaylist != null){
-                    for(i in detailUser?.dataplaylist!!){
+                if(detailUser!!.dataplaylistowned != null){
+                    for(i in detailUser?.dataplaylistowned!!){
                         val playlist  = PlaylistApi.getPlaylistById(i.toInt())
                         delay(3000)
                         if(playlist != null){
@@ -101,8 +97,8 @@ class LibraryFragment : Fragment() {
         val run = object : Runnable {
             override fun run() {
                 if(detailUser != null){
-                    if(detailUser!!.dataplaylist != null) {
-                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + detailUser!!.dataplaylist.size + " Playlists")
+                    if(detailUser!!.dataplaylistowned != null) {
+                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + detailUser!!.dataplaylistowned.size + " Playlists")
                     }else{
                         view.findViewById<TextView>(R.id.tv_detail_playlist).setText("0 Playlists")
                     }
