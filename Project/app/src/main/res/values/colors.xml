@@ -14,4 +14,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="text__color_primary">#FFFFFFFF</color>
     <color name="dark_maroon">#5C2F2F</color>
+    <color name="maroon">#4F0B0B</color>
+    <color name="sky_night">#0D0D29</color>
+    <color name="dark_green">#001D1C</color>
 </resources>
