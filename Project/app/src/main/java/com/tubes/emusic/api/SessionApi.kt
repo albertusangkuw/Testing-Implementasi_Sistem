@@ -27,6 +27,7 @@ class SessionApi {
                         status = false
                     }
                 }
+
                 override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
                     // Jika koneksi gagal
 
@@ -46,7 +47,7 @@ class SessionApi {
                 }
             })
 
-            delay(300L)
+            delay(600L)
             return  status
         }
 

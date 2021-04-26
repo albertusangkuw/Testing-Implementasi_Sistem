@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.playbar.PlaybarFragment
 import com.tubes.emusic.ui.search.GenrePlaylistAdapter
 
 
@@ -22,8 +23,8 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                 findViewById<TextView>(R.id.tv_item_music_name).text = thumb.title
                 findViewById<TextView>(R.id.tv_item_music_description).text = thumb.description
 
-                when(thumb.type){
-                    "MusicNoCover" -> {
+                when(thumb.addOn){
+                    "NoCover" -> {
                         findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.img_item_musicalbum_photo).setVisibility(View.GONE)
                     }
                     "LibraryListMusic" -> {
@@ -36,6 +37,7 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                     }
                 }
 
+
                 itemView.setOnClickListener {
                     Log.e("Abstract", "List Music item clicked")
                     when(thumb.type){
@@ -46,6 +48,14 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                             // Otw digantgi jadi format di my library
                             val ldf = DetailPlaylistAlbum()
                             ldf.setArguments(args)
+                            (context as MainActivity).openFragment(ldf)
+                        }
+                        "Music" ->{
+                            //Insialisisasi Bundle
+                            val args =  (context as MainActivity).setBundle(thumb)
+                            val ldf = PlaybarFragment()
+                            ldf.setArguments(args)
+                            // Menaruh data ke dalam fragment yang dikirim
                             (context as MainActivity).openFragment(ldf)
                         }
                     }

@@ -18,11 +18,13 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper.mapListAlbumToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListPlaylistSongToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListsongToArrayList
 import com.tubes.emusic.ui.home.ListBigMusicAlbumAdapter
+import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,6 +38,8 @@ import kotlinx.coroutines.launch
  * create an instance of this fragment.
  */
 class DetailPlaylistAlbum : Fragment() {
+
+
     private lateinit var rv_music: RecyclerView
     private val list = ArrayList<Thumbnail>()
     private lateinit var bundleData : Thumbnail
@@ -78,10 +82,14 @@ class DetailPlaylistAlbum : Fragment() {
             )
             mapData = rawPlaylist.get(0).listsong!!
         }
+
+        var iter = 0
         for (i in mapData){
-            val thumb = Thumbnail(i.idsong.toString(), "Music", addOn,  HTTPClientManager.host + "album/" +  i.idalbum + "/photo", i.title,  i.genre)
+            val thumb = Thumbnail(i.idsong.toString(), "Music",""+ iter,  HTTPClientManager.host + "album/" +  i.idalbum + "/photo", i.title,  i.genre)
             list.add(thumb)
+            iter++
         }
+        PlaybarFragment.mapData = list
     }
 
     private fun showRecyclerListMusic() {

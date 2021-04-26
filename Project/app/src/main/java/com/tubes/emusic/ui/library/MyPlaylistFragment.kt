@@ -33,6 +33,14 @@ class MyPlaylistFragment : Fragment() {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
+        /*
+        Panggil libraryfrgament
+
+        for(i in LibraryFragment.playlistUser){
+            i.
+        }
+
+         */
         rv_listPlaylist = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_playlist_music)
         rv_listPlaylist.setHasFixedSize(true)
         showRecyclerListPlaylist()

@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter
 class HomeFragment : Fragment()  {
     companion object{
         var responseAlbum: ResponseAlbum? = null
+
     }
     private lateinit var rv_bigmusicalbum : RecyclerView
 
@@ -38,6 +39,7 @@ class HomeFragment : Fragment()  {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
         rv_bigmusicalbum.setHasFixedSize(true)
@@ -66,9 +68,12 @@ class HomeFragment : Fragment()  {
                 showRecyclerListBigMusicAlbum()
             }
         }
+
         handler.postDelayed(run,(3000).toLong())
         return view
     }
+
+
 
     private fun laucherWaiting(){
         GlobalScope.launch{

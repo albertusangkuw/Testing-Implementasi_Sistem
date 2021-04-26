@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         val args = Bundle()
         args.putString("id", thumb.id)
         args.putString("type", thumb.type)
+        args.putString("addon", thumb.addOn)
         args.putString("title", thumb.title)
         args.putString("description", thumb.description)
         args.putString("urlImage", thumb.urlImage)
