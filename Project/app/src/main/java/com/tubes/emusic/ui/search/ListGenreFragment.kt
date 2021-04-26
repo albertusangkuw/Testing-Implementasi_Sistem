@@ -8,7 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.R
+import com.tubes.emusic.api.MusicApi
 import com.tubes.emusic.entity.Thumbnail
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ListGenreFragment : Fragment() {
     private lateinit var rv_genre_card : RecyclerView
@@ -29,18 +32,19 @@ class ListGenreFragment : Fragment() {
 
     private fun showRecyclerCardGenreView() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail("", "Genre", "", "" , "EDM", "")
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
+        val strGenre = arrayListOf<String>("Electronic", "Dance",        "Pop",        "K-Pop",        "Electronica",        "Ballad",        "R&B",        "J-Pop",        "Rap / Hip-hop",        "Aziatische Muziek / Electro",               "R&B / Soul")
 
+        for(i in strGenre){
+            val thumb = Thumbnail("", "Genre", "", "" , i, "")
+            GlobalScope.launch {
+                MusicApi.getMusicByGenre(i)
+            }
+            list.add(thumb)
+        }
         rv_genre_card.layoutManager = GridLayoutManager(context,2)
         val cardViewAdapter = CardViewGenreAdapter(list)
         rv_genre_card.adapter = cardViewAdapter
+
     }
 
 }

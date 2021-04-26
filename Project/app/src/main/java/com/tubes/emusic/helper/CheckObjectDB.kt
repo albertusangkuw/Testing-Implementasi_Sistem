@@ -27,4 +27,21 @@ object CheckObjectDB {
         }
         return  true
     }
+
+    fun searchDataUser(id: String): Boolean{
+        var rs =  MappingHelper.mapListRegularUserToArrayList(
+                MainActivity.db?.queryById(id,DatabaseContract.UserDB.TABLE_NAME)
+        )
+        for(i in rs){
+            Log.d("DB", "Stats User " + i.iduser + " vs " + id )
+            if(i.iduser == id){
+                return false
+            }
+        }
+        return  true
+
+    }
+
+
+
 }

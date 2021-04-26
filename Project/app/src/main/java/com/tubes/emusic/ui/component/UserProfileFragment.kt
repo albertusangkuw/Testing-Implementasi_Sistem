@@ -34,6 +34,8 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun showRecyclerListPublicPlaylists() {
+
+
         val list = ArrayList<Thumbnail>()
         val hero1 = Thumbnail( "sfhskwe","LibraryListMusic", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
         list.add(hero1)

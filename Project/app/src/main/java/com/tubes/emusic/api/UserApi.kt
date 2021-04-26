@@ -5,11 +5,15 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
  */
+import android.content.ContentValues
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.loopj.android.http.RequestParams
+import com.tubes.emusic.MainActivity
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.User
+import com.tubes.emusic.helper.CheckObjectDB.searchDataUser
 import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -111,9 +115,12 @@ class UserApi {
                                 break
                             }
                         }
+
                         Log.d("API", "Success Get Single User with ID " + user!!.iduser)
 
                         status = true
+                        insertUpdateUserRegulerDB(mUser.regularuser)
+                        insertUpdateArtisDB(mUser.artist)
                     } else {
                         Log.d("API", "Failed Get Single User")
                         status = false
@@ -155,6 +162,8 @@ class UserApi {
                         resultUser = mUser
                         Log.d( "API","Success Search user")
                         cookieStatus = true
+                        insertUpdateUserRegulerDB(mUser.regularuser)
+                        insertUpdateArtisDB(mUser.artist)
                     }else{
                         Log.d( "API","Failed search user")
                         cookieStatus = false
@@ -394,6 +403,65 @@ class UserApi {
 
             delay(500L)
             return resultDetailUser
+        }
+
+
+        fun insertUpdateUserRegulerDB(data: List<Regularuser>){
+            for(i in data){
+                val valuesUser = ContentValues()
+                valuesUser.put(DatabaseContract.UserDB.ID, i.iduser)
+                valuesUser.put(DatabaseContract.UserDB.DATEJOIN, i.datejoin)
+                valuesUser.put(DatabaseContract.UserDB.URLPHOTOPROFILE, i.urlphotoprofile)
+                valuesUser.put(DatabaseContract.UserDB.COUNTRY, i.country)
+                valuesUser.put(DatabaseContract.UserDB.EMAIL, i.email)
+                valuesUser.put(DatabaseContract.UserDB.CATEGORIES, i.categories)
+                valuesUser.put(DatabaseContract.UserDB.USERNAME, i.username)
+
+                val values = ContentValues()
+                values.put(DatabaseContract.RegularUserDB.DATEOFBIRTH, i.dateofbirth)
+                values.put(DatabaseContract.RegularUserDB.GENDER, i.gender)
+                values.put(DatabaseContract.RegularUserDB.ID ,i.iduser)
+                if(searchDataUser(i.iduser)){
+                    //Insert
+                    MainActivity.db?.insert( valuesUser, DatabaseContract.UserDB.TABLE_NAME)
+                    MainActivity.db?.insert( values, DatabaseContract.RegularUserDB.TABLE_NAME)
+                }else{
+                    MainActivity.db?.update(i.iduser , valuesUser , DatabaseContract.UserDB.TABLE_NAME)
+                    MainActivity.db?.update(i.iduser, values ,DatabaseContract.RegularUserDB.TABLE_NAME)
+                    //Update
+                }
+
+
+
+            }
+        }
+
+        fun insertUpdateArtisDB(data: List<Artist>){
+            for(i in data) {
+                val valuesUser = ContentValues()
+                valuesUser.put(DatabaseContract.UserDB.ID, i.iduser)
+                valuesUser.put(DatabaseContract.UserDB.DATEJOIN, i.datejoin)
+                valuesUser.put(DatabaseContract.UserDB.URLPHOTOPROFILE, i.urlphotoprofile)
+                valuesUser.put(DatabaseContract.UserDB.COUNTRY, i.country)
+                valuesUser.put(DatabaseContract.UserDB.EMAIL, i.email)
+                valuesUser.put(DatabaseContract.UserDB.CATEGORIES, i.categories)
+                valuesUser.put(DatabaseContract.UserDB.USERNAME, i.username)
+
+                val values = ContentValues()
+                values.put(DatabaseContract.ArtistDB.ID, i.iduser)
+                values.put(DatabaseContract.ArtistDB.BIO, i.bio)
+
+                if (searchDataUser(i.iduser)) {
+                    //Insert
+                    MainActivity.db?.insert(valuesUser, DatabaseContract.UserDB.TABLE_NAME)
+                    MainActivity.db?.insert(values, DatabaseContract.ArtistDB.TABLE_NAME)
+                } else {
+                    //Update
+                    MainActivity.db?.update(i.iduser , valuesUser , DatabaseContract.UserDB.TABLE_NAME)
+                    MainActivity.db?.update(i.iduser, values ,DatabaseContract.ArtistDB.TABLE_NAME)
+
+                }
+            }
         }
 
 

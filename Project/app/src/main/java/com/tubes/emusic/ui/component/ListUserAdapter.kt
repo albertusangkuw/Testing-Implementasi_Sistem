@@ -19,7 +19,7 @@ class ListUserAdapter (private val listThumbnail: ArrayList<Thumbnail>): Recycle
                 Glide.with(itemView.context).load(thumb.urlImage).into(findViewById<ImageView>(R.id.img_item_user_photo))
                 findViewById<TextView>(R.id.tv_item_user_name).text = thumb.title
 
-                when(thumb.type){
+                when(thumb.addOn){
                     "ListArtist" -> {
                         findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_item_user_photo).layoutParams.width = 250
                         findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_item_user_photo).layoutParams.height = 250
@@ -29,20 +29,14 @@ class ListUserAdapter (private val listThumbnail: ArrayList<Thumbnail>): Recycle
                 itemView.setOnClickListener {
                     Log.e("Abstract", "List user item clicked")
                     when(thumb.type){
-                        "ListArtist" -> {
-                            //Insialisisasi Bundle
+                        "Artist" -> {
                             val args =  (context as MainActivity).setBundle(thumb)
-                            // Frament destination
-                            // Otw digantgi jadi format di my library
                             val ldf = ArtistProfileFragment()
                             ldf.setArguments(args)
                             (context as MainActivity).openFragment(ldf)
                         }
-                        "ListUser" -> {
-                            //Insialisisasi Bundle
+                        "User" -> {
                             val args =  (context as MainActivity).setBundle(thumb)
-                            // Frament destination
-                            // Otw digantgi jadi format di my library
                             val ldf = UserProfileFragment()
                             ldf.setArguments(args)
                             (context as MainActivity).openFragment(ldf)
