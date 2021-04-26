@@ -35,7 +35,7 @@ class HomeFragment : Fragment()  {
     private lateinit var rv_bigmusicalbum : RecyclerView
 
     private val list = ArrayList<Thumbnail>()
-    private val recentlList = intArrayOf(1,5,10)
+    private val recentlList = intArrayOf(1,5,10,2)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
