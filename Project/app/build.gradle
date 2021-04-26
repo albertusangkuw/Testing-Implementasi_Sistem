@@ -10,7 +10,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.albertusangkuw.emusic"
+        applicationId "com.tubes.emusic"
         minSdkVersion 30
         targetSdkVersion 30
         versionCode 1
