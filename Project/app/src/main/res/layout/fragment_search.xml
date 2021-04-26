@@ -9,6 +9,8 @@
     android:paddingTop="@dimen/fragment_vertical_padding"
     android:paddingRight="17dp"
     android:background="@color/black"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.search.SearchFragment">
 
     <TextView

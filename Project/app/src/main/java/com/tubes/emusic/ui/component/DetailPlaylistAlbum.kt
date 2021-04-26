@@ -23,7 +23,9 @@ import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper.mapListAlbumToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListPlaylistSongToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListsongToArrayList
+import com.tubes.emusic.ui.home.HomeFragment
 import com.tubes.emusic.ui.home.ListBigMusicAlbumAdapter
+import com.tubes.emusic.ui.library.LibraryFragment
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -48,6 +50,11 @@ class DetailPlaylistAlbum : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_detail_playlist_album, container, false)
+        view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
+            Log.e("Abstract", "Back to Stack")
+            (context as MainActivity).openFragment(HomeFragment())
+        }
+
         bundleData = (context as MainActivity).getBundle(this)
         var tvdesc =  view.findViewById<TextView>(R.id.tv_detail_playlist_description)
 

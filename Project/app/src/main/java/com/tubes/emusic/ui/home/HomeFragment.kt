@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.component.UserProfileFragment
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,8 +41,11 @@ class HomeFragment : Fragment()  {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         var view = inflater.inflate(R.layout.fragment_home, container, false)
+        view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home).setOnClickListener {
+            (context as MainActivity).openFragment(UserProfileFragment())
+        }
+
         rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
         rv_bigmusicalbum.setHasFixedSize(true)
 
@@ -60,9 +65,9 @@ class HomeFragment : Fragment()  {
         val run = object : Runnable {
             override fun run() {
                 if(MainActivity.currentUser?.urlphotoprofile != "") {
-                    Glide.with(view.context).load(HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+                    Glide.with(view.context).load(HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))
                 }else{
-                    Glide.with(view.context).load("https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_fab))
+                    Glide.with(view.context).load("https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))
                 }
                 Thread.sleep((200* recentlList.size).toLong())
                 showRecyclerListBigMusicAlbum()
