@@ -354,22 +354,30 @@ class PlaylistApi {
                 }
                 if( searchDataPlaylist(i.idplaylist)){
                     MainActivity.db?.insert(valuesPlaylist, DatabaseContract.PlaylistDB.TABLE_NAME)
-                    MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
-                    MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                    if(!valuesFollowing.isEmpty) {
+                        MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                    }
+                    if(!valuesListSong.isEmpty) {
+                        MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                    }
                 }else{
                     MainActivity.db?.update(i.idplaylist.toString(), valuesPlaylist , DatabaseContract.PlaylistDB.TABLE_NAME)
-                    MainActivity.db?.deleteCustomById(
-                            i.idplaylist.toString(),
-                            DatabaseContract.PlaylistFollowingDB.IDPLAYLIST,
-                            DatabaseContract.PlaylistFollowingDB.TABLE_NAME
-                    )
-                    MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
-                    MainActivity.db?.deleteCustomById(
-                            i.idplaylist.toString(),
-                            DatabaseContract.PlaylistSongDB.IDPLAYLIST,
-                            DatabaseContract.PlaylistSongDB.TABLE_NAME
-                    )
-                    MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                    if(!valuesFollowing.isEmpty) {
+                        MainActivity.db?.deleteCustomById(
+                                i.idplaylist.toString(),
+                                DatabaseContract.PlaylistFollowingDB.IDPLAYLIST,
+                                DatabaseContract.PlaylistFollowingDB.TABLE_NAME
+                        )
+                        MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                    }
+                    if(!valuesListSong.isEmpty) {
+                        MainActivity.db?.deleteCustomById(
+                                i.idplaylist.toString(),
+                                DatabaseContract.PlaylistSongDB.IDPLAYLIST,
+                                DatabaseContract.PlaylistSongDB.TABLE_NAME
+                        )
+                        MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                    }
                 }
             }
         }

@@ -1,18 +1,29 @@
 package com.tubes.emusic.ui.library
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RelativeLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.PlaylistApi
+import com.tubes.emusic.entity.Playlist
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
+import com.tubes.emusic.ui.library.LibraryFragment.Companion.laucherWaiting
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -22,7 +33,7 @@ import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
  */
 class MyPlaylistFragment : Fragment() {
     private lateinit var rv_listPlaylist : RecyclerView
-
+    private var m_Text = ""
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -44,24 +55,54 @@ class MyPlaylistFragment : Fragment() {
         rv_listPlaylist = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_playlist_music)
         rv_listPlaylist.setHasFixedSize(true)
         showRecyclerListPlaylist()
+
+
+        view.findViewById<RelativeLayout>(R.id.rl_add_playlist).setOnClickListener{
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+            builder.setTitle("Name of new playlist")
+            val input = EditText(context)
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(input)
+            builder.setPositiveButton("OK", DialogInterface.OnClickListener {
+                dialog,
+                which -> m_Text = input.text.toString()
+                if(m_Text.length > 0){
+                    createNewPlaylist(m_Text)
+                }
+            })
+            builder.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+            builder.show()
+
+        }
+
         return view
+    }
+
+    private fun createNewPlaylist(name : String){
+        GlobalScope.launch {
+            val newPlay = Playlist(
+                    iduser= MainActivity.currentUser?.iduser,
+                    namePlaylist = name,
+                    urlImageCover = "",
+                    ""
+            )
+            PlaylistApi.insertPlaylist(newPlay)
+            delay(1000)
+            laucherWaiting()
+            delay(2000)
+            (context as MainActivity).openFragment(MyPlaylistFragment())
+        }
     }
 
     private fun showRecyclerListPlaylist() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","LibraryListAlbum", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","LibraryListAlbum", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
-        rv_listPlaylist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        for(i in LibraryFragment.playlistUser){
+            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg",
+                    i.nameplaylist, "")
+            list.add(thumb)
+        }
+        rv_listPlaylist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv_listPlaylist.adapter = listHeroAdapter
     }

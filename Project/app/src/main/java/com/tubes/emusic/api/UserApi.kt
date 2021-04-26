@@ -14,6 +14,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.User
 import com.tubes.emusic.helper.CheckObjectDB.searchDataUser
+import com.tubes.emusic.helper.MappingHelper
 import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -80,6 +81,78 @@ class UserApi {
 
         public suspend fun getSingleUser(email: String) : User? {
             var url =  HTTPClientManager.host + "users/${email}"
+
+            HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
+                override fun onSuccess(statusCode: Int, headers: Array<Header>,
+                                       responseBody: ByteArray) {
+
+                    val result = String(responseBody)
+
+                    Log.d("API", "hasil ${result}")
+                    if (HTTPClientManager.getStatusRequest(result)) {
+
+                        var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseUser::class.java)
+                        if(mUser.regularuser != null) {
+                            for (i in mUser.regularuser) {
+                                user = User(i.iduser,
+                                        i.username,
+                                        i.email,
+                                        i.country,
+                                        i.urlphotoprofile,
+                                        i.datejoin,
+                                        2)
+                                break
+                            }
+
+                        }else if(mUser.artist != null){
+                            for (i in mUser.artist) {
+                                user = User(i.iduser,
+                                        i.username,
+                                        i.email,
+                                        i.country,
+                                        i.urlphotoprofile,
+                                        i.datejoin,
+                                        2)
+                                break
+                            }
+                        }
+
+                        Log.d("API", "Success Get Single User with ID " + user!!.iduser)
+
+                        status = true
+                        insertUpdateUserRegulerDB(mUser.regularuser)
+                        insertUpdateArtisDB(mUser.artist)
+                    } else {
+                        Log.d("API", "Failed Get Single User")
+                        status = false
+                    }
+                }
+
+                override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+                    // Jika koneksi gagal
+
+                    val errorMessage = when (statusCode) {
+                        401 -> "$statusCode : Bad Request"
+                        403 -> "$statusCode : Forbidden"
+                        404 -> "$statusCode : Not Found"
+                        else -> "$statusCode : ${error.message}"
+                    }
+                    Log.d("Failure", errorMessage)
+
+                }
+
+                // ----New Overridden method
+                override fun getUseSynchronousMode(): Boolean {
+                    return false
+                }
+            })
+
+            delay(500L)
+            return user
+        }
+
+        public suspend fun getSingleUserByID(id: String) : User? {
+            var url =  HTTPClientManager.host + "users/${id}"
 
             HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
                 override fun onSuccess(statusCode: Int, headers: Array<Header>,
@@ -375,6 +448,12 @@ class UserApi {
                         resultDetailUser = mUser
                         Log.d("API", "Success Get Detail Single User with ID ")
                         status = true
+                        for( i in mUser.datafollowing){
+                           val tempUser =  MappingHelper.mapListRegularUserToArrayList(MainActivity.db?.queryById(i,DatabaseContract.UserDB.TABLE_NAME))
+                           if (tempUser.isEmpty()){
+
+                           }
+                        }
                     } else {
                         Log.d("API", "Failed Get  Detail Single User")
                         status = false

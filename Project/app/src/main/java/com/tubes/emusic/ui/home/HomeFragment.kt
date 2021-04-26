@@ -64,7 +64,7 @@ class HomeFragment : Fragment()  {
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
-                if(MainActivity.currentUser?.urlphotoprofile != "") {
+                if(MainActivity.currentUser?.urlphotoprofile != "" &&  MainActivity.currentUser?.iduser != null) {
                     Glide.with(view.context).load(HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))
                 }else{
                     Glide.with(view.context).load("https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))

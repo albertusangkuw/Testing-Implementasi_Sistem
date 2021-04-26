@@ -152,11 +152,11 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
                      " ${DatabaseContract.PlaylistDB.NAMEPLAYLIST} TEXT ," +
                      " ${DatabaseContract.PlaylistDB.URLIMAGECOVER} TEXT )"
              private val SQL_CREATE_TABLE_PLAYLIST_FOLLOWING =  "CREATE TABLE " + DatabaseContract.PlaylistFollowingDB.TABLE_NAME+
-                     " (${DatabaseContract.PlaylistFollowingDB.ID} INTEGER  PRIMARY KEY ," +
+                     " (${DatabaseContract.PlaylistFollowingDB.ID} INTEGER  PRIMARY KEY  AUTOINCREMENT," +
                      " ${DatabaseContract.PlaylistFollowingDB.IDPLAYLIST} INTEGER ," +
                      " ${DatabaseContract.PlaylistFollowingDB.IDUSER} TEXT )"
              private val SQL_CREATE_TABLE_PLAYLIST_SONG =  "CREATE TABLE " + DatabaseContract.PlaylistSongDB.TABLE_NAME+
-                     " (${DatabaseContract.PlaylistSongDB.ID} INTEGER  PRIMARY KEY ," +
+                     " (${DatabaseContract.PlaylistSongDB.ID} INTEGER  PRIMARY KEY AUTOINCREMENT ," +
                      " ${DatabaseContract.PlaylistSongDB.IDSONG} INTEGER ," +
                      " ${DatabaseContract.PlaylistSongDB.IDPLAYLIST} INTEGER )"
              private val SQL_CREATE_TABLE_REGULAR_USER =  "CREATE TABLE "  + DatabaseContract.RegularUserDB.TABLE_NAME+

@@ -30,6 +30,38 @@ class LibraryFragment : Fragment() {
         var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
         var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
         var artistUser : ArrayList<UserApi> = ArrayList<UserApi>()
+
+        public fun laucherWaiting(){
+            GlobalScope.launch{
+                delay(1000)
+                val idUser = MainActivity.currentUser?.iduser
+                Log.e("Abstract", "ID Usernow Library : " + idUser)
+                detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
+                var playlistUserTemp :ArrayList<PlaylistData> =ArrayList<PlaylistData>()
+                if(detailUser!!.dataplaylist != null){
+                    for(i in detailUser?.dataplaylist!!){
+                        val playlist  = PlaylistApi.getPlaylistById(i.toInt())
+                        delay(3000)
+                        if(playlist != null){
+                            playlistUserTemp.add(playlist.data.get(0))
+                        }
+                    }
+                }
+                playlistUser = playlistUserTemp
+
+                var albumUserTemp : ArrayList<AlbumData> =ArrayList<AlbumData>()
+                if(detailUser!!.dataalbum != null){
+                    for(i in detailUser?.dataalbum!!) {
+                        val album = AlbumApi.getAlbumById(i.toInt())
+                        delay(3000)
+                        if(album != null){
+                            albumUserTemp.add(album.data.get(0))
+                        }
+                    }
+                }
+                albumUser= albumUserTemp
+            }
+        }
     }
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -68,7 +100,6 @@ class LibraryFragment : Fragment() {
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
-                //delay(2000)
                 if(detailUser != null){
                     if(detailUser!!.dataplaylist != null) {
                         view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + detailUser!!.dataplaylist.size + " Playlists")
@@ -89,33 +120,5 @@ class LibraryFragment : Fragment() {
         return view
     }
 
-    private fun laucherWaiting(){
-        GlobalScope.launch{
-            delay(1000)
-            Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
-            val idUser = MainActivity.currentUser?.iduser
-            Log.e("Abstract", "ID Usernow : " + idUser)
-            detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
 
-            if(detailUser!!.dataplaylist != null){
-                for(i in detailUser?.dataplaylist!!){
-                    val playlist  = PlaylistApi.getPlaylistById(i.toInt())
-                    delay(1000)
-                    if(playlist != null){
-                        playlistUser.add(playlist.data.get(0))
-                    }
-                }
-            }
-
-            if(detailUser!!.dataalbum != null){
-                for(i in detailUser?.dataalbum!!) {
-                    val album = AlbumApi.getAlbumById(i.toInt())
-                    delay(1000)
-                    if(album != null){
-                        albumUser.add(album.data.get(0))
-                    }
-                }
-            }
-        }
-    }
 }
