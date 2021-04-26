@@ -3,6 +3,7 @@ package com.tubes.emusic.ui.library
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
@@ -23,7 +25,11 @@ import kotlinx.coroutines.launch
 
 class LibraryFragment : Fragment() {
     companion object{
-          var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+        var detailUser : ResponseDetailUser? = null
+        var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+        var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
+        var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
+        var artistUser : ArrayList<UserApi> = ArrayList<UserApi>()
     }
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -57,38 +63,59 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
+        laucherWaiting()
 
-        laucherWaiting(view)
+        val handler: Handler = Handler()
+        val run = object : Runnable {
+            override fun run() {
+                //delay(2000)
+                if(detailUser != null){
+                    if(detailUser!!.dataplaylist != null) {
+                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + detailUser!!.dataplaylist.size + " Playlists")
+                    }else{
+                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("0 Playlists")
+                    }
 
+                    if(detailUser!!.dataalbum != null) {
+                        view.findViewById<TextView>(R.id.tv_detail_album).setText("" + detailUser!!.dataalbum.size + " Albums")
+                    }else{
+                        view.findViewById<TextView>(R.id.tv_detail_album).setText("0 Albums")
+                    }
+                }
+            }
+        }
 
+        handler.postDelayed(run,(3000).toLong())
         return view
     }
 
-    private fun laucherWaiting(view: View){
+    private fun laucherWaiting(){
         GlobalScope.launch{
             delay(1000)
             Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
             val idUser = MainActivity.currentUser?.iduser
             Log.e("Abstract", "ID Usernow : " + idUser)
+            detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
 
-            val detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
-            delay(1000)
-            if(detailUser != null){
-                if(detailUser.dataplaylist.size > 0) {
-                    view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + detailUser.dataalbum.size + " Playlists")
-                    for(i in detailUser.dataplaylist){
-                        val playlist  = PlaylistApi.getPlaylistById(i.toInt())
-                        delay(1000)
-                        if(playlist != null){
-                            playlistUser.add(playlist.data.get(0))
-                        }
+            if(detailUser!!.dataplaylist != null){
+                for(i in detailUser?.dataplaylist!!){
+                    val playlist  = PlaylistApi.getPlaylistById(i.toInt())
+                    delay(1000)
+                    if(playlist != null){
+                        playlistUser.add(playlist.data.get(0))
                     }
                 }
-
             }
 
+            if(detailUser!!.dataalbum != null){
+                for(i in detailUser?.dataalbum!!) {
+                    val album = AlbumApi.getAlbumById(i.toInt())
+                    delay(1000)
+                    if(album != null){
+                        albumUser.add(album.data.get(0))
+                    }
+                }
+            }
         }
     }
-
-
 }
