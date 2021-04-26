@@ -46,13 +46,6 @@ class MyAlbumFragment : Fragment() {
             list.add(thumb)
         }
 
-        /*
-        val hero1 = Thumbnail( "sfhskwe","LibraryListAlbum","LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
-        list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","LibraryListAlbum", "LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
-        list.add(hero2)
-*/
-
         rv_listAlbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv_listAlbum.adapter = listHeroAdapter

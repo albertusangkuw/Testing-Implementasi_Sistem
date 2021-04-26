@@ -58,6 +58,13 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                             // Menaruh data ke dalam fragment yang dikirim
                             (context as MainActivity).openFragment(ldf)
                         }
+                        "Album" ->{
+                            //Insialisisasi Bundle
+                            val args =  (context as MainActivity).setBundle(thumb)
+                            val ldf = DetailPlaylistAlbum()
+                            ldf.setArguments(args)
+                            (context as MainActivity).openFragment(ldf)
+                        }
                     }
                 }
                 val button = itemView.findViewById<ImageButton>(R.id.btn_more_music_album_item)

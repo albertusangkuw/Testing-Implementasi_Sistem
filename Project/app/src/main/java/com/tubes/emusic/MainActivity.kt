@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
-            currentUser = UserApi.getSingleUser("Twice@gmail.com")
+            currentUser = UserApi.getSingleUser("albertus@gmail.com")
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }
         startMainActivity()

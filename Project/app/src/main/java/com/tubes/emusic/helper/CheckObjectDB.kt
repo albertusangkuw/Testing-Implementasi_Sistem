@@ -29,14 +29,13 @@ object CheckObjectDB {
     }
 
     fun searchDataUser(id: String): Boolean{
-        var rs =  MappingHelper.mapListRegularUserToArrayList(
+        var rs =  MappingHelper.mapListUserToArrayString(
                 MainActivity.db?.queryById(id,DatabaseContract.UserDB.TABLE_NAME)
         )
-        for(i in rs){
-            Log.d("DB", "Stats User " + i.iduser + " vs " + id )
-            if(i.iduser == id){
-                return false
-            }
+
+        Log.d("DB", "Stats User " + rs.iduser + " vs " + id )
+        if(rs.iduser == id){
+            return false
         }
         return  true
 

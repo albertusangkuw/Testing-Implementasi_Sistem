@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
 import com.tubes.emusic.ui.component.ListUserAdapter
@@ -42,18 +43,11 @@ class MyArtistFragment : Fragment() {
 
     private fun showRecyclerListArtist() {
         val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","ListArtist", "","https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","ListArtist", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)
+        for(i in LibraryFragment.artistUser){
+            val thumb = Thumbnail( i.username,"Artist","LibraryListAlbum",  HTTPClientManager.host + "users/"  + i.iduser + "/photo" ,
+                    i.username, "")
+            list.add(thumb)
+        }
         rv_listArtist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListUserAdapter(list)
         rv_listArtist.adapter = listHeroAdapter

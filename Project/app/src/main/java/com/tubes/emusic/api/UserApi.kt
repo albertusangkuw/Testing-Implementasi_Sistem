@@ -65,11 +65,11 @@ data class ResponseDetailUser (
         @SerializedName("message") var message : String,
         @SerializedName("id") var id : String,
         @SerializedName("datafollowers") var datafollowers : List<String>,
-        @SerializedName("datafollowingartis") var datafollowingartis : String,
-        @SerializedName("datalikedsong") var datalikedsong : String,
+        @SerializedName("datafollowingartis") var datafollowingartis : List<String>,
+        @SerializedName("datalikedsong") var datalikedsong : List<String>,
         @SerializedName("datafollowingregular") var datafollowingregular : List<String>,
         @SerializedName("dataplaylistowned") var dataplaylistowned : List<String>,
-        @SerializedName("dataplaylistliked") var dataplaylistliked : String,
+        @SerializedName("dataplaylistliked") var dataplaylistliked :List<String>,
         @SerializedName("dataalbum") var dataalbum : List<String>
 
 )
@@ -124,8 +124,12 @@ class UserApi {
                         Log.d("API", "Success Get Single User with ID " + user!!.iduser)
 
                         status = true
-                        insertUpdateUserRegulerDB(mUser.regularuser)
-                        insertUpdateArtisDB(mUser.artist)
+                        if(mUser.regularuser != null) {
+                            insertUpdateUserRegulerDB(mUser.regularuser)
+                        }
+                        if(mUser.artist != null) {
+                            insertUpdateArtisDB(mUser.artist)
+                        }
                     } else {
                         Log.d("API", "Failed Get Single User")
                         status = false
@@ -156,7 +160,7 @@ class UserApi {
         }
 
         public suspend fun getSingleUserByID(id: String) : User? {
-            var url =  HTTPClientManager.host + "users/${id}"
+            var url =  HTTPClientManager.host + "users?userId=${id}"
 
             HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
                 override fun onSuccess(statusCode: Int, headers: Array<Header>,
@@ -196,8 +200,12 @@ class UserApi {
                         Log.d("API", "Success Get Single User with ID " + user!!.iduser)
 
                         status = true
-                        insertUpdateUserRegulerDB(mUser.regularuser)
-                        insertUpdateArtisDB(mUser.artist)
+                        if(mUser.regularuser != null) {
+                            insertUpdateUserRegulerDB(mUser.regularuser)
+                        }
+                        if(mUser.artist != null) {
+                            insertUpdateArtisDB(mUser.artist)
+                        }
                     } else {
                         Log.d("API", "Failed Get Single User")
                         status = false
@@ -452,11 +460,13 @@ class UserApi {
                         resultDetailUser = mUser
                         Log.d("API", "Success Get Detail Single User with ID ")
                         status = true
-                        for( i in mUser.datafollowingregular){
-                           val tempUser =  MappingHelper.mapListRegularUserToArrayList(MainActivity.db?.queryById(i,DatabaseContract.UserDB.TABLE_NAME))
-                           if (tempUser.isEmpty()){
+                        if( mUser.datafollowingregular != null) {
+                            for (i in mUser.datafollowingregular) {
+                                val tempUser = MappingHelper.mapListRegularUserToArrayList(MainActivity.db?.queryById(i, DatabaseContract.UserDB.TABLE_NAME))
+                                if (tempUser.isEmpty()) {
 
-                           }
+                                }
+                            }
                         }
                     } else {
                         Log.d("API", "Failed Get  Detail Single User")
