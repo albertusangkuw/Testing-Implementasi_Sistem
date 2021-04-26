@@ -2,10 +2,7 @@ package com.tubes.emusic.helper
 
 import android.database.Cursor
 import com.tubes.emusic.MainActivity
-import com.tubes.emusic.api.AlbumData
-import com.tubes.emusic.api.Listsong
-import com.tubes.emusic.api.PlaylistData
-import com.tubes.emusic.api.Userfollowing
+import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
 
@@ -146,6 +143,72 @@ object MappingHelper {
                                 "",
                         )
                 )
+            }
+        }
+        return  list
+    }
+
+
+    fun mapListRegularUserToArrayList(cursor: Cursor?): ArrayList<Regularuser> {
+        val list = ArrayList<Regularuser>()
+        cursor?.apply {
+            while (moveToNext()) {
+                list.add(
+                        Regularuser(
+                                username = "",
+                                email = "",
+                                country = "",
+                                urlphotoprofile = "",
+                                datejoin = "",
+                                categories = 2,
+                                dateofbirth =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.DATEOFBIRTH)) ,
+                                gender =    getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.GENDER)),
+                                iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID))
+                        )
+                )
+            }
+        }
+        return  list
+    }
+
+    fun mapListArtistToArrayList(cursor: Cursor?): ArrayList<Artist> {
+        val list = ArrayList<Artist>()
+        cursor?.apply {
+            while (moveToNext()) {
+                list.add(
+                        Artist(
+                                username = "",
+                                email = "",
+                                country = "",
+                                urlphotoprofile = "",
+                                datejoin = "",
+                                categories = 1,
+                                bio =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.DATEOFBIRTH)) ,
+                                iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID))
+                        )
+                )
+            }
+        }
+        return  list
+    }
+
+    fun mapListUserToArrayString(cursor: Cursor?): Regularuser {
+        var list :Regularuser = Regularuser("","","","","","",0,"","")
+        cursor?.apply {
+            while (moveToNext()) {
+
+                list =        Regularuser(
+                                 iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID)),
+                                username = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.USERNAME)),
+                                email = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.EMAIL)),
+                                country = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.COUNTRY)),
+                                urlphotoprofile = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.URLPHOTOPROFILE)),
+                                datejoin = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.DATEJOIN)),
+                                categories = 0,
+                                dateofbirth = ""  ,
+                                gender = ""
+                        )
+
             }
         }
         return  list
