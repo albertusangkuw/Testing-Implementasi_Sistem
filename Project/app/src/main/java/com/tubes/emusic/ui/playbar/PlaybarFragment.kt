@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
-import com.tubes.emusic.api.Listsong
 import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail

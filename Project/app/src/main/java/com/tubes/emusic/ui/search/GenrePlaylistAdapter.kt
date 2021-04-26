@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
-import com.tubes.emusic.api.Listsong
+import com.tubes.emusic.api.MusicData
+
 import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper
@@ -43,7 +44,7 @@ class GenrePlaylistAdapter: Fragment()  {
     }
     private fun showRecyclerViewGenreMusicView() {
         val list = ArrayList<Thumbnail>()
-        var mapData : List<Listsong> = MappingHelper.mapListsongToArrayList(MainActivity.db?.queryCustomById(
+        var mapData : List<MusicData> = MappingHelper.mapListsongToArrayList(MainActivity.db?.queryCustomById(
                 bundleData.title!!,
                 DatabaseContract.SongDB.GENRE,
                 DatabaseContract.SongDB.TABLE_NAME

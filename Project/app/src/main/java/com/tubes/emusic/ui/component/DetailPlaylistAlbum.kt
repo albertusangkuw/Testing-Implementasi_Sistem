@@ -63,7 +63,7 @@ class DetailPlaylistAlbum : Fragment() {
         showRecyclerListMusic()
     }
     private fun laucherWaiting(){
-        var mapData : List<Listsong> = mapListsongToArrayList(MainActivity.db?.queryAll(DatabaseContract.SongDB.TABLE_NAME))
+        var mapData : List<MusicData> = mapListsongToArrayList(MainActivity.db?.queryAll(DatabaseContract.SongDB.TABLE_NAME))
         var id = bundleData.id
         var addOn = ""
         if(bundleData.type == "Album" && id != null){

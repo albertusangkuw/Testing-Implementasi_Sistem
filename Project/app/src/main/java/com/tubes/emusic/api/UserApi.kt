@@ -369,7 +369,6 @@ class UserApi {
                                        responseBody: ByteArray) {
 
                     val result = String(responseBody)
-
                     Log.d("API", "Hasil ${result}")
                     if (HTTPClientManager.getStatusRequest(result)) {
                         var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseDetailUser::class.java)
@@ -430,9 +429,6 @@ class UserApi {
                     MainActivity.db?.update(i.iduser, values ,DatabaseContract.RegularUserDB.TABLE_NAME)
                     //Update
                 }
-
-
-
             }
         }
 

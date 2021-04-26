@@ -242,7 +242,8 @@ class MusicApi {
             delay(500L)
             return resultMusic
         }
-        private fun insertUpdateMusicDB(data :List<MusicData>){
+
+        fun insertUpdateMusicDB(data :List<MusicData>){
             for(i in data){
                 val values = ContentValues()
                 values.put(DatabaseContract.SongDB.ID, i.idsong)

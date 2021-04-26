@@ -81,4 +81,8 @@ class DBManager(context: Context) {
     fun deleteById(id: String, table_name : String): Int {
         return database.delete(table_name, "${BaseColumns._ID} = '$id'", null)
     }
+
+    fun deleteCustomById(id: String,column: String, table_name : String): Int {
+        return database.delete(table_name, "${column} = '$id'", null)
+    }
 }

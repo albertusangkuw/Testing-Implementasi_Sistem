@@ -42,6 +42,20 @@ object CheckObjectDB {
 
     }
 
+    fun searchDataPlaylist(id: Int): Boolean{
+        var rs =  MappingHelper.mapListPlaylistToArrayString(
+                MainActivity.db?.queryById(id.toString(),DatabaseContract.PlaylistDB.TABLE_NAME)
+        )
+        for(i in rs){
+            Log.d("DB", "Stats Playlist " + i.idplaylist + " vs " + id )
+            if(i.idplaylist == id){
+                return false
+            }
+        }
+        return  true
+
+    }
+
 
 
 }

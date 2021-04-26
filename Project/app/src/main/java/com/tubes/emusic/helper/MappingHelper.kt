@@ -7,12 +7,12 @@ import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
 
 object MappingHelper {
-    fun mapListsongToArrayList(cursor: Cursor?): ArrayList<Listsong> {
-        val list = ArrayList<Listsong>()
+    fun mapListsongToArrayList(cursor: Cursor?): ArrayList<MusicData> {
+        val list = ArrayList<MusicData>()
         cursor?.apply {
             while (moveToNext()) {
                 list.add(
-                    Listsong(
+                        MusicData(
                         idsong = getInt(getColumnIndexOrThrow(DatabaseContract.SongDB.ID)) ,
                         idalbum =  getInt(getColumnIndexOrThrow(DatabaseContract.SongDB.IDALBUM)),
                         title = getString(getColumnIndexOrThrow(DatabaseContract.SongDB.TITLE)),
@@ -65,7 +65,7 @@ object MappingHelper {
                         DatabaseContract.PlaylistSongDB.IDPLAYLIST,
                         DatabaseContract.PlaylistSongDB.TABLE_NAME
                 ))
-                val listsong = ArrayList<Listsong>()
+                val listsong = ArrayList<MusicData>()
                 for (i in dataIdSong){
                     listsong.add( (mapListsongToArrayList(MainActivity.db?.queryById(i.idsong.toString(),DatabaseContract.SongDB.TABLE_NAME)) ).get(0))
                 }
@@ -130,12 +130,12 @@ object MappingHelper {
         return  list
     }
 
-    fun mapPlaylistSongToArrayList(cursor: Cursor?): ArrayList<Listsong> {
-        val list = ArrayList<Listsong>()
+    fun mapPlaylistSongToArrayList(cursor: Cursor?): ArrayList<MusicData> {
+        val list = ArrayList<MusicData>()
         cursor?.apply {
             while (moveToNext()) {
                 list.add(
-                        Listsong(
+                        MusicData(
                                 idsong = getInt(getColumnIndexOrThrow(DatabaseContract.PlaylistSongDB.IDSONG)) ,
                                 idalbum =  getInt(getColumnIndexOrThrow(DatabaseContract.PlaylistSongDB.IDPLAYLIST)),
                                 "",
@@ -213,6 +213,30 @@ object MappingHelper {
         }
         return  list
     }
+
+
+    fun mapListPlaylistToArrayString(cursor: Cursor?): ArrayList<PlaylistData>{
+        val list = ArrayList<PlaylistData>()
+        cursor?.apply {
+            while (moveToNext()) {
+                list.add(
+                        PlaylistData(
+                                idplaylist = getInt(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.ID)) ,
+                                iduser= getString(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.IDUSER)) ,
+                                nameplaylist = getString(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.NAMEPLAYLIST)) ,
+                                urlimagecover = getString(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.URLIMAGECOVER)) ,
+                                datecreated = getString(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.DATECREATED)) ,
+                                listsong = null ,
+                                userfollowing =null,
+
+                        )
+                )
+            }
+        }
+        return  list
+
+    }
+
 
 
 

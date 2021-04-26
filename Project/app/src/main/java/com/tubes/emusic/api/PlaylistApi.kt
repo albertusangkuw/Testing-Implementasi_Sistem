@@ -1,10 +1,14 @@
 package com.tubes.emusic.api
 
+import android.content.ContentValues
 import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.loopj.android.http.RequestParams
+import com.tubes.emusic.MainActivity
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Playlist
+import com.tubes.emusic.helper.CheckObjectDB.searchDataPlaylist
 import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -17,15 +21,7 @@ data class ResponsePlaylist (
         @SerializedName("data") var data : List<PlaylistData>
 
 )
-data class Listsong (
 
-        @SerializedName("idsong") var idsong : Int,
-        @SerializedName("idalbum") var idalbum : Int,
-        @SerializedName("title") var title : String,
-        @SerializedName("urlsongs") var urlsongs : String,
-        @SerializedName("genre") var genre : String
-
-)
 data class Userfollowing (
 
         @SerializedName("iduser") var iduser : String,
@@ -44,8 +40,8 @@ data class PlaylistData (
         @SerializedName("nameplaylist") var nameplaylist : String,
         @SerializedName("urlimagecover") var urlimagecover : String,
         @SerializedName("datecreated") var datecreated : String,
-        @SerializedName("listsong") var listsong : List<Listsong>,
-        @SerializedName("userfollowing") var userfollowing : List<Userfollowing>
+        @SerializedName("listsong") var listsong : List<MusicData>?,
+        @SerializedName("userfollowing") var userfollowing : List<Userfollowing>?
 
 )
 class PlaylistApi {
@@ -70,6 +66,7 @@ class PlaylistApi {
                         resultPlaylist = data
                         Log.d("API", "Success Get Playlist by id" )
                         status = true
+                        insertUpdatePlaylistDB(data.data)
                     } else {
                         Log.d("API", "Failed Get Playlist by id")
                         status = false
@@ -330,6 +327,53 @@ class PlaylistApi {
             delay(500L)
             return status
         }
+
+        fun insertUpdatePlaylistDB(data: List<PlaylistData>){
+            for(i in data){
+                val valuesPlaylist = ContentValues()
+                valuesPlaylist.put(DatabaseContract.PlaylistDB.DATECREATED, i.datecreated)
+                valuesPlaylist.put(DatabaseContract.PlaylistDB.ID, i.idplaylist)
+                valuesPlaylist.put(DatabaseContract.PlaylistDB.IDUSER, i.iduser)
+                valuesPlaylist.put(DatabaseContract.PlaylistDB.NAMEPLAYLIST, i.nameplaylist)
+                valuesPlaylist.put(DatabaseContract.PlaylistDB.URLIMAGECOVER, i.urlimagecover)
+
+                val valuesFollowing = ContentValues()
+                if(i.userfollowing != null) {
+                    for (j in i.userfollowing!!) {
+
+                        valuesFollowing.put(DatabaseContract.PlaylistFollowingDB.IDUSER, j.iduser)
+                        valuesFollowing.put(DatabaseContract.PlaylistFollowingDB.IDPLAYLIST, i.idplaylist)
+                    }
+                }
+                val valuesListSong = ContentValues()
+                if( i.listsong != null) {
+                    for (j in i.listsong!!) {
+                        valuesListSong.put(DatabaseContract.PlaylistSongDB.IDSONG, j.idsong)
+                        valuesListSong.put(DatabaseContract.PlaylistSongDB.IDPLAYLIST, i.idplaylist)
+                    }
+                }
+                if( searchDataPlaylist(i.idplaylist)){
+                    MainActivity.db?.insert(valuesPlaylist, DatabaseContract.PlaylistDB.TABLE_NAME)
+                    MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                    MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                }else{
+                    MainActivity.db?.update(i.idplaylist.toString(), valuesPlaylist , DatabaseContract.PlaylistDB.TABLE_NAME)
+                    MainActivity.db?.deleteCustomById(
+                            i.idplaylist.toString(),
+                            DatabaseContract.PlaylistFollowingDB.IDPLAYLIST,
+                            DatabaseContract.PlaylistFollowingDB.TABLE_NAME
+                    )
+                    MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                    MainActivity.db?.deleteCustomById(
+                            i.idplaylist.toString(),
+                            DatabaseContract.PlaylistSongDB.IDPLAYLIST,
+                            DatabaseContract.PlaylistSongDB.TABLE_NAME
+                    )
+                    MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                }
+            }
+        }
+
     }
 
 }

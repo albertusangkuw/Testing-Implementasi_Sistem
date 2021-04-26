@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.api.MusicApi.Companion.insertUpdateMusicDB
 import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.helper.CheckObjectDB.searchDataAlbum
@@ -30,7 +31,7 @@ data class AlbumData (
         @SerializedName("urlimagecover") var urlimagecover : String,
         @SerializedName("genre") var genre : String,
         @SerializedName("daterelease") var daterelease : String,
-        @SerializedName("listsong") var listsong : List<Listsong>?,
+        @SerializedName("listsong") var listsong : List<MusicData>?,
         @SerializedName("userfollowing") var userfollowing : List<Userfollowing>?
 
 )
@@ -54,39 +55,13 @@ class AlbumApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
                         var data = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseAlbum::class.java)
                         resultAlbum = data
-
-                        val values = ContentValues()
-                        values.put(DatabaseContract.AlbumDB.ID, data.data[0].idalbum)
-                        values.put(DatabaseContract.AlbumDB.DATERELEASE, data.data[0].daterelease)
-                        values.put(DatabaseContract.AlbumDB.GENRE, data.data[0].genre)
-                        values.put(DatabaseContract.AlbumDB.NAMEALBUM, data.data[0].namealbum)
-                        values.put(DatabaseContract.AlbumDB.URLIMAGECOVER, data.data[0].urlimagecover)
-                        values.put(DatabaseContract.AlbumDB.IDUSER, data.data[0].iduser)
-                        //Database Insert to Table Album
-                        if(searchDataAlbum(data.data[0].idalbum)){
-                            MainActivity.db?.insert(values,DatabaseContract.AlbumDB.TABLE_NAME)
-                        }else{
-                            MainActivity.db?.update(data.data[0].idalbum.toString(), values, DatabaseContract.AlbumDB.TABLE_NAME)
-                        }
-                        //Database Insert to Table Song
+                        status = true
+                        Log.d("API", "Success Get Album by id" )
+                        insertUpdateAlbum(data.data)
                         var listSong = data.data[0].listsong
                         if (listSong != null) {
-                            for(i in listSong){
-                                val values = ContentValues()
-                                values.put(DatabaseContract.SongDB.ID, i.idsong)
-                                values.put(DatabaseContract.SongDB.IDALBUM, i.idalbum)
-                                values.put(DatabaseContract.SongDB.GENRE, i.genre)
-                                values.put(DatabaseContract.SongDB.TITLE, i.title)
-                                values.put(DatabaseContract.SongDB.URLSONGS, i.urlsongs)
-                                if(searchDataSong(i.idsong)){
-                                    MainActivity.db?.insert(values,DatabaseContract.SongDB.TABLE_NAME)
-                                }else{
-                                    MainActivity.db?.update(i.idsong.toString(), values,DatabaseContract.SongDB.TABLE_NAME)
-                                }
-                            }
+                            insertUpdateMusicDB(listSong)
                         }
-                        Log.d("API", "Success Get Album by id" )
-                        status = true
                     } else {
                         Log.d("API", "Failed Get Album by id")
                         status = false
@@ -137,6 +112,8 @@ class AlbumApi {
                         resultAlbum = data
                         Log.d("API", "Success Search Album " )
                         status = true
+
+                        insertUpdateAlbum(data.data)
                     } else {
                         Log.d("API", "Failed Search Album ")
                         status = false
@@ -240,6 +217,24 @@ class AlbumApi {
             delay(500L)
             return status
         }
+
+         fun insertUpdateAlbum(data : List<AlbumData>){
+             for(i in data) {
+                 val values = ContentValues()
+                 values.put(DatabaseContract.AlbumDB.ID, i.idalbum)
+                 values.put(DatabaseContract.AlbumDB.DATERELEASE, i.daterelease)
+                 values.put(DatabaseContract.AlbumDB.GENRE, i.genre)
+                 values.put(DatabaseContract.AlbumDB.NAMEALBUM, i.namealbum)
+                 values.put(DatabaseContract.AlbumDB.URLIMAGECOVER, i.urlimagecover)
+                 values.put(DatabaseContract.AlbumDB.IDUSER, i.iduser)
+                 //Database Insert to Table Album
+                 if (searchDataAlbum(i.idalbum)) {
+                     MainActivity.db?.insert(values, DatabaseContract.AlbumDB.TABLE_NAME)
+                 } else {
+                     MainActivity.db?.update(i.idalbum.toString(), values, DatabaseContract.AlbumDB.TABLE_NAME)
+                 }
+             }
+         }
 
     }
 }
