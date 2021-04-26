@@ -91,7 +91,7 @@
     </LinearLayout>
 
     <!-- Continuous slider -->
-    <com.google.android.material.slider.Slider
+    <SeekBar
         android:id="@+id/icon_seekbar_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
