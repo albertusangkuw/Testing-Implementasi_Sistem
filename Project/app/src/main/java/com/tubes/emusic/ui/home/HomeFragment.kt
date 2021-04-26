@@ -17,8 +17,10 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
 import com.tubes.emusic.ui.component.UserProfileFragment
 import com.tubes.emusic.ui.playbar.PlaybarFragment
+import com.tubes.emusic.ui.search.SearchFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -32,8 +34,9 @@ class HomeFragment : Fragment()  {
         var responseAlbum: ResponseAlbum? = null
 
     }
-    private lateinit var rv_bigmusicalbum : RecyclerView
-
+    private lateinit var rv_bigmusicalbum_recently : RecyclerView
+    private lateinit var rv_bigmusicalbum_recommended : RecyclerView
+    private lateinit var rv_bigmusicalbum_new_release : RecyclerView
     private val list = ArrayList<Thumbnail>()
     private val recentlList = intArrayOf(1,5,10,2)
     override fun onCreateView(
@@ -46,8 +49,12 @@ class HomeFragment : Fragment()  {
             (context as MainActivity).openFragment(UserProfileFragment())
         }
 
-        rv_bigmusicalbum = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum)
-        rv_bigmusicalbum.setHasFixedSize(true)
+        rv_bigmusicalbum_recently = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum_recently)
+        rv_bigmusicalbum_recently.setHasFixedSize(true)
+        rv_bigmusicalbum_recommended = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum_recommended)
+        rv_bigmusicalbum_recommended.setHasFixedSize(true)
+        rv_bigmusicalbum_new_release = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum_new_release)
+        rv_bigmusicalbum_new_release.setHasFixedSize(true)
 
         //Change greetings
         view.findViewById<TextView>(R.id.text_home_greeting).setText(dayGreeting())
@@ -98,9 +105,14 @@ class HomeFragment : Fragment()  {
     }
 
     private fun showRecyclerListBigMusicAlbum() {
-        rv_bigmusicalbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        rv_bigmusicalbum_recently.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        rv_bigmusicalbum_recommended.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        rv_bigmusicalbum_new_release.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+
         val listHeroAdapter = ListBigMusicAlbumAdapter(list)
-        rv_bigmusicalbum.adapter = listHeroAdapter
+        rv_bigmusicalbum_recently.adapter = listHeroAdapter
+        rv_bigmusicalbum_recommended.adapter = listHeroAdapter
+        rv_bigmusicalbum_new_release.adapter = ListMusicAlbumAdapter(list)
     }
 
     fun dayGreeting(): String {

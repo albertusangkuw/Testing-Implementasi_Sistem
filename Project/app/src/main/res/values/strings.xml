@@ -80,4 +80,7 @@
     <string name="albums_text">Albums</string>
     <string name="followers_text">FOLLOWERS</string>
     <string name="numbers_followers_text">25,582,381 FOLLOWERS</string>
+    <string name="recently_played_text">Recently Played</string>
+    <string name="recommended_playlist_text">Recommended Playlist</string>
+    <string name="new_release_text">New Release From Artist</string>
 </resources>
