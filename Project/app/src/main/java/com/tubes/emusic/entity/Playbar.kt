@@ -8,8 +8,6 @@ class Playbar {
         public var pause : Boolean = false
         public var isPlaying : Boolean = false
         public var shuffle : Boolean = false
-        public var previousSong : Boolean = false
-        public var nextSong : Boolean = false
         public var repeat : Boolean = false
     }
 }

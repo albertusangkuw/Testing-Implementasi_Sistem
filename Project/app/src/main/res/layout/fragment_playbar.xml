@@ -13,182 +13,191 @@
     android:focusable="true"
     tools:context=".ui.login.LoginFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/img_down_icon"
-            android:layout_width="wrap_content"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_expand_more_24" />
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_playbar_title"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/my_playlist_text"
-            android:textColor="@color/up_bright_gray"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/img_down_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_expand_more_24" />
 
-        <ImageView
-            android:id="@+id/img_more_menu_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_more_horiz_24" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_playbar_title"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/my_playlist_text"
+                    android:textColor="@color/up_bright_gray"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_cover"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
-            app:srcCompat="@mipmap/ic_launcher"
-            />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_title_playbar_song"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="@string/title_song_text"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/img_more_menu_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_more_horiz_24" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_cover"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+                    app:srcCompat="@mipmap/ic_launcher"
+                    />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_title_playbar_song"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="@string/title_song_text"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_artist_playbar_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5sp"
-            android:gravity="left"
-            android:layout_weight="1"
-            android:text="@string/artist_name_text"
-            android:textSize="15sp"
-            android:textColor="@color/up_bright_gray"
-            android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
 
-        <ImageView
-            android:id="@+id/img_like_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/ic_baseline_favorite_border_24"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_artist_playbar_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5sp"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:text="@string/artist_name_text"
+                    android:textSize="15sp"
+                    android:textColor="@color/up_bright_gray"
+                    android:textStyle="bold"/>
 
-    <!-- Continuous slider -->
-    <SeekBar
-        android:id="@+id/icon_seekbar_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:value="30"
-        android:valueFrom="0.0"
-        android:valueTo="100.0"
-        app:trackColorActive="@color/white"
-        app:thumbColor="@color/white"
-        app:tickColorActive="@color/white"
-        app:trackHeight="7dp"
-        app:haloRadius="6dp"
-        app:tickColorInactive="@color/bright_gray" />
+                <ImageView
+                    android:id="@+id/img_like_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_baseline_favorite_border_24"/>
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal">
+            <!-- Continuous slider -->
+            <SeekBar
+                android:id="@+id/icon_seekbar_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:value="30"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                app:trackColorActive="@color/white"
+                app:thumbColor="@color/white"
+                app:tickColorActive="@color/white"
+                app:trackHeight="7dp"
+                app:haloRadius="6dp"
+                app:tickColorInactive="@color/bright_gray" />
 
-        <TextView
-            android:id="@+id/tv_begin_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_weight="1"
-            android:text="@string/begin_time_text"
-            android:textColor="@color/up_bright_gray"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
 
-        <TextView
-            android:id="@+id/tv_end_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/end_time_text"
-            android:textColor="@color/up_bright_gray"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_begin_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:text="@string/begin_time_text"
+                    android:textColor="@color/up_bright_gray"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal">
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_time_text"
+                    android:textColor="@color/up_bright_gray"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/img_shuffle_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_weight="0"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_shuffle_24"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
 
-        <ImageButton
-            android:id="@+id/img_previous_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_skip_previous_24"/>
+                <ImageButton
+                    android:id="@+id/img_shuffle_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="0"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_shuffle_24"/>
 
-        <ImageButton
-            android:id="@+id/img_pause_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_pause_circle_filled_24"/>
+                <ImageButton
+                    android:id="@+id/img_previous_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_skip_previous_24"/>
 
-        <ImageButton
-            android:id="@+id/img_next_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_skip_next_24"/>
+                <ImageButton
+                    android:id="@+id/img_pause_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_pause_circle_filled_24"/>
 
-        <ImageButton
-            android:id="@+id/img_repeat_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_weight="0"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_baseline_repeat_24"/>
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/img_next_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_skip_next_24"/>
+
+                <ImageButton
+                    android:id="@+id/img_repeat_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_weight="0"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_repeat_24"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

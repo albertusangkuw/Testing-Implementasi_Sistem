@@ -91,14 +91,18 @@ class PlaybarFragment : Fragment() {
     // Method to initialize seek bar and audio stats
     private fun initializeSeekBar() {
         seek_bar.max = mediaPlayer!!.seconds
-
         var handler: Handler = Handler()
         var runnable = object : Runnable {
             override fun run(){
                 seek_bar.progress = mediaPlayer!!.currentSeconds
-                beginTime.text = "${Playbar.mediaPlayer!!.currentSeconds} sec"
+                val minuteStart = mediaPlayer!!.currentSeconds / 60
+                val secondStart = mediaPlayer!!.currentSeconds % 60
+                beginTime.text = "$minuteStart:$secondStart"
+
                 val diff = Playbar.mediaPlayer!!.seconds - Playbar.mediaPlayer!!.currentSeconds
-                endTime.text = "$diff sec"
+                val minuteEnd = diff / 60
+                val secondEnd = diff % 60
+                endTime.text = "$minuteEnd:$secondEnd"
                 handler.postDelayed(this, 1000)
             }
         }
@@ -119,13 +123,17 @@ class PlaybarFragment : Fragment() {
 
     private fun shuffleMusic(view: View, bundleData: Thumbnail){
         view.findViewById<ImageButton>(R.id.img_shuffle_icon).setOnClickListener {
+            var shuffleBtn : ImageButton = view.findViewById(R.id.img_shuffle_icon)
             if (Playbar.shuffle == false) {
                 Log.e("Abstract", "Shuffle Music ON")
                 Playbar.shuffle = true
                 mapData.shuffle()
+                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_on_24)
             } else {
+                Log.e("Abstract", "Shuffle Music OFF")
                 Playbar.shuffle = false
                 mapData.sortBy { it.description }
+                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_24)
             }
         }
     }
@@ -133,6 +141,14 @@ class PlaybarFragment : Fragment() {
     private fun previousMusic(view: View, bundleData: Thumbnail){
         view.findViewById<ImageButton>(R.id.img_previous_icon).setOnClickListener {
             Log.e("Abstract", "Previous Music is playing")
+            if (sequenceNow == 0){
+                sequenceNow = sequenceNow + (mapData.size-1)
+                playMusic(view, mapData[sequenceNow])
+            } else {
+                sequenceNow = sequenceNow-1
+                playMusic(view, mapData[sequenceNow])
+            }
+            Playbar.mediaPlayer!!.start()
         }
     }
 
@@ -210,12 +226,38 @@ class PlaybarFragment : Fragment() {
     private fun nextMusic(view: View, bundleData: Thumbnail){
         view.findViewById<ImageButton>(R.id.img_next_icon).setOnClickListener {
             Log.e("Abstract", "Next Music is playing")
+            sequenceNow++
+            if (sequenceNow > mapData.size-1){
+                sequenceNow = 0
+            }
+            playMusic(view, mapData[sequenceNow])
+            Playbar.mediaPlayer!!.start()
         }
     }
 
     private fun repeatMusic(view: View, bundleData: Thumbnail){
         view.findViewById<ImageButton>(R.id.img_repeat_icon).setOnClickListener {
-            Log.e("Abstract", "Repeat Music ON")
+            var repeatBtn : ImageButton = view.findViewById(R.id.img_repeat_icon)
+            if (Playbar.repeat == false) {
+                Log.e("Abstract", "Repeat Music ON")
+                repeatBtn.setImageResource(R.drawable.ic_baseline_repeat_on_24)
+                view.findViewById<ImageButton>(R.id.img_next_icon).setOnClickListener {
+                    Log.e("Abstract", "Next Music is playing")
+                    playMusic(view, mapData[sequenceNow])
+                }
+                view.findViewById<ImageButton>(R.id.img_previous_icon).setOnClickListener {
+                    Log.e("Abstract", "Previous Music is playing")
+                    playMusic(view, mapData[sequenceNow])
+                }
+                Playbar.repeat = true
+            } else {
+                Log.e("Abstract", "Repeat Music OFF")
+                previousMusic(view, mapData[sequenceNow])
+                nextMusic(view, mapData[sequenceNow])
+                repeatBtn.setImageResource(R.drawable.ic_baseline_repeat_24)
+                Playbar.repeat = false
+            }
+            Playbar.mediaPlayer!!.start()
         }
     }
 }
