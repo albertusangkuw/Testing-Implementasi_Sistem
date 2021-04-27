@@ -6,11 +6,8 @@ import com.google.gson.annotations.SerializedName
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.api.MusicApi.Companion.insertUpdateMusicDB
-import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.helper.CheckObjectDB.searchDataAlbum
-import com.tubes.emusic.helper.CheckObjectDB.searchDataSong
-import com.tubes.emusic.helper.MappingHelper
 import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 
@@ -99,6 +96,52 @@ class AlbumApi {
         }
         public suspend fun searchAlbumByName(nameAlbum: String) : ResponseAlbum? {
             var url =  HTTPClientManager.host + "album?namealbum=" + nameAlbum
+
+            HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
+                override fun onSuccess(statusCode: Int, headers: Array<Header>,
+                                       responseBody: ByteArray) {
+
+                    val result = String(responseBody)
+
+                    Log.d("API", "Hasil ${result}")
+                    if (HTTPClientManager.getStatusRequest(result)) {
+                        var data = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseAlbum::class.java)
+                        resultAlbum = data
+                        Log.d("API", "Success Search Album " )
+                        status = true
+
+                        insertUpdateAlbum(data.data)
+                    } else {
+                        Log.d("API", "Failed Search Album ")
+                        status = false
+                    }
+                }
+
+                override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+                    // Jika koneksi gagal
+
+                    val errorMessage = when (statusCode) {
+                        401 -> "$statusCode : Bad Request"
+                        403 -> "$statusCode : Forbidden"
+                        404 -> "$statusCode : Not Found"
+                        else -> "$statusCode : ${error.message}"
+                    }
+                    Log.d("Failure", errorMessage)
+
+                }
+
+                // ----New Overridden method
+                override fun getUseSynchronousMode(): Boolean {
+                    return false
+                }
+            })
+
+            delay(500L)
+            return resultAlbum
+        }
+
+        public suspend fun searchAlbumByArtits(iduser: String) : ResponseAlbum? {
+            var url =  HTTPClientManager.host + "album?iduser=" + iduser
 
             HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
                 override fun onSuccess(statusCode: Int, headers: Array<Header>,

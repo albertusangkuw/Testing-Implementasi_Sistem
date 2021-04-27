@@ -44,7 +44,7 @@ class MyArtistFragment : Fragment() {
     private fun showRecyclerListArtist() {
         val list = ArrayList<Thumbnail>()
         for(i in LibraryFragment.artistUser){
-            val thumb = Thumbnail( i.username,"Artist","LibraryListAlbum",  HTTPClientManager.host + "users/"  + i.iduser + "/photo" ,
+            val thumb = Thumbnail( i.iduser,"Artist","LibraryListAlbum",  HTTPClientManager.host + "users/"  + i.iduser + "/photo" ,
                     i.username, "")
             list.add(thumb)
         }

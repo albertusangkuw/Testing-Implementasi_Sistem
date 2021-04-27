@@ -19,6 +19,9 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(thumb: Thumbnail) {
             with(itemView){
+                if(thumb.urlImage == "" || thumb.urlImage == null){
+                    thumb.urlImage = "http://simpleicon.com/wp-content/uploads/playlist.png"
+                }
                 Glide.with(itemView.context).load(thumb.urlImage).into(findViewById<ImageView>(R.id.img_item_musicalbum_photo))
                 findViewById<TextView>(R.id.tv_item_music_name).text = thumb.title
                 findViewById<TextView>(R.id.tv_item_music_description).text = thumb.description
@@ -59,6 +62,13 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                             (context as MainActivity).openFragment(ldf)
                         }
                         "Album" ->{
+                            //Insialisisasi Bundle
+                            val args =  (context as MainActivity).setBundle(thumb)
+                            val ldf = DetailPlaylistAlbum()
+                            ldf.setArguments(args)
+                            (context as MainActivity).openFragment(ldf)
+                        }
+                        "Playlist" ->{
                             //Insialisisasi Bundle
                             val args =  (context as MainActivity).setBundle(thumb)
                             val ldf = DetailPlaylistAlbum()

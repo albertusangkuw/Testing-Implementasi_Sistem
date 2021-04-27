@@ -98,7 +98,7 @@ class MyPlaylistFragment : Fragment() {
     private fun showRecyclerListPlaylist() {
         val list = ArrayList<Thumbnail>()
         for(i in LibraryFragment.playlistUser){
-            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg",
+            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
                     i.nameplaylist, "")
             list.add(thumb)
         }
