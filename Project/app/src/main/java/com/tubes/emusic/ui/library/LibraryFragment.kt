@@ -35,8 +35,8 @@ class LibraryFragment : Fragment() {
                 val idUser = MainActivity.currentUser?.iduser
                 Log.e("Abstract", "ID Usernow Library : " + idUser)
                 detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
-                var playlistUserTemp :ArrayList<PlaylistData> =ArrayList<PlaylistData>()
 
+                var playlistUserTemp :ArrayList<PlaylistData> =ArrayList<PlaylistData>()
                 if(detailUser?.dataplaylistowned != null){
                     for(i in detailUser?.dataplaylistowned!!){
                         val playlist  = PlaylistApi.getPlaylistById(i.toInt())

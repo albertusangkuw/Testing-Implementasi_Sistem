@@ -83,4 +83,5 @@
     <string name="recently_played_text">Recently Played</string>
     <string name="recommended_playlist_text">Recommended Playlist</string>
     <string name="new_release_text">New Release From Artist</string>
+    <string name="country_text">Country</string>
 </resources>
