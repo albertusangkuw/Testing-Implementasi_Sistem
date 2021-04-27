@@ -52,7 +52,14 @@ class PlaybarFragment : Fragment() {
         beginTime = view.findViewById<TextView>(R.id.tv_begin_time)
         endTime = view.findViewById<TextView>(R.id.tv_end_time)
 
-        sequenceNow = bundleData.addOn!!.toInt()
+        var counterMap = 0
+        for(i in mapData){
+            if(i.id == bundleData.id){
+                sequenceNow = counterMap
+            }
+            counterMap++
+        }
+
         Log.e("Abstract", "Data : " + bundleData )
         //sequenceNow = 3
         shuffleMusic(view, mapData.get(sequenceNow))
@@ -118,7 +125,7 @@ class PlaybarFragment : Fragment() {
                 mapData.shuffle()
             } else {
                 Playbar.shuffle = false
-                mapData.sortBy { it.addOn }
+                mapData.sortBy { it.description }
             }
         }
     }

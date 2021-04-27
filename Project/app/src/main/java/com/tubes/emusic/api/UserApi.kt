@@ -235,6 +235,16 @@ class UserApi {
             return user
         }
 
+        public suspend fun searchIdUserArray(id:String, list: List<String>): Boolean{
+            for(i in list){
+                if(id.equals(i)){
+                    return true
+                }
+            }
+            return false
+        }
+
+
         public suspend fun searchUser(username: String): ResponseUser?{
             var url =  HTTPClientManager.host + "users?username="+ username
             HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {

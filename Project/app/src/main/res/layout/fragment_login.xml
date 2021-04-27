@@ -112,10 +112,10 @@
         android:text="@string/or_text"
         android:textColor="@color/white"/>
 
-    <Button
-        android:id="@+id/buttonLoginGoogle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
         android:layout_gravity="center"
         android:paddingTop="6dp"
         android:paddingBottom="7dp"
@@ -126,7 +126,6 @@
         app:icon="@drawable/ic_google_icon"
         app:iconTint="@android:color/transparent"
         app:iconTintMode="add"/>
-
     <TextView
         android:id="@+id/tv_account"
         android:layout_width="match_parent"
