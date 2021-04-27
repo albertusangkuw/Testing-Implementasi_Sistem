@@ -22,6 +22,9 @@ import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Playbar.Companion.mediaPlayer
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.ui.component.ArtistProfileFragment
+import com.tubes.emusic.ui.home.HomeFragment
+import com.tubes.emusic.ui.library.LibraryFragment
 import java.io.IOException
 
 
@@ -48,6 +51,10 @@ class PlaybarFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_playbar, container, false)
         var bundleData = (context as MainActivity).getBundle(this)
 
+        view.findViewById<ImageView>(R.id.img_down_icon).setOnClickListener {
+            Log.e("Abstract", "Back to List Music Artist")
+            (context as MainActivity).openFragment(HomeFragment())
+        }
         seek_bar = view.findViewById<SeekBar>(R.id.icon_seekbar_progress)
         beginTime = view.findViewById<TextView>(R.id.tv_begin_time)
         endTime = view.findViewById<TextView>(R.id.tv_end_time)
@@ -69,6 +76,7 @@ class PlaybarFragment : Fragment() {
            //endTimeTv.setText(mediaPlayer.seconds)
         nextMusic(view, mapData.get(sequenceNow))
         repeatMusic(view, mapData.get(sequenceNow))
+        likeMusic(view, mapData.get(sequenceNow))
 
         // Seek bar change listener
         seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -258,6 +266,21 @@ class PlaybarFragment : Fragment() {
                 Playbar.repeat = false
             }
             Playbar.mediaPlayer!!.start()
+        }
+    }
+
+    private fun likeMusic(view: View, bundleData: Thumbnail){
+        view.findViewById<ImageButton>(R.id.img_like_icon).setOnClickListener {
+            var likeBtn : ImageButton = view.findViewById(R.id.img_like_icon)
+            if (Playbar.like == false) {
+                Log.e("Abstract", "Like Music")
+                likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24)
+                Playbar.like = true
+            }else{
+                Log.e("Abstract", "Unlike Music")
+                likeBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                Playbar.like = false
+            }
         }
     }
 }

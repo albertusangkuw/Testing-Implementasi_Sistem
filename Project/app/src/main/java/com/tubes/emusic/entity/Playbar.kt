@@ -9,5 +9,6 @@ class Playbar {
         public var isPlaying : Boolean = false
         public var shuffle : Boolean = false
         public var repeat : Boolean = false
+        public var like : Boolean = false
     }
 }
