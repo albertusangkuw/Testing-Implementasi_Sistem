@@ -10,5 +10,8 @@ class Playbar {
         public var shuffle : Boolean = false
         public var repeat : Boolean = false
         public var like : Boolean = false
+        public var mapData = ArrayList<Thumbnail>()
+        public var playingNow : Thumbnail = Thumbnail("","","","","","")
+        public var sequenceNow = 0
     }
 }

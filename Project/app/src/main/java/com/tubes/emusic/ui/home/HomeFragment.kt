@@ -30,15 +30,15 @@ import java.time.format.DateTimeFormatter
 
 
 class HomeFragment : Fragment()  {
-    companion object{
-        var responseAlbum: ResponseAlbum? = null
 
-    }
     private lateinit var rv_bigmusicalbum_recently : RecyclerView
     private lateinit var rv_bigmusicalbum_recommended : RecyclerView
     private lateinit var rv_bigmusicalbum_new_release : RecyclerView
+
     private val list = ArrayList<Thumbnail>()
     private val recentlList = intArrayOf(1,5,10,2)
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

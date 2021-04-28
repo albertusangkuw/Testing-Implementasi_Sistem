@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.MainActivity.Companion.detailUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.User
@@ -22,71 +23,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LibraryFragment : Fragment() {
-    companion object{
-        var detailUser : ResponseDetailUser? = null
-        var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-        var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
-        var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
-        var artistUser : ArrayList<User> = ArrayList<User>()
-
-        public fun laucherWaiting(){
-            GlobalScope.launch{
-                delay(1000)
-                val idUser = MainActivity.currentUser?.iduser
-                Log.e("Abstract", "ID Usernow Library : " + idUser)
-                detailUser = idUser?.let { UserApi.getDetailSingleUser(it) }
-
-                var playlistUserTemp :ArrayList<PlaylistData> =ArrayList<PlaylistData>()
-                if(detailUser?.dataplaylistowned != null){
-                    for(i in detailUser?.dataplaylistowned!!){
-                        val playlist  = PlaylistApi.getPlaylistById(i.toInt())
-                        delay(600)
-                        if(playlist != null){
-                            playlistUserTemp.add(playlist.data.get(0))
-                        }
-                    }
-                }
-                playlistUser = playlistUserTemp
-
-                var albumUserTemp : ArrayList<AlbumData> =ArrayList<AlbumData>()
-                if(detailUser?.dataalbum != null){
-                    for(i in detailUser?.dataalbum!!) {
-                        val album = AlbumApi.getAlbumById(i.toInt())
-                        delay(600)
-                        if(album != null){
-                            albumUserTemp.add(album.data.get(0))
-                        }
-                    }
-                }
-                albumUser= albumUserTemp
-
-                var musicUserTemp : ArrayList<MusicData> =ArrayList<MusicData>()
-                if(detailUser!!.datalikedsong != null){
-                    for(i in detailUser?.datalikedsong!!) {
-                        val music = MusicApi.getMusicById(i.toInt())
-                        delay(600)
-                        if(music != null){
-                            musicUserTemp.add(music.data.get(0))
-                        }
-                    }
-                }
-                musicUser= musicUserTemp
-
-                var artistUserTemp : ArrayList<User> =ArrayList<User>()
-                if(detailUser!!.datafollowingartis != null){
-                    for(i in detailUser?.datafollowingartis!!) {
-                        val artist = UserApi.getSingleUserByID(i)
-                        delay(600)
-                        if(artist != null){
-                            artistUserTemp.add(artist)
-                        }
-                    }
-                }
-                artistUser = artistUserTemp
-
-            }
-        }
-    }
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -131,21 +67,17 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
-        laucherWaiting()
+        MainActivity.laucherWaiting()
 
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
                 if(detailUser != null){
-                    if(detailUser!!.dataplaylistowned != null) {
-                        var sums =  detailUser!!.dataplaylistowned.size
-                        if(detailUser!!.dataplaylistowned != null){
-                            sums += detailUser!!.dataplaylistliked.size
-                        }
-                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + sums + " Playlists")
-                    }else{
-                        view.findViewById<TextView>(R.id.tv_detail_playlist).setText("0 Playlists")
+                    var sums =  detailUser!!.dataplaylistowned.size
+                    if(detailUser!!.dataplaylistowned != null){
+                        sums += detailUser!!.dataplaylistliked.size
                     }
+                    view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + sums + " Playlists")
                     if(detailUser!!.dataalbum != null) {
                         view.findViewById<TextView>(R.id.tv_detail_album).setText("" + detailUser!!.dataalbum.size + " Albums")
                     }else{
@@ -165,7 +97,6 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
-
         handler.postDelayed(run,(3000).toLong())
         return view
     }

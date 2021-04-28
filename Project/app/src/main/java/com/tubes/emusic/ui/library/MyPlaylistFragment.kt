@@ -15,12 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.MainActivity.Companion.laucherWaiting
+import com.tubes.emusic.MainActivity.Companion.playlistUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.PlaylistApi
 import com.tubes.emusic.entity.Playlist
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
-import com.tubes.emusic.ui.library.LibraryFragment.Companion.laucherWaiting
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -97,7 +98,7 @@ class MyPlaylistFragment : Fragment() {
 
     private fun showRecyclerListPlaylist() {
         val list = ArrayList<Thumbnail>()
-        for(i in LibraryFragment.playlistUser){
+        for(i in playlistUser){
             val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
                     i.nameplaylist, "")
             list.add(thumb)

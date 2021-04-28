@@ -17,6 +17,8 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.Playbar
+import com.tubes.emusic.entity.Playbar.Companion.mapData
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper.mapListAlbumToArrayList
 import com.tubes.emusic.helper.MappingHelper.mapListPlaylistSongToArrayList
@@ -157,20 +159,20 @@ class DetailPlaylistAlbum : Fragment() {
             )
             mapData = rawAlbum.get(0).listsong!!
             addOn = "NoCover"
-            val artistAlbum  = mapListUserToArrayString(MainActivity.db?.queryById(rawAlbum.get(0).iduser,DatabaseContract.UserDB.TABLE_NAME))
-            desc = "" +  artistAlbum.username
+            desc = "" +  MainActivity.getUserByIdUser(rawAlbum.get(0).iduser)?.username
         }else if(bundleData.type == "Playlist" && id != null ){
             val rawPlaylist =   mapListPlaylistSongToArrayList(
                     MainActivity.db?.queryById(id, DatabaseContract.PlaylistDB.TABLE_NAME)
             )
             mapData = rawPlaylist.get(0).listsong!!
+
         }
 
         for (i in mapData){
             val thumb = Thumbnail(i.idsong.toString(), "Music", addOn, HTTPClientManager.host + "album/" + i.idalbum + "/photo", i.title,"" + desc)
             list.add(thumb)
         }
-        PlaybarFragment.mapData = list
+        Playbar.mapData = list
     }
 
     private fun showRecyclerListMusic() {

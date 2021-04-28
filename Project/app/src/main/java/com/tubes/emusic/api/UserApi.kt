@@ -470,14 +470,7 @@ class UserApi {
                         resultDetailUser = mUser
                         Log.d("API", "Success Get Detail Single User with ID ")
                         status = true
-                        if( mUser.datafollowingregular != null) {
-                            for (i in mUser.datafollowingregular) {
-                                val tempUser = MappingHelper.mapListRegularUserToArrayList(MainActivity.db?.queryById(i, DatabaseContract.UserDB.TABLE_NAME))
-                                if (tempUser.isEmpty()) {
 
-                                }
-                            }
-                        }
                     } else {
                         Log.d("API", "Failed Get  Detail Single User")
                         status = false
@@ -503,7 +496,7 @@ class UserApi {
                 }
             })
 
-            delay(500L)
+            delay(400L)
             return resultDetailUser
         }
 

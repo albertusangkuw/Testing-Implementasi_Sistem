@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.MainActivity.Companion.musicUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.entity.Thumbnail
@@ -35,7 +36,7 @@ class MyMusicFragment : Fragment() {
 
     private fun showRecyclerListMusic() {
         val list = ArrayList<Thumbnail>()
-        for(i in LibraryFragment.musicUser){
+        for(i in musicUser){
             val thumb = Thumbnail( i.idsong.toString(),"Music","LibraryListAlbum",  HTTPClientManager.host + "album/"  + i.idalbum + "/photo" ,
                     i.title , "")
             list.add(thumb)

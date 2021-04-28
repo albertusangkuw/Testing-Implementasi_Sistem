@@ -5,6 +5,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.User
 
 object MappingHelper {
     fun mapListsongToArrayList(cursor: Cursor?): ArrayList<MusicData> {
@@ -192,23 +193,19 @@ object MappingHelper {
         return  list
     }
 
-    fun mapListUserToArrayString(cursor: Cursor?): Regularuser {
-        var list :Regularuser = Regularuser("","","","","","",0,"","")
+    fun mapListUserToArrayString(cursor: Cursor?): User {
+        var list :User = User("","","","","","",0)
         cursor?.apply {
             while (moveToNext()) {
-
-                list =        Regularuser(
-                                 iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID)),
+                list = User(
+                                iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID)),
                                 username = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.USERNAME)),
                                 email = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.EMAIL)),
                                 country = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.COUNTRY)),
                                 urlphotoprofile = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.URLPHOTOPROFILE)),
                                 datejoin = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.DATEJOIN)),
-                                categories = 0,
-                                dateofbirth = ""  ,
-                                gender = ""
-                        )
-
+                                categories = 0
+                )
             }
         }
         return  list

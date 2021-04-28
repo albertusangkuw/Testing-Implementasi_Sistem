@@ -2,6 +2,7 @@ package com.tubes.emusic
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,21 +11,167 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.tubes.emusic.api.SessionApi
-import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DBManager
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.entity.User
+import com.tubes.emusic.helper.MappingHelper
 import com.tubes.emusic.ui.login.LoginActivity
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     companion object{
-        public var currentUser : User? = null
+        var currentUser : User? = null
         var db : DBManager? = null
+        private var detailUser : ResponseDetailUser? = null
+        var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+        var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
+        var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
+        var artistUser : ArrayList<User> = ArrayList<User>()
+
+        fun laucherWaiting(){
+            GlobalScope.launch{
+                delay(1000)
+                val idUser = MainActivity.currentUser?.iduser
+                Log.e("Abstract", "ID Usernow Library : " + idUser)
+                detailUser = idUser?.let {
+                    UserApi.getDetailSingleUser(it)
+                }
+
+                var playlistUserTemp :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+                if(detailUser?.dataplaylistowned != null){
+                    for(i in detailUser?.dataplaylistowned!!){
+                        val playlist  = PlaylistApi.getPlaylistById(i.toInt())
+                        delay(600)
+                        if(playlist != null){
+                            playlistUserTemp.add(playlist.data.get(0))
+                        }
+                    }
+                }
+                playlistUser = playlistUserTemp
+
+                var albumUserTemp : ArrayList<AlbumData> =ArrayList<AlbumData>()
+                if(detailUser?.dataalbum != null){
+                    for(i in detailUser?.dataalbum!!) {
+                        val album = AlbumApi.getAlbumById(i.toInt())
+                        delay(600)
+                        if(album != null){
+                            albumUserTemp.add(album.data.get(0))
+                        }
+                    }
+                }
+                albumUser= albumUserTemp
+
+                var musicUserTemp : ArrayList<MusicData> =ArrayList<MusicData>()
+                if(detailUser!!.datalikedsong != null){
+                    for(i in detailUser?.datalikedsong!!) {
+                        val music = MusicApi.getMusicById(i.toInt())
+                        delay(600)
+                        if(music != null){
+                            musicUserTemp.add(music.data.get(0))
+                        }
+                    }
+                }
+                musicUser= musicUserTemp
+
+                var artistUserTemp : ArrayList<User> =ArrayList<User>()
+                if(detailUser!!.datafollowingartis != null){
+                    for(i in detailUser?.datafollowingartis!!) {
+                        val artist = UserApi.getSingleUserByID(i)
+                        delay(600)
+                        if(artist != null){
+                            artistUserTemp.add(artist)
+                        }
+                    }
+                }
+                artistUser = artistUserTemp
+            }
+        }
+
+        fun getUserByIdUser(iduser: String?): User?{
+            if(iduser == null){
+                return User("","","","","","",0)
+            }
+            var apiUser : User? = User("","","","","","",0)
+            GlobalScope.launch{
+                apiUser = UserApi.getSingleUserByID(iduser)
+            }
+            val regularuserDB  = MappingHelper.mapListUserToArrayString(db?.queryById(iduser, DatabaseContract.UserDB.TABLE_NAME))
+            if(regularuserDB.iduser == ""){
+                // Database cannot find the user
+                // Return value from API
+                Thread.sleep(510)
+                return apiUser
+            }else{
+                return regularuserDB
+            }
+        }
+
+        fun getUserDetailByIdUser(iduser: String?): ResponseDetailUser?{
+            if(iduser == null){
+                return ResponseDetailUser(0,"","", ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>())
+            }
+            var apiUser : ResponseDetailUser? = null
+            GlobalScope.launch {
+                apiUser = UserApi.getDetailSingleUser(iduser)
+            }
+            if(detailUser == null){
+                Thread.sleep(600)
+                detailUser = apiUser
+                return  detailUser
+            }else{
+                return detailUser
+            }
+        }
+
+        fun getMusicByIdSong(idsong: Int) :Music?{
+            var apiUser : MusicData? = null
+            var responseMusicData: MusicData? = null
+            GlobalScope.launch{
+                responseMusicData = MusicApi.getMusicById(idsong)?.data?.get(0)
+            }
+            val regularuserDB  = MappingHelper.mapPlaylistSongToArrayList(db?.queryById(idsong.toString(), DatabaseContract.SongDB.TABLE_NAME))
+            if(regularuserDB.isEmpty()){
+                // Database cannot find the user
+                // Return value from API
+                Thread.sleep(510)
+                val nameArtis = getUserByIdUser(searchAlbumIdAlbum(responseMusicData?.idalbum)?.iduser)?.username
+                //Thread.sleep(1030)
+                return  Music(responseMusicData?.idsong.toString(), responseMusicData?.idalbum.toString(), responseMusicData?.title, HTTPClientManager.host + "album/" + responseMusicData?.idalbum + "/photo"  , responseMusicData?.urlsongs, nameArtis, responseMusicData?.genre)
+            }else{
+                apiUser = regularuserDB.get(0)
+                val nameArtis = getUserByIdUser(searchAlbumIdAlbum(apiUser?.idalbum)?.iduser)?.username
+                return  Music(apiUser?.idsong.toString(), apiUser?.idalbum.toString(), apiUser.title, HTTPClientManager.host + "album/" +apiUser?.idalbum + "/photo"  , apiUser.urlsongs, nameArtis,apiUser?.genre)
+            }
+        }
+
+        fun synchronizeObject(iduser: String?){
+            GlobalScope.launch{
+                currentUser = UserApi.getSingleUser("albertus@gmail.com")
+            }
+        }
+        fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{
+            if(idalbum == null ) {
+                return  AlbumData(0, "", "", "", "", "", null, null)
+            }
+            var reponseAlbumData : AlbumData? = null
+            GlobalScope.launch {
+                reponseAlbumData = AlbumApi.getAlbumById(idalbum)?.data?.get(0)
+            }
+            val regularuserDB  = MappingHelper.mapListAlbumToArrayList( db?.queryById(idalbum.toString(), DatabaseContract.AlbumDB.TABLE_NAME))
+            if(regularuserDB.isEmpty()){
+                Thread.sleep(510)
+                return reponseAlbumData
+            }else{
+                return regularuserDB[0]
+            }
+        }
+
     }
     lateinit var navView: BottomNavigationView
 
@@ -44,6 +191,7 @@ class MainActivity : AppCompatActivity() {
             currentUser = UserApi.getSingleUser("albertus@gmail.com")
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }
+        Thread.sleep(1000)
         startMainActivity()
     }
 
@@ -61,6 +209,7 @@ class MainActivity : AppCompatActivity() {
         // To remove title in apps
         supportActionBar?.hide()
     }
+
     public fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager
         transaction.beginTransaction().addToBackStack(null)
@@ -76,7 +225,6 @@ class MainActivity : AppCompatActivity() {
             transaction.popBackStack()
         }
     }
-
     public fun setBundle(thumb: Thumbnail) : Bundle{
         val args = Bundle()
         args.putString("id", thumb.id)

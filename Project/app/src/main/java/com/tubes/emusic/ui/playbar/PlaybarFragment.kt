@@ -16,11 +16,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.MainActivity.Companion.getMusicByIdSong
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
+import com.tubes.emusic.entity.Playbar.Companion.mapData
 import com.tubes.emusic.entity.Playbar.Companion.mediaPlayer
+import com.tubes.emusic.entity.Playbar.Companion.sequenceNow
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ArtistProfileFragment
 import com.tubes.emusic.ui.home.HomeFragment
@@ -38,11 +41,6 @@ class PlaybarFragment : Fragment() {
     private lateinit var beginTime : TextView
     private lateinit var endTime : TextView
 
-    companion object{
-        var mapData = ArrayList<Thumbnail>()
-        var sequenceNow = 0
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,13 +49,15 @@ class PlaybarFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_playbar, container, false)
         var bundleData = (context as MainActivity).getBundle(this)
 
+        seek_bar = view.findViewById<SeekBar>(R.id.icon_seekbar_progress)
+        beginTime = view.findViewById<TextView>(R.id.tv_begin_time)
+        endTime = view.findViewById<TextView>(R.id.tv_end_time)
+
         view.findViewById<ImageView>(R.id.img_down_icon).setOnClickListener {
             Log.e("Abstract", "Back to List Music Artist")
             (context as MainActivity).openFragment(HomeFragment())
         }
-        seek_bar = view.findViewById<SeekBar>(R.id.icon_seekbar_progress)
-        beginTime = view.findViewById<TextView>(R.id.tv_begin_time)
-        endTime = view.findViewById<TextView>(R.id.tv_end_time)
+
 
         var counterMap = 0
         for(i in mapData){
@@ -68,12 +68,11 @@ class PlaybarFragment : Fragment() {
         }
 
         Log.e("Abstract", "Data : " + bundleData )
+
         //sequenceNow = 3
         shuffleMusic(view, mapData.get(sequenceNow))
         previousMusic(view, mapData.get(sequenceNow))
         playMusic(view, mapData.get(sequenceNow))
-          // beginTimeTv.setText(mediaPlayer.currentSeconds)
-           //endTimeTv.setText(mediaPlayer.seconds)
         nextMusic(view, mapData.get(sequenceNow))
         repeatMusic(view, mapData.get(sequenceNow))
         likeMusic(view, mapData.get(sequenceNow))
@@ -156,7 +155,7 @@ class PlaybarFragment : Fragment() {
                 sequenceNow = sequenceNow-1
                 playMusic(view, mapData[sequenceNow])
             }
-            Playbar.mediaPlayer!!.start()
+            mediaPlayer!!.start()
         }
     }
 
@@ -174,13 +173,13 @@ class PlaybarFragment : Fragment() {
         Glide.with(view.context).load( dummyMusic.urlAlbumPhoto).into(view.findViewById<ImageView>(R.id.img_cover))
 
         view.findViewById<TextView>(R.id.tv_title_playbar_song).setText(dummyMusic.title)
-        view.findViewById<TextView>(R.id.tv_artist_playbar_name).setText(dummyMusic.artistName)
+        view.findViewById<TextView>(R.id.tv_artist_playbar_name).setText(getMusicByIdSong(dummyMusic.idsong!!.toInt() )?.artistName)
 
-        if(Playbar.mediaPlayer == null){
+        if(mediaPlayer == null){
             startMusic(dummyMusic.urlsongs)
         }else{
             //Stop Already Played Music
-            Playbar.mediaPlayer!!.release()
+            mediaPlayer!!.release()
             startMusic(dummyMusic.urlsongs)
             Playbar.pause = false
         }
@@ -216,7 +215,7 @@ class PlaybarFragment : Fragment() {
     }
 
     private fun startMusic(url :String?){
-        Playbar.mediaPlayer = MediaPlayer().apply {
+        mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
                     AudioAttributes.Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -239,7 +238,7 @@ class PlaybarFragment : Fragment() {
                 sequenceNow = 0
             }
             playMusic(view, mapData[sequenceNow])
-            Playbar.mediaPlayer!!.start()
+            mediaPlayer!!.start()
         }
     }
 
@@ -265,7 +264,7 @@ class PlaybarFragment : Fragment() {
                 repeatBtn.setImageResource(R.drawable.ic_baseline_repeat_24)
                 Playbar.repeat = false
             }
-            Playbar.mediaPlayer!!.start()
+            mediaPlayer!!.start()
         }
     }
 
