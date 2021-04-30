@@ -91,8 +91,6 @@ class SearchFragment : Fragment() {
         transaction.replace(R.id.child_fragment_container, childFragment).commit()
     }
 
-
-
     //References https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin
     fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }

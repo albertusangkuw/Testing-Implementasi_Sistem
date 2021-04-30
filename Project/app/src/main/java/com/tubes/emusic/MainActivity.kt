@@ -2,7 +2,6 @@ package com.tubes.emusic
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -26,10 +25,12 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     companion object{
+        var loggedEmail : String = ""
         var currentUser : User? = null
         var db : DBManager? = null
-        private var detailUser : ResponseDetailUser? = null
+        var detailUser : ResponseDetailUser? = null
         var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+        var playlistFollowing :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
         var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
         var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
         var artistUser : ArrayList<User> = ArrayList<User>()
@@ -54,6 +55,18 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 playlistUser = playlistUserTemp
+
+                var playlistFollowingTemp :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
+                if(detailUser?.dataplaylistowned != null){
+                    for(i in detailUser?.dataplaylistliked!!){
+                        val playlist  = PlaylistApi.getPlaylistById(i.toInt())
+                        delay(600)
+                        if(playlist != null){
+                            playlistFollowingTemp.add(playlist.data.get(0))
+                        }
+                    }
+                }
+                playlistFollowing = playlistFollowingTemp
 
                 var albumUserTemp : ArrayList<AlbumData> =ArrayList<AlbumData>()
                 if(detailUser?.dataalbum != null){
@@ -135,14 +148,14 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch{
                 responseMusicData = MusicApi.getMusicById(idsong)?.data?.get(0)
             }
-            val regularuserDB  = MappingHelper.mapPlaylistSongToArrayList(db?.queryById(idsong.toString(), DatabaseContract.SongDB.TABLE_NAME))
+            val regularuserDB  = MappingHelper.mapPlaylistSongToArrayList(db?.queryById( DatabaseContract.SongDB.ID, DatabaseContract.SongDB.TABLE_NAME))
             if(regularuserDB.isEmpty()){
                 // Database cannot find the user
                 // Return value from API
                 Thread.sleep(510)
                 val nameArtis = getUserByIdUser(searchAlbumIdAlbum(responseMusicData?.idalbum)?.iduser)?.username
                 //Thread.sleep(1030)
-                return  Music(responseMusicData?.idsong.toString(), responseMusicData?.idalbum.toString(), responseMusicData?.title, HTTPClientManager.host + "album/" + responseMusicData?.idalbum + "/photo"  , responseMusicData?.urlsongs, nameArtis, responseMusicData?.genre)
+                return  Music(responseMusicData?.idsong.toString(), responseMusicData?.idalbum.toString(), responseMusicData?.title, HTTPClientManager.host + "album/" + responseMusicData?.idalbum + "/photo"  , HTTPClientManager.host +"/music/"+ responseMusicData?.urlsongs + "/data" , nameArtis, responseMusicData?.genre)
             }else{
                 apiUser = regularuserDB.get(0)
                 val nameArtis = getUserByIdUser(searchAlbumIdAlbum(apiUser?.idalbum)?.iduser)?.username
@@ -150,9 +163,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fun synchronizeObject(iduser: String?){
+        fun synchronizeObject(){
             GlobalScope.launch{
-                currentUser = UserApi.getSingleUser("albertus@gmail.com")
+                currentUser = UserApi.getSingleUser(loggedEmail)
+                getUserByIdUser(currentUser?.iduser)
+                getUserDetailByIdUser(currentUser?.iduser)
             }
         }
         fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{
@@ -163,12 +178,12 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch {
                 reponseAlbumData = AlbumApi.getAlbumById(idalbum)?.data?.get(0)
             }
-            val regularuserDB  = MappingHelper.mapListAlbumToArrayList( db?.queryById(idalbum.toString(), DatabaseContract.AlbumDB.TABLE_NAME))
-            if(regularuserDB.isEmpty()){
+            val albumresult  = MappingHelper.mapListAlbumToArrayList( db?.queryById(idalbum.toString(), DatabaseContract.AlbumDB.TABLE_NAME))
+            if(albumresult.isEmpty()){
                 Thread.sleep(510)
                 return reponseAlbumData
             }else{
-                return regularuserDB[0]
+                return albumresult[0]
             }
         }
 
@@ -189,6 +204,7 @@ class MainActivity : AppCompatActivity() {
             }
             Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
             currentUser = UserApi.getSingleUser("albertus@gmail.com")
+            synchronizeObject()
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }
         Thread.sleep(1000)

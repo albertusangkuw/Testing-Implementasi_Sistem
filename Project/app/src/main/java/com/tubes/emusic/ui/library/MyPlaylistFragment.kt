@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.MainActivity.Companion.laucherWaiting
+import com.tubes.emusic.MainActivity.Companion.playlistFollowing
 import com.tubes.emusic.MainActivity.Companion.playlistUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.PlaylistApi
@@ -45,18 +46,10 @@ class MyPlaylistFragment : Fragment() {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
-        /*
-        Panggil libraryfrgament
 
-        for(i in LibraryFragment.playlistUser){
-            i.
-        }
-
-         */
         rv_listPlaylist = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_playlist_music)
         rv_listPlaylist.setHasFixedSize(true)
         showRecyclerListPlaylist()
-
 
         view.findViewById<RelativeLayout>(R.id.rl_add_playlist).setOnClickListener{
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -100,7 +93,12 @@ class MyPlaylistFragment : Fragment() {
         val list = ArrayList<Thumbnail>()
         for(i in playlistUser){
             val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
-                    i.nameplaylist, "")
+                    i.nameplaylist, MainActivity.getUserByIdUser(i.iduser)?.username)
+            list.add(thumb)
+        }
+        for(i in playlistFollowing){
+            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
+                    i.nameplaylist, MainActivity.getUserByIdUser(i.iduser)?.username)
             list.add(thumb)
         }
         rv_listPlaylist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

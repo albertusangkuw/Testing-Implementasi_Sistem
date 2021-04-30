@@ -16,9 +16,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
+import com.tubes.emusic.MainActivity.Companion.detailUser
 import com.tubes.emusic.MainActivity.Companion.getMusicByIdSong
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
+import com.tubes.emusic.api.ResponseMusic
 import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Playbar.Companion.mapData
@@ -57,7 +59,6 @@ class PlaybarFragment : Fragment() {
             Log.e("Abstract", "Back to List Music Artist")
             (context as MainActivity).openFragment(HomeFragment())
         }
-
 
         var counterMap = 0
         for(i in mapData){
@@ -116,49 +117,6 @@ class PlaybarFragment : Fragment() {
         handler.postDelayed(runnable, 1000)
     }
 
-    // Creating an extension property to get the media player time duration in seconds
-    val MediaPlayer.seconds:Int
-        get() {
-            return this.duration / 1000
-        }
-
-    // Creating an extension property to get media player current position in seconds
-    val MediaPlayer.currentSeconds:Int
-        get() {
-            return this.currentPosition/1000
-        }
-
-    private fun shuffleMusic(view: View, bundleData: Thumbnail){
-        view.findViewById<ImageButton>(R.id.img_shuffle_icon).setOnClickListener {
-            var shuffleBtn : ImageButton = view.findViewById(R.id.img_shuffle_icon)
-            if (Playbar.shuffle == false) {
-                Log.e("Abstract", "Shuffle Music ON")
-                Playbar.shuffle = true
-                mapData.shuffle()
-                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_on_24)
-            } else {
-                Log.e("Abstract", "Shuffle Music OFF")
-                Playbar.shuffle = false
-                mapData.sortBy { it.description }
-                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_24)
-            }
-        }
-    }
-
-    private fun previousMusic(view: View, bundleData: Thumbnail){
-        view.findViewById<ImageButton>(R.id.img_previous_icon).setOnClickListener {
-            Log.e("Abstract", "Previous Music is playing")
-            if (sequenceNow == 0){
-                sequenceNow = sequenceNow + (mapData.size-1)
-                playMusic(view, mapData[sequenceNow])
-            } else {
-                sequenceNow = sequenceNow-1
-                playMusic(view, mapData[sequenceNow])
-            }
-            mediaPlayer!!.start()
-        }
-    }
-
     private fun playMusic(view: View, bundleData: Thumbnail){
         val dummyMusic = Music(
                 bundleData.id,
@@ -166,7 +124,7 @@ class PlaybarFragment : Fragment() {
                 bundleData.title,
                 bundleData.urlImage,
                 HTTPClientManager.host +"/music/"+ bundleData.id  + "/data",
-                "Avicii",
+                "",
                 bundleData.addOn
         )
 
@@ -179,9 +137,9 @@ class PlaybarFragment : Fragment() {
             startMusic(dummyMusic.urlsongs)
         }else{
             //Stop Already Played Music
-            mediaPlayer!!.release()
+            mediaPlayer!!.reset()
             startMusic(dummyMusic.urlsongs)
-            Playbar.pause = false
+            //? Playbar.pause = false
         }
 
         var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)
@@ -199,20 +157,24 @@ class PlaybarFragment : Fragment() {
                     playBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
                     Log.e("Abstract", "Pausing Playbar")
                 }
-                Playbar.mediaPlayer!!.setOnCompletionListener {
-                    //playBtn.isEnabled = true
-                    sequenceNow++
-                    if(sequenceNow > mapData.size-1){
-                        sequenceNow = 0
-                    }
-                    //playMusic(view, mapData[sequenceNow])
-                    //Playbar.mediaPlayer!!.start()
-                    startMusic(HTTPClientManager.host +"/music/"+ bundleData.id  + "/data")
-                }
+
             }
         }
+
+        Playbar.mediaPlayer!!.setOnCompletionListener {
+            //playBtn.isEnabled = true
+            sequenceNow++
+            if(sequenceNow > mapData.size-1){
+                sequenceNow = 0
+            }
+            playMusic(view, mapData[sequenceNow])
+
+        }
+
         initializeSeekBar()
     }
+
+    private fun helperMusic(){}
 
     private fun startMusic(url :String?){
         mediaPlayer = MediaPlayer().apply {
@@ -281,5 +243,59 @@ class PlaybarFragment : Fragment() {
                 Playbar.like = false
             }
         }
+        if(detailUser!!.datalikedsong != null){
+           for(i in detailUser!!.datalikedsong){
+                if(i.equals(bundleData.id)){
+                    var likeBtn : ImageButton = view.findViewById(R.id.img_like_icon)
+                    likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    Playbar.like = true
+                    break
+                }
+           }
+        }
     }
+
+    private fun shuffleMusic(view: View, bundleData: Thumbnail){
+        view.findViewById<ImageButton>(R.id.img_shuffle_icon).setOnClickListener {
+            var shuffleBtn : ImageButton = view.findViewById(R.id.img_shuffle_icon)
+            if (Playbar.shuffle == false) {
+                Log.e("Abstract", "Shuffle Music ON")
+                Playbar.shuffle = true
+                mapData.shuffle()
+                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_on_24)
+            } else {
+                Log.e("Abstract", "Shuffle Music OFF")
+                Playbar.shuffle = false
+                mapData.sortBy { it.description }
+                shuffleBtn.setImageResource(R.drawable.ic_baseline_shuffle_24)
+            }
+        }
+    }
+
+    private fun previousMusic(view: View, bundleData: Thumbnail){
+        view.findViewById<ImageButton>(R.id.img_previous_icon).setOnClickListener {
+            Log.e("Abstract", "Previous Music is playing")
+            if (sequenceNow == 0){
+                sequenceNow = sequenceNow + (mapData.size-1)
+                playMusic(view, mapData[sequenceNow])
+            } else {
+                sequenceNow = sequenceNow-1
+                playMusic(view, mapData[sequenceNow])
+            }
+            mediaPlayer!!.start()
+        }
+    }
+
+    // Creating an extension property to get the media player time duration in seconds
+    val MediaPlayer.seconds:Int
+        get() {
+            return this.duration / 1000
+        }
+
+    // Creating an extension property to get media player current position in seconds
+    val MediaPlayer.currentSeconds:Int
+        get() {
+            return this.currentPosition/1000
+        }
+
 }

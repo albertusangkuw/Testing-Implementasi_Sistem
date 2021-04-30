@@ -13,6 +13,7 @@ import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 data class ResponsePlaylist (
 
@@ -337,46 +338,59 @@ class PlaylistApi {
                 valuesPlaylist.put(DatabaseContract.PlaylistDB.NAMEPLAYLIST, i.nameplaylist)
                 valuesPlaylist.put(DatabaseContract.PlaylistDB.URLIMAGECOVER, i.urlimagecover)
 
-                val valuesFollowing = ContentValues()
+                val valuesFollowing =  ArrayList<ContentValues>()
                 if(i.userfollowing != null) {
                     for (j in i.userfollowing!!) {
-
-                        valuesFollowing.put(DatabaseContract.PlaylistFollowingDB.IDUSER, j.iduser)
-                        valuesFollowing.put(DatabaseContract.PlaylistFollowingDB.IDPLAYLIST, i.idplaylist)
+                        val tempValues = ContentValues()
+                        tempValues.put(DatabaseContract.PlaylistFollowingDB.IDUSER, j.iduser)
+                        tempValues.put(DatabaseContract.PlaylistFollowingDB.IDPLAYLIST, i.idplaylist)
+                        valuesFollowing.add(tempValues)
                     }
                 }
-                val valuesListSong = ContentValues()
+                val valuesListSong = ArrayList<ContentValues>()
                 if( i.listsong != null) {
                     for (j in i.listsong!!) {
-                        valuesListSong.put(DatabaseContract.PlaylistSongDB.IDSONG, j.idsong)
-                        valuesListSong.put(DatabaseContract.PlaylistSongDB.IDPLAYLIST, i.idplaylist)
+                        val tempValues = ContentValues()
+                        tempValues.put(DatabaseContract.PlaylistSongDB.IDSONG, j.idsong)
+                        tempValues.put(DatabaseContract.PlaylistSongDB.IDPLAYLIST, i.idplaylist)
+                        valuesListSong.add(tempValues)
                     }
                 }
+
+                Log.d("API", "Success Playlist Insert Update db " + valuesListSong  )
                 if( searchDataPlaylist(i.idplaylist)){
                     MainActivity.db?.insert(valuesPlaylist, DatabaseContract.PlaylistDB.TABLE_NAME)
-                    if(!valuesFollowing.isEmpty) {
-                        MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                    if(!valuesFollowing.isEmpty()) {
+                        for(i in valuesFollowing) {
+                            MainActivity.db?.insert(i, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                        }
                     }
-                    if(!valuesListSong.isEmpty) {
-                        MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                    if(!valuesListSong.isEmpty()) {
+                        for(i in valuesListSong) {
+                            MainActivity.db?.insert(i, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                        }
                     }
                 }else{
                     MainActivity.db?.update(i.idplaylist.toString(), valuesPlaylist , DatabaseContract.PlaylistDB.TABLE_NAME)
-                    if(!valuesFollowing.isEmpty) {
+                    if(!valuesFollowing.isEmpty()) {
                         MainActivity.db?.deleteCustomById(
                                 i.idplaylist.toString(),
                                 DatabaseContract.PlaylistFollowingDB.IDPLAYLIST,
                                 DatabaseContract.PlaylistFollowingDB.TABLE_NAME
                         )
-                        MainActivity.db?.insert(valuesFollowing, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                        for(i in valuesFollowing) {
+                            MainActivity.db?.insert(i, DatabaseContract.PlaylistFollowingDB.TABLE_NAME)
+                        }
                     }
-                    if(!valuesListSong.isEmpty) {
+                    if(!valuesListSong.isEmpty()) {
                         MainActivity.db?.deleteCustomById(
                                 i.idplaylist.toString(),
                                 DatabaseContract.PlaylistSongDB.IDPLAYLIST,
                                 DatabaseContract.PlaylistSongDB.TABLE_NAME
                         )
-                        MainActivity.db?.insert(valuesListSong, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                        for(i in valuesListSong) {
+                            MainActivity.db?.insert(i, DatabaseContract.PlaylistSongDB.TABLE_NAME)
+                        }
                     }
                 }
             }

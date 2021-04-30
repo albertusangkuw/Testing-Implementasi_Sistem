@@ -17,6 +17,7 @@ import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.api.MusicData
 
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
@@ -54,19 +55,12 @@ class GenrePlaylistAdapter: Fragment()  {
             val thumb = Thumbnail(
                     i.idsong.toString(), "Music", "",
                     HTTPClientManager.host + "album/" +  i.idalbum + "/photo",
-                    i.title, ""
+                    i.title, "" +  MainActivity.getUserByIdUser(MainActivity.searchAlbumIdAlbum(i.idalbum)?.iduser)?.username
             )
             list.add(thumb)
         }
+        Playbar.mapData = list
 
-        /*
-        val hero1 = Thumbnail( "song1","Music", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Sunset ", "Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "song2","Music", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Yes or Yes", "Twice")
-        list.add(hero2)
-        list.add(hero1)
-*/
         rv_genre_music_list .layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv_genre_music_list .adapter = listHeroAdapter

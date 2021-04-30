@@ -11,7 +11,7 @@ class Playbar {
         public var repeat : Boolean = false
         public var like : Boolean = false
         public var mapData = ArrayList<Thumbnail>()
-        public var playingNow : Thumbnail = Thumbnail("","","","","","")
+        public var title : String = "Now Playing"
         public var sequenceNow = 0
     }
 }

@@ -165,10 +165,12 @@ class DetailPlaylistAlbum : Fragment() {
                     MainActivity.db?.queryById(id, DatabaseContract.PlaylistDB.TABLE_NAME)
             )
             mapData = rawPlaylist.get(0).listsong!!
-
         }
 
         for (i in mapData){
+            if(bundleData.type == "Playlist"){
+                desc = MainActivity.getMusicByIdSong(i.idsong!!.toInt())?.artistName!!
+            }
             val thumb = Thumbnail(i.idsong.toString(), "Music", addOn, HTTPClientManager.host + "album/" + i.idalbum + "/photo", i.title,"" + desc)
             list.add(thumb)
         }

@@ -13,6 +13,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.MainActivity.Companion.musicUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
+import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
 
@@ -38,10 +39,10 @@ class MyMusicFragment : Fragment() {
         val list = ArrayList<Thumbnail>()
         for(i in musicUser){
             val thumb = Thumbnail( i.idsong.toString(),"Music","LibraryListAlbum",  HTTPClientManager.host + "album/"  + i.idalbum + "/photo" ,
-                    i.title , "")
+                    i.title , MainActivity.getMusicByIdSong(i.idsong!!.toInt())?.artistName)
             list.add(thumb)
         }
-
+        Playbar.mapData = list
         rv_listMusic.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv_listMusic.adapter = listHeroAdapter

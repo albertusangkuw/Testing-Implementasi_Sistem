@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
+import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
 import com.tubes.emusic.ui.component.ListUserAdapter
@@ -27,7 +28,7 @@ class ResultSearchFragment: Fragment()  {
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
-                Thread.sleep(3000)
+                Thread.sleep(1510)
                 showResultSong(view)
                 showResultArtis(view)
                 showResultAlbum(view)
@@ -46,9 +47,10 @@ class ResultSearchFragment: Fragment()  {
                     "" ,
                     HTTPClientManager.host + "album/"+ i.idalbum.toString()  + "/photo",
                     "" +i.title ,
-                    "desc none"
+                    MainActivity.getMusicByIdSong(i.idsong!!.toInt())?.artistName
             ))
         }
+        Playbar.mapData = list
         rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv.adapter = listHeroAdapter
@@ -78,13 +80,12 @@ class ResultSearchFragment: Fragment()  {
                     "" ,
                     HTTPClientManager.host + "album/"+ i.idalbum + "/photo",
                     "" +i.namealbum ,
-                    ""
+                    "" + MainActivity.getUserByIdUser(MainActivity.searchAlbumIdAlbum(i.idalbum)?.iduser)?.username
             ))
         }
         rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv.adapter = listHeroAdapter
     }
-
 
 }

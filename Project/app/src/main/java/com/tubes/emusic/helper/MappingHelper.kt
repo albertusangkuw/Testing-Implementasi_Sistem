@@ -1,6 +1,7 @@
 package com.tubes.emusic.helper
 
 import android.database.Cursor
+import android.util.Log
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DBManager
@@ -70,7 +71,7 @@ object MappingHelper {
                 for (i in dataIdSong){
                     listsong.add( (mapListsongToArrayList(MainActivity.db?.queryById(i.idsong.toString(),DatabaseContract.SongDB.TABLE_NAME)) ).get(0))
                 }
-
+                Log.e("Abstract", "List playlist song " +  listsong  + " data id" + dataIdSong)
                 list.add(
                         PlaylistData(
                                 idplaylist = getInt(getColumnIndexOrThrow(DatabaseContract.PlaylistDB.ID)) ,

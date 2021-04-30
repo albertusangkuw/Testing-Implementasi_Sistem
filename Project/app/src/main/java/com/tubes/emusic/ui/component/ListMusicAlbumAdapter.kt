@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import com.tubes.emusic.ui.search.GenrePlaylistAdapter
@@ -20,7 +21,8 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
         fun bind(thumb: Thumbnail) {
             with(itemView){
                 if(thumb.urlImage == "" || thumb.urlImage == null){
-                    thumb.urlImage = "http://simpleicon.com/wp-content/uploads/playlist.png"
+                    Log.e("Abstract", "Url image is emypty")
+                    thumb.urlImage =  "http://18.140.59.14/static/playlist_default.jpg"
                 }
                 Glide.with(itemView.context).load(thumb.urlImage).into(findViewById<ImageView>(R.id.img_item_musicalbum_photo))
                 findViewById<TextView>(R.id.tv_item_music_name).text = thumb.title
