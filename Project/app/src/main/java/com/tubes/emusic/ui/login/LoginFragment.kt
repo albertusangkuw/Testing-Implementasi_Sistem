@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.tubes.emusic.MainActivity
@@ -25,8 +27,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class LoginFragment  : Fragment() {
-    var mGoogleSignInClient: GoogleSignInClient? = null
+class LoginFragment  : Fragment(), View.OnClickListener {
+    companion object{
+        lateinit  var signInButton : com.google.android.gms.common.SignInButton
+        lateinit  var mGoogleSignInClient :GoogleSignInClient
+        var RC_SIGN_IN = 1
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,49 +67,30 @@ class LoginFragment  : Fragment() {
                     startActivity(Intent(context, MainActivity::class.java))
                     //(context as MainActivity).startMainActivity()
                 }else{
+                    //Toast.makeText(view.context, "Failed Login", Toast.LENGTH_LONG).show()
                     Log.e("Abstract", "Failed Login")
                 }
             }
 
 
         }
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        signInButton = view.findViewById<SignInButton>(R.id.signin);
+        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
-            .build()
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(view.context, gso);
+            .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso);
 
-        view.findViewById<com.google.android.gms.common.SignInButton>(R.id.sign_in_button).setOnClickListener{
-            when (view.getId()) {
-                R.id.sign_in_button -> signIn()
-            }
-        }
+        signInButton.setOnClickListener(this)
+
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        val account = GoogleSignIn.getLastSignedInAccount(view?.context)
 
-        if(account!=null) {
-            //val intent = Intent(this, UserProfile::class.java)
-            //startActivity(intent)
-        }
-        //updateUI(account)
-    }
-    private fun signIn() {
-        val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
-        startActivityForResult(signInIntent, 1)
-    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == 1) {
+        if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -114,15 +101,35 @@ class LoginFragment  : Fragment() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            Log.e("Abstract", "Account " + account?.email)
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account)
+            //Toast.makeText(this.context, "SIgn in success", Toast.LENGTH_LONG).show()
+
+            GlobalScope.launch {
+                if(SessionApi.signwithGoogle(account!!)){
+                    Log.w(TAG, "Success sign with google " + account?.email + " -" + account?.id  + " ,"  + account?.displayName )
+                    Log.e("Abstract", "Redirect Main Activity")
+                    MainActivity.currentUser = UserApi.getSingleUser(account?.email!!)
+                    startActivity(Intent(context, MainActivity::class.java))
+                }
+            }
+
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-            //updateUI(null)
+            Toast.makeText(this.context, "Sign in with Google Failed ("    + e.statusCode + ")", Toast.LENGTH_LONG).show()
+            //  updateUI(null)
         }
+    }
+
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.signin -> signIn()
+        }
+    }
+
+    private fun signIn() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
 }

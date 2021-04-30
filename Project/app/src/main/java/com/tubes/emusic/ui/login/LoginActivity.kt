@@ -11,15 +11,10 @@ import com.tubes.emusic.R
 
 
 class LoginActivity : AppCompatActivity() {
-    companion object{
 
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-
-
 
 
         val fragment: Fragment = LoginFragment()
