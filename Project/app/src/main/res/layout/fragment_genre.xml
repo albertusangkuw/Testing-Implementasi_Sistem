@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
         android:paddingRight="10dp"
-        android:paddingBottom="@dimen/fragment_vertical_padding"
         android:orientation="horizontal"
         >
         <androidx.recyclerview.widget.RecyclerView
