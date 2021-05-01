@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 playlistUser = playlistUserTemp
 
                 var playlistFollowingTemp :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-                if(detailUser?.dataplaylistowned != null){
+                if(detailUser?.dataplaylistliked != null){
                     for(i in detailUser?.dataplaylistliked!!){
                         val playlist  = PlaylistApi.getPlaylistById(i.toInt())
                         delay(600)
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 albumUser= albumUserTemp
 
                 var musicUserTemp : ArrayList<MusicData> =ArrayList<MusicData>()
-                if(detailUser!!.datalikedsong != null){
+                if(detailUser?.datalikedsong != null){
                     for(i in detailUser?.datalikedsong!!) {
                         val music = MusicApi.getMusicById(i.toInt())
                         delay(600)
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 musicUser= musicUserTemp
 
                 var artistUserTemp : ArrayList<User> =ArrayList<User>()
-                if(detailUser!!.datafollowingartis != null){
+                if(detailUser?.datafollowingartis != null){
                     for(i in detailUser?.datafollowingartis!!) {
                         val artist = UserApi.getSingleUserByID(i)
                         delay(600)
@@ -167,7 +167,8 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch{
                 currentUser = UserApi.getSingleUser(loggedEmail)
                 getUserByIdUser(currentUser?.iduser)
-                getUserDetailByIdUser(currentUser?.iduser)
+                laucherWaiting()
+                //getUserDetailByIdUser(currentUser?.iduser)
             }
         }
         fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{
@@ -197,13 +198,13 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch{
             //Check is user can access api
             var statusCookie  = SessionApi.checkCookie()
+            Thread.sleep(310)
             //statusCookie  = true
             if(!statusCookie){
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
-            Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
-            currentUser = UserApi.getSingleUser("albertus@gmail.com")
+            currentUser = UserApi.getSingleUser(loggedEmail)
             synchronizeObject()
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }

@@ -21,6 +21,7 @@ import com.tubes.emusic.MainActivity.Companion.getMusicByIdSong
 import com.tubes.emusic.R
 import com.tubes.emusic.api.HTTPClientManager
 import com.tubes.emusic.api.ResponseMusic
+import com.tubes.emusic.api.UserApi
 import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Playbar.Companion.mapData
@@ -30,6 +31,8 @@ import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ArtistProfileFragment
 import com.tubes.emusic.ui.home.HomeFragment
 import com.tubes.emusic.ui.library.LibraryFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 
@@ -77,6 +80,20 @@ class PlaybarFragment : Fragment() {
         nextMusic(view, mapData.get(sequenceNow))
         repeatMusic(view, mapData.get(sequenceNow))
         likeMusic(view, mapData.get(sequenceNow))
+
+        //Add logging to database
+
+        GlobalScope.launch {
+            var type = 0
+            if(Playbar.parentData.type == "Playlist"){
+                type = 1
+            }else if (Playbar.parentData.type == "Album"){
+                type = 2
+            }
+            if(Playbar.parentData.id != "") {
+                UserApi.addHistory(Playbar.parentData.id!!.toInt(), MainActivity.currentUser?.iduser!!, type)
+            }
+        }
 
         // Seek bar change listener
         seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -243,15 +260,17 @@ class PlaybarFragment : Fragment() {
                 Playbar.like = false
             }
         }
-        if(detailUser!!.datalikedsong != null){
-           for(i in detailUser!!.datalikedsong){
-                if(i.equals(bundleData.id)){
-                    var likeBtn : ImageButton = view.findViewById(R.id.img_like_icon)
-                    likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24)
-                    Playbar.like = true
-                    break
+        if(detailUser != null ) {
+            if (detailUser?.datalikedsong != null) {
+                for (i in detailUser!!.datalikedsong) {
+                    if (i.equals(bundleData.id)) {
+                        var likeBtn: ImageButton = view.findViewById(R.id.img_like_icon)
+                        likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        Playbar.like = true
+                        break
+                    }
                 }
-           }
+            }
         }
     }
 

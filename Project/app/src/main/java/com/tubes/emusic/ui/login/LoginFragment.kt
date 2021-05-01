@@ -63,7 +63,8 @@ class LoginFragment  : Fragment(), View.OnClickListener {
                 Log.e("Abstract", "Testing login  : " + status)
                 if(status){
                     Log.e("Abstract", "Redirect Mainactivity")
-                    MainActivity.currentUser = UserApi.getSingleUser(email)
+                    MainActivity.loggedEmail = email
+                    //MainActivity.currentUser = UserApi.getSingleUser(email)
                     startActivity(Intent(context, MainActivity::class.java))
                     //(context as MainActivity).startMainActivity()
                 }else{
@@ -107,7 +108,8 @@ class LoginFragment  : Fragment(), View.OnClickListener {
                 if(SessionApi.signwithGoogle(account!!)){
                     Log.w(TAG, "Success sign with google " + account?.email + " -" + account?.id  + " ,"  + account?.displayName )
                     Log.e("Abstract", "Redirect Main Activity")
-                    MainActivity.currentUser = UserApi.getSingleUser(account?.email!!)
+                    MainActivity.loggedEmail = account?.email!!
+                    //MainActivity.currentUser = UserApi.getSingleUser(account?.email!!)
                     startActivity(Intent(context, MainActivity::class.java))
                 }
             }

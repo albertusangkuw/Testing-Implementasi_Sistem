@@ -73,8 +73,11 @@ class LibraryFragment : Fragment() {
         val run = object : Runnable {
             override fun run() {
                 if(detailUser != null){
-                    var sums =  detailUser!!.dataplaylistowned.size
+                    var sums =  0
                     if(detailUser!!.dataplaylistowned != null){
+                        sums += detailUser!!.dataplaylistowned.size
+                    }
+                    if(detailUser!!.dataplaylistliked != null){
                         sums += detailUser!!.dataplaylistliked.size
                     }
                     view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + sums + " Playlists")
@@ -97,7 +100,7 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
-        handler.postDelayed(run,(3000).toLong())
+        handler.postDelayed(run,(1000).toLong())
         return view
     }
 

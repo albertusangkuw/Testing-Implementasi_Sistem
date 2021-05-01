@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/like_items"
-        android:title="Like" />
+        android:title="Like"
+        />
+    <item
+        android:id="@+id/unlike_items"
+        android:title="Unlike" />
     <item android:id="@+id/add_playlist_item"
         android:title="Add to playlist" />
+    <item android:id="@+id/remove_playlist_item"
+        android:title="Remove from playlist" />
 
 </menu>

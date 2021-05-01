@@ -1,8 +1,9 @@
 package com.tubes.emusic.ui.component
 
-import android.os.Bundle
+import android.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -10,10 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
-import com.tubes.emusic.api.HTTPClientManager
+import com.tubes.emusic.api.AlbumApi
+import com.tubes.emusic.api.MusicApi
+import com.tubes.emusic.api.PlaylistApi
+import com.tubes.emusic.api.UserApi
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.playbar.PlaybarFragment
-import com.tubes.emusic.ui.search.GenrePlaylistAdapter
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): RecyclerView.Adapter<ListMusicAlbumAdapter.ListViewHolder> () {
@@ -48,31 +53,31 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                     when(thumb.type){
                         "LibraryListAlbum" -> {
                             //Insialisisasi Bundle
-                            val args =  (context as MainActivity).setBundle(thumb)
+                            val args = (context as MainActivity).setBundle(thumb)
                             // Frament destination
                             // Otw digantgi jadi format di my library
                             val ldf = DetailPlaylistAlbum()
                             ldf.setArguments(args)
                             (context as MainActivity).openFragment(ldf)
                         }
-                        "Music" ->{
+                        "Music" -> {
                             //Insialisisasi Bundle
-                            val args =  (context as MainActivity).setBundle(thumb)
+                            val args = (context as MainActivity).setBundle(thumb)
                             val ldf = PlaybarFragment()
                             ldf.setArguments(args)
                             // Menaruh data ke dalam fragment yang dikirim
                             (context as MainActivity).openFragment(ldf)
                         }
-                        "Album" ->{
+                        "Album" -> {
                             //Insialisisasi Bundle
-                            val args =  (context as MainActivity).setBundle(thumb)
+                            val args = (context as MainActivity).setBundle(thumb)
                             val ldf = DetailPlaylistAlbum()
                             ldf.setArguments(args)
                             (context as MainActivity).openFragment(ldf)
                         }
-                        "Playlist" ->{
+                        "Playlist" -> {
                             //Insialisisasi Bundle
-                            val args =  (context as MainActivity).setBundle(thumb)
+                            val args = (context as MainActivity).setBundle(thumb)
                             val ldf = DetailPlaylistAlbum()
                             ldf.setArguments(args)
                             (context as MainActivity).openFragment(ldf)
@@ -82,22 +87,155 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                 val button = itemView.findViewById<ImageButton>(R.id.btn_more_music_album_item)
                 button.setOnClickListener { v: View ->
                     val popup = PopupMenu(itemView.context, v)
-                    popup.menuInflater.inflate( R.menu.overflow_item_menu, popup.menu)
+                    popup.menuInflater.inflate(R.menu.overflow_item_menu, popup.menu)
 
-                    popup.setOnDismissListener {
-                        // Respond to popup being dismissed.
+                    if(likedThumb(thumb)){
+                        popup.menu.getItem(0).setVisible(false)
+                    }else{
+                        popup.menu.getItem(1).setVisible(false)
                     }
-                    // Show the popup menu.
+
+                    if(thumb.type != "Music"){
+                        popup.menu.getItem(2).setVisible(false)
+                    }
+                    popup.menu.getItem(3).setVisible(false)
+
+                    popup.setOnMenuItemClickListener { item: MenuItem ->
+                        if (item.itemId == R.id.like_items) {
+                            Log.e("Detail", "Item Like")
+                            addLikedThumb(thumb)
+                            popup.menu.getItem(0).setVisible(false)
+                            popup.menu.getItem(1).setVisible(true)
+                            //Toast.makeText(ApplicationProvider.getApplicationContext<Context>(), "Email clicked", Toast.LENGTH_SHORT).show()
+                        } else if (item.itemId == R.id.unlike_items) {
+                            Log.e("Detail", "Item UnLike")
+                            removeLikedThumb(thumb)
+                            popup.menu.getItem(0).setVisible(true)
+                            popup.menu.getItem(1).setVisible(false)
+                            //Toast.makeText(ApplicationProvider.getApplicationContext<Context>(), "Call clicked", Toast.LENGTH_SHORT).show()
+                        } else if (item.itemId == R.id.add_playlist_item){
+                            Log.e("Abstract", "Add Playlist Item")
+                            addtomyplaylist(itemView,thumb)
+                        }
+                        true
+                    }
+
                     popup.show()
                 }
-
-
             }
         }
     }
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_musicalbum_list, viewGroup, false)
         return ListViewHolder(view)
+    }
+    private fun likedThumb(thumb: Thumbnail): Boolean{
+        if(thumb.type == "Album" && MainActivity.detailUser?.dataalbum != null){
+            for(i in MainActivity.detailUser!!.dataalbum){
+                if(i == thumb.id){
+                    return true
+                }
+            }
+        }else if(thumb.type =="Playlist" && MainActivity.detailUser?.dataplaylistliked != null){
+            for(i in MainActivity.detailUser!!.dataplaylistliked){
+                if(i == thumb.id){
+                    return true
+                }
+            }
+        }else if(thumb.type =="Music" && MainActivity.detailUser?.datalikedsong != null){
+            for(i in MainActivity.detailUser!!.datalikedsong){
+                if(i == thumb.id){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun addLikedThumb(thumb: Thumbnail): Boolean{
+        if(thumb.type == "Album"){
+            GlobalScope.launch {
+                AlbumApi.addFollowingAlbum(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Playlist"){
+            GlobalScope.launch {
+                PlaylistApi.addFollowingPlaylist(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Music"){
+            GlobalScope.launch {
+                MusicApi.addLikedMusic(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }
+        return false
+    }
+
+    private fun removeLikedThumb(thumb: Thumbnail): Boolean{
+        if(thumb.type == "Album"){
+            GlobalScope.launch {
+                AlbumApi.deleteFollowingAlbum(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Playlist"){
+            GlobalScope.launch {
+                PlaylistApi.deleteFollowingPlaylist(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Music"){
+            GlobalScope.launch {
+                MusicApi.deleteLikedMusic(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }
+        return false
+    }
+
+    private fun addtomyplaylist(view: View,itemsong: Thumbnail) {
+        val itemsThumb = ArrayList<Thumbnail>()
+        val items = Array<String>(MainActivity.playlistUser.size){""}
+        val selectedList =  ArrayList<Int>()
+        val builder = AlertDialog.Builder(view.context)
+
+        var c = 0
+        for(i in MainActivity.playlistUser){
+            itemsThumb.add(Thumbnail(i.idplaylist.toString(),"Playlist","","",i.nameplaylist, ""))
+            items.set(c,i.nameplaylist)
+            c++
+        }
+
+        builder.setTitle("List your playlist")
+        builder.setMultiChoiceItems(items, null
+        ) { dialog, which, isChecked ->
+            if (isChecked) {
+                selectedList.add(which)
+            } else if (selectedList.contains(which)) {
+                selectedList.remove(Integer.valueOf(which))
+            }
+        }
+
+        builder.setPositiveButton("Add") {
+            dialogInterface, i ->
+           for (j in selectedList.indices) {
+                GlobalScope.launch{
+                    PlaylistApi.addSongPlaylist(itemsThumb.get(selectedList[j]).id!!.toInt()  , itemsong.id!!.toInt())
+                }
+            }
+        }
+        builder.show()
     }
 
     override fun getItemCount(): Int = listThumbnail.size

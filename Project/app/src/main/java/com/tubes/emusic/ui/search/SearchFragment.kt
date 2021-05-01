@@ -60,8 +60,8 @@ class SearchFragment : Fragment() {
 
     private fun laucherWaiting(search : String){
         GlobalScope.launch{
-            val hasilAlbum  = AlbumApi.searchAlbumByName(search)?.data!!
-            val hasilMusic =  MusicApi.searchMusicByName(search)?.data!!
+            val hasilAlbum  = AlbumApi.searchAlbumByName(search)?.data
+            val hasilMusic =  MusicApi.searchMusicByName(search)?.data
             val hasilUser = UserApi.searchUser(search)
             delay(1500)
             if(hasilAlbum != null) {

@@ -36,6 +36,7 @@ class MyArtistFragment : Fragment() {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
+        MainActivity.synchronizeObject()
         rv_listArtist = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_artist_music)
         rv_listArtist.setHasFixedSize(true)
         showRecyclerListArtist()
