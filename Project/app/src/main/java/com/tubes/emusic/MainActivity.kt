@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
         var currentUser : User? = null
         var db : DBManager? = null
         var detailUser : ResponseDetailUser? = null
-        var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-        var playlistFollowing :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-        var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
-        var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
-        var artistUser : ArrayList<User> = ArrayList<User>()
+        var playlistUser :ArrayList<PlaylistData>? = null
+        var playlistFollowing :ArrayList<PlaylistData>? = null
+        var albumUser : ArrayList<AlbumData>? = null
+        var musicUser : ArrayList<MusicData>? = null
+        var artistUser : ArrayList<User>? = null
 
-        fun laucherWaiting(){
+        fun laucherWaitingNew(){
             GlobalScope.launch{
                 delay(1000)
                 val idUser = MainActivity.currentUser?.iduser
@@ -105,12 +105,11 @@ class MainActivity : AppCompatActivity() {
                 artistUser = artistUserTemp
             }
         }
-
         fun getUserByIdUser(iduser: String?): User?{
             if(iduser == null){
                 return User("","","","","","",0)
             }
-            var apiUser : User? = User("","","","","","",0)
+            var apiUser : User? = null
             GlobalScope.launch{
                 apiUser = UserApi.getSingleUserByID(iduser)
             }
@@ -124,7 +123,6 @@ class MainActivity : AppCompatActivity() {
                 return regularuserDB
             }
         }
-
         fun getUserDetailByIdUser(iduser: String?): ResponseDetailUser?{
             if(iduser == null){
                 return ResponseDetailUser(0,"","", ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>())
@@ -141,7 +139,6 @@ class MainActivity : AppCompatActivity() {
                 return detailUser
             }
         }
-
         fun getMusicByIdSong(idsong: Int) :Music?{
             var apiUser : MusicData? = null
             var responseMusicData: MusicData? = null
@@ -162,13 +159,10 @@ class MainActivity : AppCompatActivity() {
                 return  Music(apiUser?.idsong.toString(), apiUser?.idalbum.toString(), apiUser.title, HTTPClientManager.host + "album/" +apiUser?.idalbum + "/photo"  , apiUser.urlsongs, nameArtis,apiUser?.genre)
             }
         }
-
         fun synchronizeObject(){
             GlobalScope.launch{
                 currentUser = UserApi.getSingleUser(loggedEmail)
-                getUserByIdUser(currentUser?.iduser)
-                laucherWaiting()
-                //getUserDetailByIdUser(currentUser?.iduser)
+                laucherWaitingNew()
             }
         }
         fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{

@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tubes.emusic.MainActivity
-import com.tubes.emusic.MainActivity.Companion.laucherWaiting
 import com.tubes.emusic.MainActivity.Companion.playlistFollowing
 import com.tubes.emusic.MainActivity.Companion.playlistUser
 import com.tubes.emusic.R
@@ -83,7 +82,7 @@ class MyPlaylistFragment : Fragment() {
             )
             PlaylistApi.insertPlaylist(newPlay)
             delay(1000)
-            laucherWaiting()
+            //laucherWaiting()
             delay(2000)
             (context as MainActivity).openFragment(MyPlaylistFragment())
         }
@@ -91,15 +90,19 @@ class MyPlaylistFragment : Fragment() {
 
     private fun showRecyclerListPlaylist() {
         val list = ArrayList<Thumbnail>()
-        for(i in playlistUser){
+        if(!playlistUser.isNullOrEmpty()) {
+            for (i in playlistUser!!) {
+                val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum", i.urlimagecover,
+                        i.nameplaylist, MainActivity.getUserByIdUser(i.iduser)?.username)
+                list.add(thumb)
+            }
+        }
+        if(!playlistFollowing.isNullOrEmpty()) {
+        for(i in playlistFollowing!!){
             val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
                     i.nameplaylist, MainActivity.getUserByIdUser(i.iduser)?.username)
             list.add(thumb)
         }
-        for(i in playlistFollowing){
-            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "LibraryListAlbum",  i.urlimagecover,
-                    i.nameplaylist, MainActivity.getUserByIdUser(i.iduser)?.username)
-            list.add(thumb)
         }
         rv_listPlaylist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)

@@ -205,13 +205,17 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
     }
 
     private fun addtomyplaylist(view: View,itemsong: Thumbnail) {
+        if(MainActivity.playlistUser == null){
+            return
+        }
         val itemsThumb = ArrayList<Thumbnail>()
-        val items = Array<String>(MainActivity.playlistUser.size){""}
+        val items = Array<String>(MainActivity.playlistUser!!.size){""}
         val selectedList =  ArrayList<Int>()
         val builder = AlertDialog.Builder(view.context)
 
         var c = 0
-        for(i in MainActivity.playlistUser){
+
+        for(i in MainActivity.playlistUser!!){
             itemsThumb.add(Thumbnail(i.idplaylist.toString(),"Playlist","","",i.nameplaylist, ""))
             items.set(c,i.nameplaylist)
             c++

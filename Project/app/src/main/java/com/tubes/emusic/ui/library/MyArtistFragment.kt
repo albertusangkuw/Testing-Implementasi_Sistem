@@ -45,10 +45,12 @@ class MyArtistFragment : Fragment() {
 
     private fun showRecyclerListArtist() {
         val list = ArrayList<Thumbnail>()
-        for(i in artistUser){
-            val thumb = Thumbnail( i.iduser,"Artist","LibraryListAlbum",  HTTPClientManager.host + "users/"  + i.iduser + "/photo" ,
-                    i.username, "")
-            list.add(thumb)
+        if(!artistUser.isNullOrEmpty()){
+            for (i in artistUser!!) {
+                val thumb = Thumbnail(i.iduser, "Artist", "LibraryListAlbum", HTTPClientManager.host + "users/" + i.iduser + "/photo",
+                        i.username, "")
+                list.add(thumb)
+            }
         }
         rv_listArtist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListUserAdapter(list)

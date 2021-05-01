@@ -112,6 +112,7 @@ class UserApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
 
                         var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseUser::class.java)
+
                         if(mUser.regularuser != null) {
                             for (i in mUser.regularuser) {
                                 user = User(i.iduser,

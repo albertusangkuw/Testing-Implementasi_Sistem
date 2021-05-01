@@ -85,14 +85,17 @@ class PlaybarFragment : Fragment() {
 
         GlobalScope.launch {
             var type = 0
-            if(Playbar.parentData.type == "Playlist"){
+            if(Playbar.parentData?.type == "Playlist"){
                 type = 1
-            }else if (Playbar.parentData.type == "Album"){
+            }else if (Playbar.parentData?.type == "Album"){
                 type = 2
             }
-            if(Playbar.parentData.id != "") {
-                UserApi.addHistory(Playbar.parentData.id!!.toInt(), MainActivity.currentUser?.iduser!!, type)
+            Playbar.parentData?.id?.toInt()?.let {
+                MainActivity.currentUser?.iduser?.let {
+                    it1 -> UserApi.addHistory(it, it1, type)
+                }
             }
+
         }
 
         // Seek bar change listener
@@ -151,25 +154,24 @@ class PlaybarFragment : Fragment() {
         view.findViewById<TextView>(R.id.tv_artist_playbar_name).setText(getMusicByIdSong(dummyMusic.idsong!!.toInt() )?.artistName)
 
         if(mediaPlayer == null){
-            startMusic(dummyMusic.urlsongs)
+            startMusic(dummyMusic.urlsongs!!)
         }else{
             //Stop Already Played Music
             mediaPlayer!!.reset()
-            startMusic(dummyMusic.urlsongs)
-            //? Playbar.pause = false
+            startMusic(dummyMusic.urlsongs!!)
         }
 
         var playBtn : ImageButton = view.findViewById(R.id.img_pause_icon)
         playBtn.setOnClickListener{
-            if(Playbar.mediaPlayer != null) {
+            if(mediaPlayer != null) {
                 if (Playbar.pause) {
-                    Playbar.mediaPlayer!!.seekTo(Playbar.mediaPlayer!!.currentPosition)
-                    Playbar.mediaPlayer!!.start()
+                    mediaPlayer!!.seekTo(Playbar.mediaPlayer!!.currentPosition)
+                    mediaPlayer!!.start()
                     Playbar.pause = false
                     playBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
                     Log.e("Abstract", "Resuming Playbar")
                 } else if (Playbar.isPlaying) {
-                    Playbar.mediaPlayer!!.pause()
+                    mediaPlayer!!.pause()
                     Playbar.pause = true
                     playBtn.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
                     Log.e("Abstract", "Pausing Playbar")
@@ -178,22 +180,18 @@ class PlaybarFragment : Fragment() {
             }
         }
 
-        Playbar.mediaPlayer!!.setOnCompletionListener {
-            //playBtn.isEnabled = true
+        mediaPlayer!!.setOnCompletionListener {
             sequenceNow++
             if(sequenceNow > mapData.size-1){
                 sequenceNow = 0
             }
             playMusic(view, mapData[sequenceNow])
-
         }
 
         initializeSeekBar()
     }
 
-    private fun helperMusic(){}
-
-    private fun startMusic(url :String?){
+    private fun startMusic(url :String){
         mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
                     AudioAttributes.Builder()

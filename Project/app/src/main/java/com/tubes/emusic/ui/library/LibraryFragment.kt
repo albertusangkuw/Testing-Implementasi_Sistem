@@ -67,7 +67,7 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
-        MainActivity.laucherWaiting()
+        //MainActivity.laucherWaiting()
 
         val handler: Handler = Handler()
         val run = object : Runnable {

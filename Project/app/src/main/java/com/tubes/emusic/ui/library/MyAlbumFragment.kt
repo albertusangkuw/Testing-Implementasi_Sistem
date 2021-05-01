@@ -41,10 +41,12 @@ class MyAlbumFragment : Fragment() {
 
     private fun showRecyclerListAlbum() {
         val list = ArrayList<Thumbnail>()
-        for(i in albumUser){
-            val thumb = Thumbnail( i.idalbum.toString(),"Album","LibraryListAlbum",  HTTPClientManager.host + "album/"  + i.idalbum + "/photo" ,
-                    i.namealbum, MainActivity.getUserByIdUser(MainActivity.searchAlbumIdAlbum(i.idalbum)?.iduser)?.username)
-            list.add(thumb)
+        if(albumUser != null) {
+            for (i in albumUser!!) {
+                val thumb = Thumbnail(i.idalbum.toString(), "Album", "LibraryListAlbum", HTTPClientManager.host + "album/" + i.idalbum + "/photo",
+                        i.namealbum, MainActivity.getUserByIdUser(MainActivity.searchAlbumIdAlbum(i.idalbum)?.iduser)?.username)
+                list.add(thumb)
+            }
         }
         rv_listAlbum.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
