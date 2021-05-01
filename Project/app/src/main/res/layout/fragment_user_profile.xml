@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView
-                android:id="@+id/img_foto_profile"
+                android:id="@+id/img_foto_profile_user"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
@@ -41,7 +41,7 @@
                 android:src="@mipmap/ic_launcher"/>
 
             <TextView
-                android:id="@+id/tv_profile_name"
+                android:id="@+id/tv_profile_name_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -52,7 +52,7 @@
                 android:textAlignment="center"/>
 
             <ToggleButton
-                android:id="@+id/tb_following_playlist"
+                android:id="@+id/btn_following_user"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -70,7 +70,7 @@
                 android:gravity="center_vertical|center_horizontal">
 
                 <TextView
-                    android:id="@+id/tv_number_playlists"
+                    android:id="@+id/tv_number_playlists_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -79,7 +79,7 @@
                     android:textColor="@color/white"/>
 
                 <TextView
-                    android:id="@+id/tv_number_followers"
+                    android:id="@+id/tv_number_followers_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -88,7 +88,7 @@
                     android:textColor="@color/white"/>
 
                 <TextView
-                    android:id="@+id/tv_number_following"
+                    android:id="@+id/tv_number_following_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
