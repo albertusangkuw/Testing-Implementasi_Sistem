@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
         var currentUser : User? = null
         var db : DBManager? = null
         var detailUser : ResponseDetailUser? = null
-        var playlistUser :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-        var playlistFollowing :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-        var albumUser : ArrayList<AlbumData> = ArrayList<AlbumData>()
-        var musicUser : ArrayList<MusicData> = ArrayList<MusicData>()
-        var artistUser : ArrayList<User> = ArrayList<User>()
+        var playlistUser :ArrayList<PlaylistData>? = null
+        var playlistFollowing :ArrayList<PlaylistData>? = null
+        var albumUser : ArrayList<AlbumData>? = null
+        var musicUser : ArrayList<MusicData>? = null
+        var artistUser : ArrayList<User>? = null
 
-        fun laucherWaiting(){
+        fun laucherWaitingNew(){
             GlobalScope.launch{
                 delay(1000)
                 val idUser = MainActivity.currentUser?.iduser
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 playlistUser = playlistUserTemp
 
                 var playlistFollowingTemp :ArrayList<PlaylistData> = ArrayList<PlaylistData>()
-                if(detailUser?.dataplaylistowned != null){
+                if(detailUser?.dataplaylistliked != null){
                     for(i in detailUser?.dataplaylistliked!!){
                         val playlist  = PlaylistApi.getPlaylistById(i.toInt())
                         delay(600)
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 albumUser= albumUserTemp
 
                 var musicUserTemp : ArrayList<MusicData> =ArrayList<MusicData>()
-                if(detailUser!!.datalikedsong != null){
+                if(detailUser?.datalikedsong != null){
                     for(i in detailUser?.datalikedsong!!) {
                         val music = MusicApi.getMusicById(i.toInt())
                         delay(600)
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 musicUser= musicUserTemp
 
                 var artistUserTemp : ArrayList<User> =ArrayList<User>()
-                if(detailUser!!.datafollowingartis != null){
+                if(detailUser?.datafollowingartis != null){
                     for(i in detailUser?.datafollowingartis!!) {
                         val artist = UserApi.getSingleUserByID(i)
                         delay(600)
@@ -105,12 +105,11 @@ class MainActivity : AppCompatActivity() {
                 artistUser = artistUserTemp
             }
         }
-
         fun getUserByIdUser(iduser: String?): User?{
             if(iduser == null){
                 return User("","","","","","",0)
             }
-            var apiUser : User? = User("","","","","","",0)
+            var apiUser : User? = null
             GlobalScope.launch{
                 apiUser = UserApi.getSingleUserByID(iduser)
             }
@@ -124,7 +123,6 @@ class MainActivity : AppCompatActivity() {
                 return regularuserDB
             }
         }
-
         fun getUserDetailByIdUser(iduser: String?): ResponseDetailUser?{
             if(iduser == null){
                 return ResponseDetailUser(0,"","", ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>(),ArrayList<String>())
@@ -141,7 +139,6 @@ class MainActivity : AppCompatActivity() {
                 return detailUser
             }
         }
-
         fun getMusicByIdSong(idsong: Int) :Music?{
             var apiUser : MusicData? = null
             var responseMusicData: MusicData? = null
@@ -162,12 +159,10 @@ class MainActivity : AppCompatActivity() {
                 return  Music(apiUser?.idsong.toString(), apiUser?.idalbum.toString(), apiUser.title, HTTPClientManager.host + "album/" +apiUser?.idalbum + "/photo"  , apiUser.urlsongs, nameArtis,apiUser?.genre)
             }
         }
-
         fun synchronizeObject(){
             GlobalScope.launch{
                 currentUser = UserApi.getSingleUser(loggedEmail)
-                getUserByIdUser(currentUser?.iduser)
-                getUserDetailByIdUser(currentUser?.iduser)
+                laucherWaitingNew()
             }
         }
         fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{
@@ -197,13 +192,13 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch{
             //Check is user can access api
             var statusCookie  = SessionApi.checkCookie()
+            Thread.sleep(310)
             //statusCookie  = true
             if(!statusCookie){
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
-            Log.e("Abstract", "Testing login  : " +  SessionApi.loginUser("albertus@gmail.com","albertus"))
-            currentUser = UserApi.getSingleUser("albertus@gmail.com")
+            currentUser = UserApi.getSingleUser(loggedEmail)
             synchronizeObject()
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }

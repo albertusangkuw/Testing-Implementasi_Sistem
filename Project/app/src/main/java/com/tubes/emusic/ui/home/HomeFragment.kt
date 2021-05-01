@@ -36,7 +36,7 @@ class HomeFragment : Fragment()  {
     private lateinit var rv_bigmusicalbum_new_release : RecyclerView
 
     private val list = ArrayList<Thumbnail>()
-    private val recentlList = intArrayOf(1,5,10,2)
+    private val recentlList =  intArrayOf(1,5,10,2)
 
 
     override fun onCreateView(
@@ -91,6 +91,37 @@ class HomeFragment : Fragment()  {
         GlobalScope.launch{
             delay(1000)
             Log.e("Abstract", "Get Usernow : " + MainActivity.currentUser?.username)
+            if(MainActivity.currentUser == null){
+                return@launch
+            }
+            var dataHistory =  UserApi.getHistory(MainActivity.currentUser?.iduser!!)
+            Thread.sleep(500)
+            if (dataHistory != null) {
+                for(i in dataHistory){
+                    if(i.type == 1){
+                        //Id
+                        val data = ( PlaylistApi.getPlaylistById(i.idlist ))?.data?.get(0)
+                        if(data != null) {
+                            val thumb = Thumbnail(id= data.idplaylist.toString(), type="Playlist",
+                                    addOn = "",  urlImage = data.urlimagecover,
+                                    title = data.nameplaylist,
+                                    description = " followers")
+                            list.add(thumb)
+                        }
+                    }else if(i.type == 2){
+                        //Album\
+                        val data = ( AlbumApi.getAlbumById(i.idlist ))?.data?.get(0)
+                        if(data != null) {
+                            val thumb = Thumbnail(id= data.idalbum.toString(), type="Album",
+                                    addOn = "",  urlImage = HTTPClientManager.host + "album/" + i.idlist + "/photo",
+                                    title = data.namealbum,
+                                    description = " followers")
+                            list.add(thumb)
+                        }
+                    }
+                }
+            }
+/*
             for (i in recentlList){
                 val data = (AlbumApi.getAlbumById(i))?.data?.get(0)
                 if(data != null) {
@@ -101,6 +132,8 @@ class HomeFragment : Fragment()  {
                     list.add(thumb)
                 }
             }
+
+ */
         }
     }
 

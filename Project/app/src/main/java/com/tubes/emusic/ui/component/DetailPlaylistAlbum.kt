@@ -175,6 +175,7 @@ class DetailPlaylistAlbum : Fragment() {
             list.add(thumb)
         }
         Playbar.mapData = list
+        Playbar.parentData = bundleData
     }
 
     private fun showRecyclerListMusic() {

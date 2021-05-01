@@ -19,6 +19,7 @@ import cz.msebera.android.httpclient.Header
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 //Generator Class JSON https://json2kt.com/
@@ -73,6 +74,20 @@ data class ResponseDetailUser (
         @SerializedName("dataalbum") var dataalbum : List<String>
 
 )
+data class ResponseHistory (
+
+        @SerializedName("status") var status : Int,
+        @SerializedName("message") var message : String,
+        @SerializedName("data") var data : List<History>
+)
+
+data class History (
+
+        @SerializedName("idlist") var idlist : Int,
+        @SerializedName("type") var type : Int,
+        @SerializedName("date") var date : String
+
+)
 
 class UserApi {
     companion object{
@@ -82,6 +97,7 @@ class UserApi {
         private var cookieStatus: Boolean = false
         private var resultUser: ResponseUser? = null
         private var resultDetailUser: ResponseDetailUser? = null
+        private var resultHistory: List<History> = ArrayList<History>()
 
         public suspend fun getSingleUser(email: String) : User? {
             var url =  HTTPClientManager.host + "users/${email}"
@@ -96,6 +112,7 @@ class UserApi {
                     if (HTTPClientManager.getStatusRequest(result)) {
 
                         var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseUser::class.java)
+
                         if(mUser.regularuser != null) {
                             for (i in mUser.regularuser) {
                                 user = User(i.iduser,
@@ -244,6 +261,93 @@ class UserApi {
             return false
         }
 
+        public suspend fun addHistory(id: Int, idUser: String,type: Int) : Boolean{
+            var url =  HTTPClientManager.host + "users/" + idUser + "/history"
+            val params = RequestParams()
+            params.put("idlist", id)
+            params.put("type", type)
+            params.put("date",  SimpleDateFormat("yyyy-MM-dd  hh:mm:ss").format(Date()).toString())
+
+            HTTPClientManager.client.post(url, params, object : AsyncHttpResponseHandler() {
+                override fun onSuccess(statusCode: Int, headers: Array<Header>,
+                                       responseBody: ByteArray) {
+                    val result = String(responseBody)
+                    Log.d("API", "Hasil ${result}")
+                    if (HTTPClientManager.getStatusRequest(result)) {
+                        Log.d("API", "Success Insert History")
+                        status = true
+                    } else {
+                        Log.d("API", "Failed Insert History")
+                        status = false
+                    }
+                }
+
+                override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+                    // Jika koneksi gagal
+                    status = false
+                    val errorMessage = when (statusCode) {
+                        401 -> "$statusCode : Bad Request"
+                        403 -> "$statusCode : Forbidden"
+                        404 -> "$statusCode : Not Found"
+                        else -> "$statusCode : ${error.message}"
+                    }
+                    Log.d("Failure", errorMessage)
+                }
+
+                // ----New Overridden method
+                override fun getUseSynchronousMode(): Boolean {
+                    return false
+                }
+
+            })
+
+            delay(500L)
+            return status
+        }
+
+        public suspend fun getHistory(iduser: String) : List<History>? {
+            var url =  HTTPClientManager.host + "users/${iduser}/history"
+
+            HTTPClientManager.client.get(url, object : AsyncHttpResponseHandler() {
+                override fun onSuccess(statusCode: Int, headers: Array<Header>,
+                                       responseBody: ByteArray) {
+
+                    val result = String(responseBody)
+                    Log.d("API", "Hasil ${result}")
+                    if (HTTPClientManager.getStatusRequest(result)) {
+                        var mUser = HTTPClientManager.gson.fromJson(result.trimIndent(), ResponseHistory::class.java)
+                        resultHistory = mUser.data
+                        Log.d("API", "Success Get Detail Single User with ID ")
+                        status = true
+
+                    } else {
+                        Log.d("API", "Failed Get  Detail Single User")
+                        status = false
+                    }
+                }
+
+                override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
+                    // Jika koneksi gagal
+
+                    val errorMessage = when (statusCode) {
+                        401 -> "$statusCode : Bad Request"
+                        403 -> "$statusCode : Forbidden"
+                        404 -> "$statusCode : Not Found"
+                        else -> "$statusCode : ${error.message}"
+                    }
+                    Log.d("Failure", errorMessage)
+
+                }
+
+                // ----New Overridden method
+                override fun getUseSynchronousMode(): Boolean {
+                    return false
+                }
+            })
+
+            delay(400L)
+            return resultHistory
+        }
 
         public suspend fun searchUser(username: String): ResponseUser?{
             var url =  HTTPClientManager.host + "users?username="+ username

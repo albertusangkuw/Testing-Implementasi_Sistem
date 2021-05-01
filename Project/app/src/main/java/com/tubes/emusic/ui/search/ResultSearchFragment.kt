@@ -28,13 +28,13 @@ class ResultSearchFragment: Fragment()  {
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
-                Thread.sleep(1510)
+                Thread.sleep(4010)
                 showResultSong(view)
                 showResultArtis(view)
                 showResultAlbum(view)
             }
         }
-        handler.postDelayed(run,(1000).toLong())
+        handler.postDelayed(run,(2000).toLong())
 
         return view
     }

@@ -13,5 +13,6 @@ class Playbar {
         public var mapData = ArrayList<Thumbnail>()
         public var title : String = "Now Playing"
         public var sequenceNow = 0
+        public var parentData :Thumbnail? = null
     }
 }

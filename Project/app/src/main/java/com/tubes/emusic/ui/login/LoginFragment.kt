@@ -40,8 +40,6 @@ class LoginFragment  : Fragment(), View.OnClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
-
-
         view.findViewById<TextView>(R.id.tv_reset_password).setOnClickListener {
             Log.e("Abstract", "Reset Password Triggered")
             (context as LoginActivity).openFragment(ResetPassword())
@@ -58,21 +56,18 @@ class LoginFragment  : Fragment(), View.OnClickListener {
             ).editText?.text.toString()
 
             GlobalScope.launch(Dispatchers.IO) {
-                var status = false
-                status  = SessionApi.loginUser(email, password)
-                Log.e("Abstract", "Testing login  : " + status)
+                var status = SessionApi.loginUser(email, password)
+                Log.e("Abstract", "Login  : " + status)
                 if(status){
                     Log.e("Abstract", "Redirect Mainactivity")
-                    MainActivity.currentUser = UserApi.getSingleUser(email)
+                    MainActivity.loggedEmail = email
+                    //MainActivity.currentUser = UserApi.getSingleUser(email)
                     startActivity(Intent(context, MainActivity::class.java))
-                    //(context as MainActivity).startMainActivity()
                 }else{
                     //Toast.makeText(view.context, "Failed Login", Toast.LENGTH_LONG).show()
                     Log.e("Abstract", "Failed Login")
                 }
             }
-
-
         }
         signInButton = view.findViewById<SignInButton>(R.id.signin);
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -101,13 +96,12 @@ class LoginFragment  : Fragment(), View.OnClickListener {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            //Toast.makeText(this.context, "SIgn in success", Toast.LENGTH_LONG).show()
-
             GlobalScope.launch {
                 if(SessionApi.signwithGoogle(account!!)){
-                    Log.w(TAG, "Success sign with google " + account?.email + " -" + account?.id  + " ,"  + account?.displayName )
+                    Log.w(TAG, "Success sign with google " + account.email + " -" + account.id  + " ,"  + account.displayName )
                     Log.e("Abstract", "Redirect Main Activity")
-                    MainActivity.currentUser = UserApi.getSingleUser(account?.email!!)
+                    MainActivity.loggedEmail = account?.email!!
+
                     startActivity(Intent(context, MainActivity::class.java))
                 }
             }
@@ -115,9 +109,8 @@ class LoginFragment  : Fragment(), View.OnClickListener {
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            Log.w(TAG, "Failed code=" + e.statusCode)
             Toast.makeText(this.context, "Sign in with Google Failed ("    + e.statusCode + ")", Toast.LENGTH_LONG).show()
-            //  updateUI(null)
         }
     }
 

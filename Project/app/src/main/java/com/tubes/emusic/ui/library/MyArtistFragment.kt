@@ -36,6 +36,7 @@ class MyArtistFragment : Fragment() {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
+        MainActivity.synchronizeObject()
         rv_listArtist = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_artist_music)
         rv_listArtist.setHasFixedSize(true)
         showRecyclerListArtist()
@@ -44,10 +45,12 @@ class MyArtistFragment : Fragment() {
 
     private fun showRecyclerListArtist() {
         val list = ArrayList<Thumbnail>()
-        for(i in artistUser){
-            val thumb = Thumbnail( i.iduser,"Artist","LibraryListAlbum",  HTTPClientManager.host + "users/"  + i.iduser + "/photo" ,
-                    i.username, "")
-            list.add(thumb)
+        if(!artistUser.isNullOrEmpty()){
+            for (i in artistUser!!) {
+                val thumb = Thumbnail(i.iduser, "Artist", "LibraryListAlbum", HTTPClientManager.host + "users/" + i.iduser + "/photo",
+                        i.username, "")
+                list.add(thumb)
+            }
         }
         rv_listArtist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListUserAdapter(list)

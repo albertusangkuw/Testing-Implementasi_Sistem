@@ -47,7 +47,7 @@ class UserProfileFragment : Fragment() {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
-
+        MainActivity.synchronizeObject()
         rv_listPublicPlaylists = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_user_music)
         rv_listPublicPlaylists.setHasFixedSize(true)
         view.findViewById<TextView>(R.id.tv_profile_name_user).setText(bundleData.title)

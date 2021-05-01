@@ -37,10 +37,12 @@ class MyMusicFragment : Fragment() {
 
     private fun showRecyclerListMusic() {
         val list = ArrayList<Thumbnail>()
-        for(i in musicUser){
-            val thumb = Thumbnail( i.idsong.toString(),"Music","LibraryListAlbum",  HTTPClientManager.host + "album/"  + i.idalbum + "/photo" ,
-                    i.title , MainActivity.getMusicByIdSong(i.idsong!!.toInt())?.artistName)
-            list.add(thumb)
+        if(!musicUser.isNullOrEmpty()) {
+            for (i in musicUser!!) {
+                val thumb = Thumbnail(i.idsong.toString(), "Music", "LibraryListAlbum", HTTPClientManager.host + "album/" + i.idalbum + "/photo",
+                        i.title, MainActivity.getMusicByIdSong(i.idsong!!.toInt())?.artistName)
+                list.add(thumb)
+            }
         }
         Playbar.mapData = list
         rv_listMusic.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
