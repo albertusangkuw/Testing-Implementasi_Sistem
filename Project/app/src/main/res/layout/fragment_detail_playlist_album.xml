@@ -74,7 +74,7 @@
                 />
 
             <android.widget.Button
-                android:id="@+id/btn_shuffleplay"
+                android:id="@+id/btn_shuffleplay_detail"
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:text="@string/shuffleplay_text"

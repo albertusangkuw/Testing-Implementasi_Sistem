@@ -151,23 +151,19 @@ object MappingHelper {
     }
 
 
-    fun mapListRegularUserToArrayList(cursor: Cursor?): ArrayList<Regularuser> {
-        val list = ArrayList<Regularuser>()
+    fun mapArrayUserToArrayList(cursor: Cursor?): ArrayList<User> {
+        val list = ArrayList<User>()
         cursor?.apply {
             while (moveToNext()) {
-                list.add(
-                        Regularuser(
-                                username = "",
-                                email = "",
-                                country = "",
-                                urlphotoprofile = "",
-                                datejoin = "",
-                                categories = 2,
-                                dateofbirth =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.DATEOFBIRTH)) ,
-                                gender =    getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.GENDER)),
-                                iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID))
-                        )
-                )
+                list.add(User(
+                        iduser =  getString(getColumnIndexOrThrow(DatabaseContract.RegularUserDB.ID)),
+                        username = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.USERNAME)),
+                        email = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.EMAIL)),
+                        country = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.COUNTRY)),
+                        urlphotoprofile = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.URLPHOTOPROFILE)),
+                        datejoin = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.DATEJOIN)),
+                        categories = getInt(getColumnIndexOrThrow(DatabaseContract.UserDB.CATEGORIES))
+                ))
             }
         }
         return  list
@@ -205,7 +201,7 @@ object MappingHelper {
                                 country = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.COUNTRY)),
                                 urlphotoprofile = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.URLPHOTOPROFILE)),
                                 datejoin = getString(getColumnIndexOrThrow(DatabaseContract.UserDB.DATEJOIN)),
-                                categories = 0
+                                categories = getInt(getColumnIndexOrThrow(DatabaseContract.UserDB.CATEGORIES))
                 )
             }
         }

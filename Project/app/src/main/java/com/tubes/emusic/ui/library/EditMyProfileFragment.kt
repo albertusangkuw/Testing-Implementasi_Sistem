@@ -30,63 +30,66 @@ import kotlin.collections.ArrayList
  * create an instance of this fragment.
  */
 class EditMyProfileFragment : Fragment() {
-    companion object {
-        var User : User? = null
-    }
-
-    override fun onCreateView(
+   override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_edit_my_profile, container, false)
-        view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.text_input_name).setText(MainActivity.currentUser?.username)
-        view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.text_input_email_edit_profile).setText(MainActivity.currentUser?.email)
+        view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.text_input_edit_name).setText(MainActivity.currentUser?.username)
+        view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.text_input_edit_email_edit_profile).setText(MainActivity.currentUser?.email)
         view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())
         }
-        /*
+
         view.findViewById<Button>(R.id.btn_save).setOnClickListener {
             Log.e("Abstract", "Button Save was Clicked")
-            //var updatedUser = User()
 
-            val email = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_email_edit_profile)//.editText?.text.toString()
+            var email = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_email_edit_profile).getEditText()?.getText().toString()
             if (email != null){
+                if(email.equals(MainActivity.currentUser?.email)){
+                    email= ""
+                }else{
+                    MainActivity.loggedEmail = email
+                }
                 Log.e("Abstract", "Email : " + email)
             }else{
+                email = ""
                 Log.e("Abstract", "Email kosong")
             }
 
-            val password = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_create_new_password)//.editText?.text.toString()
+            var password = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_create_new_password).getEditText()?.getText().toString()
             if (password != null){
                 Log.e("Abstract", "Password : " + password)
             }else{
+                password = ""
                 Log.e("Abstract", "Password kosong")
             }
 
-            val username = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_name)//.editText?.text.toString()
+            var username = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.text_input_name).getEditText()?.getText().toString()
             if (username != null){
+                if(username.equals(MainActivity.currentUser?.username)){
+                    username= ""
+                }
                 Log.e("Abstract", "Username : " + username)
             }else{
+                username = ""
                 Log.e("Abstract", "Username kosong")
             }
-
-            /*
             GlobalScope.launch {
-                delay(1000)
                 val idUser = MainActivity.currentUser?.iduser
                 Log.e("Abstract", "ID Usernow in Edit Profile : " + idUser)
-                UserApi.updateUser(User!!, password)
+                var updatedUser = User(email= email, username = username ,country = "", iduser = idUser,urlphotoprofile = "" , datejoin = "", categories = 2)
+                UserApi.updateUser(updatedUser, password)
+                delay(500)
+                MainActivity.synchronizeObject()
             }
-            */
             (context as MainActivity).openFragment(LibraryFragment())
         }
         view.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
             Log.e("Abstract", "Button Cancel was Clicked")
         }
-
-         */
         return view
     }
 }

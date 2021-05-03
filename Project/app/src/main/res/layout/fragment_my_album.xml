@@ -34,7 +34,6 @@
             android:layout_marginLeft="10dp"
             android:text="@string/my_album_text"
             android:textSize="30sp"
-            android:textStyle="bold"
             android:textColor="@color/white" />
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView

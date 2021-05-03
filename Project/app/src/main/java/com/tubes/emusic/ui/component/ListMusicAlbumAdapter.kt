@@ -99,7 +99,19 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                         popup.menu.getItem(2).setVisible(false)
                     }
                     popup.menu.getItem(3).setVisible(false)
-
+                    popup.menu.getItem(4).setVisible(false)
+                    if(thumb.type == "Playlist"){
+                        if(MainActivity.detailUser?.dataplaylistowned != null){
+                            for( i in MainActivity.detailUser!!.dataplaylistowned){
+                                if(i == thumb.id){
+                                    //Disable like
+                                    popup.menu.getItem(4).setVisible(true)
+                                    popup.menu.getItem(0).setVisible(false)
+                                    break
+                                }
+                            }
+                        }
+                    }
                     popup.setOnMenuItemClickListener { item: MenuItem ->
                         if (item.itemId == R.id.like_items) {
                             Log.e("Detail", "Item Like")

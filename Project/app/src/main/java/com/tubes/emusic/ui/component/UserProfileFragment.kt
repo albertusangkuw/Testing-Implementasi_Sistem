@@ -43,6 +43,7 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_user_profile, container, false)
+        bundleData = (context as MainActivity).getBundle(this)
         view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
             Log.e("Abstract", "Back to Stack")
             (context as MainActivity).openFragment(LibraryFragment())

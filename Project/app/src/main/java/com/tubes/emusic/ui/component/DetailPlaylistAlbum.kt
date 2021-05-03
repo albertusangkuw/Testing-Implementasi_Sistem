@@ -91,6 +91,15 @@ class DetailPlaylistAlbum : Fragment() {
         rv_music = view.findViewById<RecyclerView>(R.id.rv_item_music)
         rv_music.setHasFixedSize(true)
 
+        view.findViewById<android.widget.Button>(R.id.btn_shuffleplay_detail).setOnClickListener {
+            if(!list.isNullOrEmpty()) {
+                val args = (context as MainActivity).setBundle(list.random())
+                val ldf = PlaybarFragment()
+                ldf.setArguments(args)
+                (context as MainActivity).openFragment(ldf)
+            }
+        }
+
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {

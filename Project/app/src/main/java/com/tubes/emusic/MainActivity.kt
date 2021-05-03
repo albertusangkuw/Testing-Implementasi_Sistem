@@ -35,9 +35,8 @@ class MainActivity : AppCompatActivity() {
         var musicUser : ArrayList<MusicData>? = null
         var artistUser : ArrayList<User>? = null
 
-        fun laucherWaitingNew(){
+        fun fillUserDetailDate(){
             GlobalScope.launch{
-                delay(1000)
                 val idUser = MainActivity.currentUser?.iduser
                 Log.e("Abstract", "ID Usernow Library : " + idUser)
                 detailUser = idUser?.let {
@@ -145,8 +144,8 @@ class MainActivity : AppCompatActivity() {
             GlobalScope.launch{
                 responseMusicData = MusicApi.getMusicById(idsong)?.data?.get(0)
             }
-            val regularuserDB  = MappingHelper.mapPlaylistSongToArrayList(db?.queryById( DatabaseContract.SongDB.ID, DatabaseContract.SongDB.TABLE_NAME))
-            if(regularuserDB.isEmpty()){
+            val songDB  = MappingHelper.mapListsongToArrayList(db?.queryById( idsong.toString(), DatabaseContract.SongDB.TABLE_NAME))
+            if(songDB.isEmpty()){
                 // Database cannot find the user
                 // Return value from API
                 Thread.sleep(510)
@@ -154,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                 //Thread.sleep(1030)
                 return  Music(responseMusicData?.idsong.toString(), responseMusicData?.idalbum.toString(), responseMusicData?.title, HTTPClientManager.host + "album/" + responseMusicData?.idalbum + "/photo"  , HTTPClientManager.host +"/music/"+ responseMusicData?.urlsongs + "/data" , nameArtis, responseMusicData?.genre)
             }else{
-                apiUser = regularuserDB.get(0)
+                apiUser = songDB.get(0)
                 val nameArtis = getUserByIdUser(searchAlbumIdAlbum(apiUser?.idalbum)?.iduser)?.username
                 return  Music(apiUser?.idsong.toString(), apiUser?.idalbum.toString(), apiUser.title, HTTPClientManager.host + "album/" +apiUser?.idalbum + "/photo"  , apiUser.urlsongs, nameArtis,apiUser?.genre)
             }
@@ -162,7 +161,7 @@ class MainActivity : AppCompatActivity() {
         fun synchronizeObject(){
             GlobalScope.launch{
                 currentUser = UserApi.getSingleUser(loggedEmail)
-                laucherWaitingNew()
+                fillUserDetailDate()
             }
         }
         fun searchAlbumIdAlbum(idalbum: Int?) : AlbumData?{
@@ -181,7 +180,6 @@ class MainActivity : AppCompatActivity() {
                 return albumresult[0]
             }
         }
-
     }
     lateinit var navView: BottomNavigationView
 
@@ -199,6 +197,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             currentUser = UserApi.getSingleUser(loggedEmail)
+
             synchronizeObject()
             Log.e("Abstract", "Testing User Now  : " +  currentUser?.iduser )
         }
