@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 class ArtistProfileFragment : Fragment() {
     private lateinit var rv_listAlbums : RecyclerView
     private lateinit var bundleData : Thumbnail
+    private val list = ArrayList<Thumbnail>()
     private var followers : String = ""
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -94,17 +95,16 @@ class ArtistProfileFragment : Fragment() {
                 }
             }
         }
-
+        showRecyclerListPublicPlaylists()
         val handler: Handler = Handler()
         val run = object : Runnable {
             override fun run() {
                 Thread.sleep(2000)
                 updatePage(view)
-                showRecyclerListPublicPlaylists()
             }
         }
         handler.postDelayed(run,(1000).toLong())
-        showRecyclerListPublicPlaylists()
+
         return view
     }
 
@@ -113,7 +113,6 @@ class ArtistProfileFragment : Fragment() {
         var mapData : List<AlbumData> = MappingHelper.mapListAlbumToArrayList(
             MainActivity.db?.queryCustomById(bundleData.id!!, DatabaseContract.AlbumDB.IDUSER, DatabaseContract.AlbumDB.TABLE_NAME)
         )
-        val list = ArrayList<Thumbnail>()
         for(i in mapData){
            val thumb = Thumbnail(i.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i.idalbum + "/photo",  i.namealbum, i.daterelease.substring(0, 4))
             list.add(thumb)

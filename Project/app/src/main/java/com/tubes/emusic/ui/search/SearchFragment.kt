@@ -14,7 +14,9 @@ import androidx.fragment.app.FragmentTransaction
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
+import com.tubes.emusic.helper.MappingHelper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
     companion object{
+        var searchedText :String = ""
         var arrayAlbumdata :List<AlbumData> = ArrayList<AlbumData>()
         var arrayMusicdata :List<MusicData> = ArrayList<MusicData>()
         var arrayArtistdata : List<Artist> = ArrayList<Artist>()
@@ -39,8 +42,21 @@ class SearchFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_GO) {
                 if(textInputLayout.getEditText()?.getText() != null){
                     Log.e("Abstract", "Pencarian terjadi :"+ textInputLayout.getEditText()?.getText() )
-                    laucherWaiting(textInputLayout.getEditText()?.getText().toString())
+                    //Flush Old Var
+                    arrayAlbumdata  = ArrayList<AlbumData>()
+                    arrayMusicdata  = ArrayList<MusicData>()
+                    arrayArtistdata  = ArrayList<Artist>()
+                    arrayRegularUserdata = ArrayList<Regularuser>()
+                    //Search from db
+                    searchedText = textInputLayout.getEditText()?.getText().toString()
+
+                    searchFromDB(searchedText)
+                    if(arrayAlbumdata.isEmpty() || arrayArtistdata.isEmpty() ||  arrayMusicdata.isEmpty()){
+                        laucherWaiting(searchedText)
+                    }
                     changeFragmentToResult()
+                    laucherWaiting(searchedText)
+                    Log.e("Abstract", "Pencarian updated ")
                 }
 
                 hideKeyboard()
@@ -57,31 +73,38 @@ class SearchFragment : Fragment() {
         transaction.replace(R.id.child_fragment_container, childFragment).commit()
         super.onViewCreated(view, savedInstanceState)
     }
-
+    private  fun searchFromDB(search : String){
+        val hasilDBMusic = MappingHelper.mapListsongToArrayList(MainActivity.db?.queryCustomLikeById(search, DatabaseContract.SongDB.TITLE, DatabaseContract.SongDB.TABLE_NAME))
+        val hasilDBAlbum = MappingHelper.mapListAlbumToArrayList(MainActivity.db?.queryCustomLikeById(search, DatabaseContract.AlbumDB.NAMEALBUM, DatabaseContract.AlbumDB.TABLE_NAME))
+        val hasilUser = MappingHelper.mapArrayUserToArrayList(MainActivity.db?.queryCustomLikeById(search, DatabaseContract.UserDB.USERNAME, DatabaseContract.UserDB.TABLE_NAME))
+        arrayMusicdata = hasilDBMusic
+        arrayAlbumdata = hasilDBAlbum
+        val artisDB = ArrayList<Artist>()
+        val regularUserDB = ArrayList<Regularuser>()
+        for(i in hasilUser){
+            if(i.categories == 1){
+                artisDB.add(Artist(i.iduser!!,i.username!!,i.email!!,"",i.urlphotoprofile!!,i.datejoin!!,1,""))
+            }else{
+                regularUserDB.add(Regularuser(i.iduser!!,i.username!!,i.email!!,"",i.urlphotoprofile!!,i.datejoin!!,2,"", ""))
+            }
+        }
+        arrayArtistdata = artisDB
+        arrayRegularUserdata = regularUserDB
+        Log.e("Abstract", "hasil DB album : " + arrayAlbumdata)
+        Log.e("Abstract", "hasil DB music : " + arrayMusicdata)
+        Log.e("Abstract", "hasil DB user : " + arrayArtistdata)
+    }
     private fun laucherWaiting(search : String){
-        GlobalScope.launch{
-            val hasilAlbum  = AlbumApi.searchAlbumByName(search)?.data
-            val hasilMusic =  MusicApi.searchMusicByName(search)?.data
+
+        GlobalScope.launch {
+            val hasilAlbum = AlbumApi.searchAlbumByName(search)?.data
+            val hasilMusic = MusicApi.searchMusicByName(search)?.data
             val hasilUser = UserApi.searchUser(search)
             delay(1500)
-            if(hasilAlbum != null) {
-                arrayAlbumdata = hasilAlbum
-            }
-            if(hasilMusic != null){
-                arrayMusicdata = hasilMusic
-            }
+            Log.e("Abstract", "hasil album : " + hasilAlbum)
+            Log.e("Abstract", "hasil music : " + hasilMusic)
+            Log.e("Abstract", "hasil user : " + hasilUser)
 
-            if(hasilUser != null) {
-                if(hasilUser.artist != null) {
-                    arrayArtistdata = hasilUser.artist
-                }
-                if(hasilUser.regularuser != null) {
-                    arrayRegularUserdata = hasilUser.regularuser
-                }
-            }
-            Log.e("Abstract", "hasil album : " +  arrayAlbumdata)
-            Log.e("Abstract", "hasil music : " + arrayMusicdata)
-            Log.e("Abstract", "hasil user : " + arrayArtistdata )
         }
     }
 

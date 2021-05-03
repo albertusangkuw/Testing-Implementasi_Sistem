@@ -11,5 +11,7 @@
         android:title="Add to playlist" />
     <item android:id="@+id/remove_playlist_item"
         android:title="Remove from playlist" />
+    <item android:id="@+id/remove_playlist"
+        android:title="Remove playlist" />
 
 </menu>

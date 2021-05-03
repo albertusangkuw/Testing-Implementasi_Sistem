@@ -442,10 +442,16 @@ class UserApi {
         public suspend fun updateUser(user: User,password : String) : Boolean{
             var url =  HTTPClientManager.host + "users/"+ user.iduser + "/update"
             val params = RequestParams()
-            params.put("username", user.username)
-            params.put("email", user.email)
-            params.put("password", password)
-            params.put("urlphotoprofile", "")
+            if(user.username != ""){
+                params.put("username", user.username)
+            }
+            if(user.email != ""){
+                params.put("email", user.email)
+            }
+            if(password != ""){
+                params.put("password", password)
+            }
+            //params.put("urlphotoprofile", "")
 
             HTTPClientManager.client.put(url, params, object : AsyncHttpResponseHandler() {
                 override fun onSuccess(statusCode: Int, headers: Array<Header>,

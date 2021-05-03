@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
 
 class DBManager(context: Context) {
     companion object {
@@ -34,30 +33,30 @@ class DBManager(context: Context) {
             database.close()
     }
 
-    fun queryAll( table_name : String): Cursor {
+    fun queryAll(table_name: String): Cursor {
         return database.query(
                 table_name,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "${BaseColumns._ID} ASC")
+                null,
+                null,
+                null,
+                null,
+                null,
+                "${BaseColumns._ID} ASC")
     }
 
-    fun queryById(id: String, table_name : String): Cursor {
+    fun queryById(id: String, table_name: String): Cursor {
         return database.query(
                 table_name,
-            null,
-            "${BaseColumns._ID} = ?",
-            arrayOf(id),
-            null,
-            null,
-            null,
-            null)
+                null,
+                "${BaseColumns._ID} = ?",
+                arrayOf(id),
+                null,
+                null,
+                null,
+                null)
     }
 
-    fun queryCustomById(value: String,column: String, table_name : String): Cursor {
+    fun queryCustomById(value: String, column: String, table_name: String): Cursor {
         return database.query(
                 table_name,
                 null,
@@ -68,21 +67,33 @@ class DBManager(context: Context) {
                 null)
     }
 
+    fun queryCustomLikeById(value: String, column: String, table_name: String): Cursor {
+        return database.query(
+                table_name,
+                null,
+                "${column} LIKE ?", arrayOf("%" + value + "%" ),
+                null,
+                null,
+                null,
+                null)
+    }
 
-    fun insert(values: ContentValues?, table_name : String): Long {
+
+
+    fun insert(values: ContentValues?, table_name: String): Long {
         return database.insert(table_name, null, values)
     }
 
-    fun update(id: String, values: ContentValues?, table_name : String ): Int {
+    fun update(id: String, values: ContentValues?, table_name: String): Int {
         return database.update(table_name, values, "${BaseColumns._ID} = ?",
-            arrayOf(id))
+                arrayOf(id))
     }
 
-    fun deleteById(id: String, table_name : String): Int {
+    fun deleteById(id: String, table_name: String): Int {
         return database.delete(table_name, "${BaseColumns._ID} = '$id'", null)
     }
 
-    fun deleteCustomById(id: String,column: String, table_name : String): Int {
+    fun deleteCustomById(id: String, column: String, table_name: String): Int {
         return database.delete(table_name, "${column} = '$id'", null)
     }
 }

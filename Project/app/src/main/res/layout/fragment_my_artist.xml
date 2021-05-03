@@ -34,7 +34,7 @@
             android:layout_marginLeft="10dp"
             android:text="@string/my_artist_text"
             android:textSize="30sp"
-            android:textStyle="bold"
+
             android:textColor="@color/white" />
     </LinearLayout>
 

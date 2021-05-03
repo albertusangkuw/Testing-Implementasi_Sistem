@@ -15,6 +15,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.MainActivity.Companion.detailUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
+import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.component.UserProfileFragment
 import com.tubes.emusic.ui.login.LoginActivity
@@ -29,6 +30,9 @@ class LibraryFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_library, container, false)
+        MainActivity.synchronizeObject()
+        Thread.sleep(800)
+
         if(MainActivity.currentUser != null) {
             view.findViewById<TextView>(R.id.tv_profile_name).setText(MainActivity.currentUser?.username)
             view.findViewById<TextView>(R.id.tv_email).setText(MainActivity.currentUser?.email)
@@ -42,7 +46,11 @@ class LibraryFragment : Fragment() {
         }
 
         view.findViewById<RelativeLayout>(R.id.rl_my_profile).setOnClickListener {
-            (context as MainActivity).openFragment(UserProfileFragment())
+            val args =  (context as MainActivity).setBundle(Thumbnail(MainActivity.currentUser?.iduser, "User", "", HTTPClientManager.host + "users/" +  MainActivity.currentUser?.iduser + "/photo",
+                    MainActivity.currentUser?.username, ""))
+            val ldf = UserProfileFragment()
+            ldf.setArguments(args)
+            (context as MainActivity).openFragment(ldf)
         }
         view.findViewById<TextView>(R.id.tv_edit_profile).setOnClickListener {
             (context as MainActivity).openFragment(EditMyProfileFragment())
@@ -67,40 +75,33 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
-        //MainActivity.laucherWaiting()
 
-        val handler: Handler = Handler()
-        val run = object : Runnable {
-            override fun run() {
-                if(detailUser != null){
-                    var sums =  0
-                    if(detailUser!!.dataplaylistowned != null){
-                        sums += detailUser!!.dataplaylistowned.size
-                    }
-                    if(detailUser!!.dataplaylistliked != null){
-                        sums += detailUser!!.dataplaylistliked.size
-                    }
-                    view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + sums + " Playlists")
-                    if(detailUser!!.dataalbum != null) {
-                        view.findViewById<TextView>(R.id.tv_detail_album).setText("" + detailUser!!.dataalbum.size + " Albums")
-                    }else{
-                        view.findViewById<TextView>(R.id.tv_detail_album).setText("0 Albums")
-                    }
-                    if(detailUser!!.datalikedsong != null){
-                        view.findViewById<TextView>(R.id.tv_detail_song).setText("" + detailUser!!.datalikedsong.size + " Liked Musics")
-                    }else{
-                        view.findViewById<TextView>(R.id.tv_detail_song).setText("0 Liked Music")
-                    }
-                    if(detailUser!!.datafollowingartis != null){
-                        view.findViewById<TextView>(R.id.tv_detail_artist).setText("" + detailUser!!.datafollowingartis.size + " Following")
-                    }else{
-                        view.findViewById<TextView>(R.id.tv_detail_artist).setText("0 Following")
-                    }
-
+        if(detailUser != null){
+                var sums =  0
+                if(detailUser!!.dataplaylistowned != null){
+                    sums += detailUser!!.dataplaylistowned.size
                 }
-            }
+                if(detailUser!!.dataplaylistliked != null){
+                    sums += detailUser!!.dataplaylistliked.size
+                }
+                view.findViewById<TextView>(R.id.tv_detail_playlist).setText("" + sums + " Playlists")
+                if(detailUser!!.dataalbum != null) {
+                    view.findViewById<TextView>(R.id.tv_detail_album).setText("" + detailUser!!.dataalbum.size + " Albums")
+                }else{
+                    view.findViewById<TextView>(R.id.tv_detail_album).setText("0 Albums")
+                }
+                if(detailUser!!.datalikedsong != null){
+                    view.findViewById<TextView>(R.id.tv_detail_song).setText("" + detailUser!!.datalikedsong.size + " Liked Musics")
+                }else{
+                    view.findViewById<TextView>(R.id.tv_detail_song).setText("0 Liked Music")
+                }
+                if(detailUser!!.datafollowingartis != null){
+                    view.findViewById<TextView>(R.id.tv_detail_artist).setText("" + detailUser!!.datafollowingartis.size + " Following")
+                }else{
+                    view.findViewById<TextView>(R.id.tv_detail_artist).setText("0 Following")
+                }
         }
-        handler.postDelayed(run,(1000).toLong())
+
         return view
     }
 
