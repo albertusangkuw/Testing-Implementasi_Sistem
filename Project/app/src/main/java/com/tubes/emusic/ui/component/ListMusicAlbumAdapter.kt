@@ -18,6 +18,7 @@ import com.tubes.emusic.api.UserApi
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -100,6 +101,20 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                     }
                     popup.menu.getItem(3).setVisible(false)
                     popup.menu.getItem(4).setVisible(false)
+                    if(thumb.type == "Music"){
+                        if(MainActivity.playlistUser != null){
+                            for(i in MainActivity.playlistUser!!){
+                                if(i.listsong != null){
+                                    val res  = i.listsong!!.find { s -> s.idsong.toString() == thumb.id }
+                                    if(res != null ){
+                                        popup.menu.getItem(3).setVisible(true)
+                                        break
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                     if(thumb.type == "Playlist"){
                         if(MainActivity.detailUser?.dataplaylistowned != null){
                             for( i in MainActivity.detailUser!!.dataplaylistowned){
@@ -128,10 +143,18 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
                         } else if (item.itemId == R.id.add_playlist_item){
                             Log.e("Abstract", "Add Playlist Item")
                             addtomyplaylist(itemView,thumb)
+                        } else if(item.itemId == R.id.remove_playlist){
+                            Log.e("Abstract", "Remove Playlist")
+                            GlobalScope.launch {
+                                PlaylistApi.deletePlaylist(thumb.id!!.toInt())
+                                MainActivity.synchronizeObject()
+                            }
+                        }else if(item.itemId == R.id.remove_playlist_item){
+                            Log.e("Abstract", "Remove Playlist Item")
+                            removeFromPlaylist(itemView,thumb)
                         }
                         true
                     }
-
                     popup.show()
                 }
             }
@@ -248,6 +271,48 @@ class ListMusicAlbumAdapter(private val listThumbnail: ArrayList<Thumbnail>): Re
            for (j in selectedList.indices) {
                 GlobalScope.launch{
                     PlaylistApi.addSongPlaylist(itemsThumb.get(selectedList[j]).id!!.toInt()  , itemsong.id!!.toInt())
+                }
+            }
+        }
+        builder.show()
+    }
+
+    private fun removeFromPlaylist(view: View,itemsong: Thumbnail) {
+        if(MainActivity.playlistUser == null){
+            return
+        }
+        val itemsThumb = ArrayList<Thumbnail>()
+        val items = Array<String>(MainActivity.playlistUser!!.size){""}
+        val selectedList =  ArrayList<Int>()
+        val builder = AlertDialog.Builder(view.context)
+
+        var c = 0
+        Log.e("Abstract", "RSeaerhc")
+        for(i in MainActivity.playlistUser!!){
+            itemsThumb.add(Thumbnail(i.idplaylist.toString(),"Playlist","","",i.nameplaylist, ""))
+            items.set(c,i.nameplaylist)
+            c++
+        }
+        Log.e("Abstract", "dada" + items )
+
+        builder.setTitle("List your playlist")
+        builder.setMultiChoiceItems(items, null
+        ) { dialog, which, isChecked ->
+            if (isChecked) {
+                selectedList.add(which)
+            } else if (selectedList.contains(which)) {
+                selectedList.remove(Integer.valueOf(which))
+            }
+        }
+
+        builder.setPositiveButton("Ok") {
+            dialogInterface, i ->
+            for (j in selectedList.indices) {
+                GlobalScope.launch{
+                    PlaylistApi.deleteSongPlaylist(itemsThumb.get(selectedList[j]).id!!.toInt()  , itemsong.id!!.toInt())
+                    delay(500)
+                    PlaylistApi.getPlaylistById(itemsThumb.get(selectedList[j]).id!!.toInt())
+                    MainActivity.synchronizeObject()
                 }
             }
         }

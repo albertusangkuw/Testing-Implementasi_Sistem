@@ -51,7 +51,7 @@
     <string name="title_album_text">Love Yourself</string>
     <string name="artist_name_text">Kim So Young</string>
     <string name="my_artist_text">My Artist</string>
-    <string name="my_playlist_text">My Playlist</string>
+    <string name="my_playlist_text">Playing Now</string>
     <string name="create_playlist_text">Create Playlist</string>
     <string name="title_song_text">Used To Love (with Dean Lewis)</string>
     <string name="begin_time_text">00:00</string>

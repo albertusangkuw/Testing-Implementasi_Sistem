@@ -109,6 +109,10 @@ class HomeFragment : Fragment()  {
                                     addOn = "",  urlImage = data.urlimagecover,
                                     title = data.nameplaylist,
                                     description = " followers")
+                            val res  = listRecently.find { s -> s.id == thumb.id && s.type == "Playlist" }
+                            if(res != null ){
+                                continue
+                            }
                             listRecently.add(thumb)
                         }
                     }else if(i.type == 2){
@@ -119,6 +123,10 @@ class HomeFragment : Fragment()  {
                                     addOn = "",  urlImage = HTTPClientManager.host + "album/" + i.idlist + "/photo",
                                     title = data.namealbum,
                                     description = " followers")
+                            val res  = listRecently.find { s -> s.id == thumb.id && s.type == "Album" }
+                            if(res != null ){
+                                continue
+                            }
                             listRecently.add(thumb)
                         }
                     }

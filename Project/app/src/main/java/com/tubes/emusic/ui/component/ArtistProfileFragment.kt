@@ -22,9 +22,11 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DatabaseContract
+import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper
 import com.tubes.emusic.ui.library.LibraryFragment
+import com.tubes.emusic.ui.playbar.PlaybarFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -104,6 +106,35 @@ class ArtistProfileFragment : Fragment() {
             }
         }
         handler.postDelayed(run,(1000).toLong())
+
+        view.findViewById<android.widget.Button>(R.id.btn_artist_shuffleplay).setOnClickListener {
+            if(!list.isNullOrEmpty()){
+                var randomAlbum =list.random()
+                val rawAlbum = MappingHelper.mapListAlbumToArrayList(
+                        MainActivity.db?.queryCustomById(
+                                randomAlbum.id.toString(),
+                                DatabaseContract.AlbumDB.ID,
+                                DatabaseContract.AlbumDB.TABLE_NAME
+                        )
+                )
+                var mapData = rawAlbum.get(0).listsong!!
+                var addOn = "NoCover"
+                var desc = "" +  MainActivity.getUserByIdUser(rawAlbum.get(0).iduser)?.username
+
+                var listSong = ArrayList<Thumbnail>()
+                for (i in mapData){
+                    val thumb = Thumbnail(i.idsong.toString(), "Music", addOn, HTTPClientManager.host + "album/" + i.idalbum + "/photo", i.title,"" + desc)
+                    listSong.add(thumb)
+                }
+                Playbar.mapData = listSong
+                Playbar.parentData = randomAlbum
+
+                val args = (context as MainActivity).setBundle(listSong.random())
+                val ldf = PlaybarFragment()
+                ldf.setArguments(args)
+                (context as MainActivity).openFragment(ldf)
+            }
+        }
 
         return view
     }

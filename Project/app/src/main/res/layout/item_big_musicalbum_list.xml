@@ -10,6 +10,7 @@
         android:id="@+id/img_item_big_musicalbum_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
         android:src="@mipmap/ic_launcher"
     />
