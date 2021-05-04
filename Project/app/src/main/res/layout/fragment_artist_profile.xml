@@ -17,18 +17,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/background_profile_artist"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="440dp"
-                android:background="@color/dark_blue"
+                android:layout_height="400dp"
                 android:orientation="vertical"
-                android:paddingLeft="30dp"
-                android:paddingTop="@dimen/fragment_vertical_padding"
-                android:paddingRight="30dp">
+                >
+                <ImageView
+                    android:id="@+id/background_profile_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@color/dark_blue"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_dark"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingTop="@dimen/fragment_vertical_padding"
+                    android:paddingRight="30dp">
 
                     <ImageView
                         android:id="@+id/img_back_icon"
@@ -90,7 +100,7 @@
                         android:text="@string/shuffleplay_text"
                         android:textColor="@color/white" />
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

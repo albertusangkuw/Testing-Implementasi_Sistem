@@ -18,10 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
-import com.tubes.emusic.api.AlbumApi
-import com.tubes.emusic.api.AlbumData
-import com.tubes.emusic.api.HTTPClientManager
-import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.api.*
 import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.helper.MappingHelper
@@ -59,6 +56,13 @@ class UserProfileFragment : Fragment() {
         })
         val followingstatus = view.findViewById<ToggleButton>(R.id.btn_following_user)
         var statusFollowers = true
+
+        //Check if user it self
+        if(MainActivity.currentUser?.iduser == bundleData.id){
+            //Remove following button
+            followingstatus.setVisibility(View.GONE)
+        }
+
         followingstatus.setOnCheckedChangeListener { buttonView,
                                                      isChecked ->
             if(followingstatus.isChecked){
@@ -80,9 +84,11 @@ class UserProfileFragment : Fragment() {
                 }
             }
         }
+
         GlobalScope.launch {
             val detail = UserApi.getDetailSingleUser(bundleData.id!!)
             delay(1000)
+            //Search Playlist from user ???
             AlbumApi.searchAlbumByArtits(bundleData.id!!)
             if(detail?.datafollowers != null) {
                 followers = "" + detail.datafollowers.size
@@ -123,12 +129,15 @@ class UserProfileFragment : Fragment() {
         list.add(hero1)
         list.add(hero1)
         list.add(hero1)*/
-        var mapData : List<AlbumData> = MappingHelper.mapListAlbumToArrayList(
-                MainActivity.db?.queryCustomById(bundleData.id!!, DatabaseContract.AlbumDB.IDUSER, DatabaseContract.AlbumDB.TABLE_NAME)
+        var mapData : List<PlaylistData> = MappingHelper.mapListPlaylistSongToArrayList(
+                MainActivity.db?.queryCustomById(bundleData.id!!, DatabaseContract.PlaylistDB.IDUSER, DatabaseContract.PlaylistDB.TABLE_NAME)
         )
         val list = ArrayList<Thumbnail>()
         for(i in mapData){
-            val thumb = Thumbnail(i.idalbum.toString(), "Album", "", HTTPClientManager.host + "album/" + i.idalbum + "/photo",  i.namealbum, i.daterelease.substring(0, 4))
+            if(i.urlimagecover == ""){
+                i.urlimagecover = "http://18.140.59.14/static/playlist_default.jpg"
+            }
+            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "", i.urlimagecover,  i.nameplaylist, i.datecreated.substring(0, 4))
             list.add(thumb)
         }
         rv_listPublicPlaylists.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)

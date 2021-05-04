@@ -45,7 +45,11 @@ class HomeFragment : Fragment()  {
     ): View? {
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home).setOnClickListener {
-            (context as MainActivity).openFragment(UserProfileFragment())
+            val args =  (context as MainActivity).setBundle(Thumbnail(MainActivity.currentUser?.iduser, "User", "", HTTPClientManager.host + "users/" +  MainActivity.currentUser?.iduser + "/photo",
+                    MainActivity.currentUser?.username, ""))
+            val ldf = UserProfileFragment()
+            ldf.setArguments(args)
+            (context as MainActivity).openFragment(ldf)
         }
 
         rv_bigmusicalbum_recently = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_big_musicalbum_recently)

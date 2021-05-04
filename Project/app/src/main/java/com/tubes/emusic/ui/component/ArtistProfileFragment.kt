@@ -53,13 +53,8 @@ class ArtistProfileFragment : Fragment() {
         rv_listAlbums.setHasFixedSize(true)
 
         view.findViewById<TextView>(R.id.tv_artist_name).setText(bundleData.title)
-        //Glide.with(view.context).load(bundleData.urlImage).into(DrawableViewBackgroundTarget())
+        Glide.with(view.context).load(bundleData.urlImage).into(view.findViewById<ImageView>(R.id.background_profile_artist))
 
-        Glide.with(this).load(bundleData.urlImage).into(object : SimpleTarget<Drawable?>() {
-            override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
-                view.findViewById<LinearLayout>(R.id.background_profile_artist).setBackground(resource)
-            }
-        })
         val followingstatus = view.findViewById<ToggleButton>(R.id.btn_following)
         var statusFollowers = true
         followingstatus.setOnCheckedChangeListener { buttonView,
