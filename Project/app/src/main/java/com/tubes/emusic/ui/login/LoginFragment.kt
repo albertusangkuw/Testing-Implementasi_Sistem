@@ -61,7 +61,7 @@ class LoginFragment  : Fragment(), View.OnClickListener {
                 if(status){
                     Log.e("Abstract", "Redirect Mainactivity")
                     MainActivity.loggedEmail = email
-                    //MainActivity.currentUser = UserApi.getSingleUser(email)
+                    MainActivity.currentUser = UserApi.getSingleUser(email)
                     startActivity(Intent(context, MainActivity::class.java))
                 }else{
                     //Toast.makeText(view.context, "Failed Login", Toast.LENGTH_LONG).show()

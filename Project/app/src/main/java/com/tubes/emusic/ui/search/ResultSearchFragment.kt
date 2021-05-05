@@ -17,6 +17,7 @@ import com.tubes.emusic.ui.component.ListUserAdapter
 
 class ResultSearchFragment: Fragment()  {
     lateinit  var rvArtist: RecyclerView
+    lateinit  var rvRegUser: RecyclerView
     lateinit  var rvAlbum: RecyclerView
     lateinit  var rvSong : RecyclerView
     override fun onCreateView(
@@ -29,16 +30,13 @@ class ResultSearchFragment: Fragment()  {
         rvArtist = view.findViewById<RecyclerView>(R.id.rv_item_relatedartist_musicalbum)
         rvAlbum = view.findViewById<RecyclerView>(R.id.rv_item_relatedplaylist_musicalbum)
         rvSong = view.findViewById<RecyclerView>(R.id.rv_item_relatedsong_musicalbum)
-
+        rvRegUser = view.findViewById<RecyclerView>(R.id.rv_item_relatedreguser)
         showResultSong(view)
         showResultArtis(view)
         showResultAlbum(view)
-
-
+        showResultRegularUser(view)
         return view
     }
-
-
 
     private fun showResultSong(view: View){
         val list = ArrayList<Thumbnail>()
@@ -69,6 +67,27 @@ class ResultSearchFragment: Fragment()  {
         rvArtist.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListUserAdapter(list)
         rvArtist.adapter = listHeroAdapter
+    }
+
+    private fun showResultRegularUser(view: View){
+        val list = ArrayList<Thumbnail>()
+        for(i in SearchFragment.arrayRegularUserdata){
+            if(i.urlphotoprofile == ""){
+                i.urlphotoprofile = "https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
+            }else{
+                i.urlphotoprofile = HTTPClientManager.host + "users/"+ i.iduser + "/photo"
+            }
+            list.add(Thumbnail(  i.iduser ,"User" ,
+                    "" ,
+                    i.urlphotoprofile ,
+                    "" +i.username ,
+                    ""
+            ))
+        }
+
+        rvRegUser.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        val listHeroAdapter = ListUserAdapter(list)
+        rvRegUser.adapter = listHeroAdapter
     }
 
     private fun showResultAlbum(view: View){

@@ -10,6 +10,10 @@ import android.widget.Button
 import android.widget.ImageView
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
+import com.tubes.emusic.api.SessionApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +30,16 @@ class ResetPassword : Fragment() {
         view.findViewById<ImageView>(R.id.img_back_icon).setOnClickListener {
             Log.e("Abstract", "Sign In Triggered")
             (context as LoginActivity).openFragment(LoginFragment())
+        }
+        view.findViewById<Button>(R.id.btn_send_reset).setOnClickListener {
+            Log.e("Abstract", "Reset Triggered")
+            val email = view.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.id_reset_email).editText?.text.toString()
+            if(email.length > 0 ) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    SessionApi.forgotPasswrod(email)
+                }
+                (context as LoginActivity).openFragment(LoginFragment())
+            }
         }
         return view
     }

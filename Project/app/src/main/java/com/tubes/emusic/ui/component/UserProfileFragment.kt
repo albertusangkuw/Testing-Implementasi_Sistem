@@ -49,13 +49,35 @@ class UserProfileFragment : Fragment() {
         rv_listPublicPlaylists = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_item_user_music)
         rv_listPublicPlaylists.setHasFixedSize(true)
         view.findViewById<TextView>(R.id.tv_profile_name_user).setText(bundleData.title)
-        Glide.with(this).load(bundleData.urlImage).into(object : SimpleTarget<Drawable?>() {
-            override fun onResourceReady(resource: Drawable, transition: com.bumptech.glide.request.transition.Transition<in Drawable?>?) {
-                view.findViewById<LinearLayout>(R.id.img_foto_profile_user).setBackground(resource)
-            }
-        })
+        var userFromApi = MainActivity.getUserByIdUser(bundleData.id)
+        if(userFromApi?.urlphotoprofile == ""){
+            bundleData.urlImage ="https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
+        }
+        Glide.with(view.context).load(bundleData.urlImage).into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_foto_profile_user))
+
         val followingstatus = view.findViewById<ToggleButton>(R.id.btn_following_user)
         var statusFollowers = true
+
+        //Get Detail to database
+        GlobalScope.launch {
+            var apiUser = UserApi.getDetailSingleUser(bundleData.id!!)
+            delay(400)
+            if(apiUser != null){
+                if(apiUser.datafollowers  != null){
+                    followers = "" + apiUser.datafollowers.size + ""
+                }else{
+                    followers = "" + 0 + ""
+                }
+                var sumfollowing = 0
+                if(apiUser.datafollowingartis  != null){
+                    sumfollowing += apiUser.datafollowingartis.size
+                }
+                if(apiUser.datafollowingregular  != null){
+                    sumfollowing += apiUser.datafollowingregular.size
+                }
+                followings = "" + sumfollowing + ""
+            }
+        }
 
         //Check if user it self
         if(MainActivity.currentUser?.iduser == bundleData.id){
@@ -87,15 +109,16 @@ class UserProfileFragment : Fragment() {
 
         GlobalScope.launch {
             val detail = UserApi.getDetailSingleUser(bundleData.id!!)
-            delay(1000)
-            //Search Playlist from user ???
-            AlbumApi.searchAlbumByArtits(bundleData.id!!)
+            delay(500)
             if(detail?.datafollowers != null) {
                 followers = "" + detail.datafollowers.size
-                if(UserApi.searchIdUserArray(MainActivity.currentUser?.iduser!!,detail.datafollowers)){
-                    if(!followingstatus.isChecked) {
-                        statusFollowers = false
-                        followingstatus.isChecked = true
+                for(i in detail.datafollowers ){
+                    if(i == MainActivity.currentUser?.iduser!!){
+                        if(!followingstatus.isChecked) {
+                            statusFollowers = false
+                            followingstatus.isChecked = true
+                        }
+                        break
                     }
                 }
             }
@@ -115,20 +138,6 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun showRecyclerListPublicPlaylists() {
-        /*
-        val list = ArrayList<Thumbnail>()
-        val hero1 = Thumbnail( "sfhskwe","LibraryListMusic", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Avicii", "Description Avicii")
-        list.add(hero1)
-        list.add(hero1)
-        val hero2 = Thumbnail( "3242ddwe","LibraryListMusic", "", "https://www.allkpop.com/upload/2019/09/content/211137/1569080263-ee-ymhtueaahug.jpg" , "Twice", "Description Avicii")
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero2)
-        list.add(hero1)
-        list.add(hero1)
-        list.add(hero1)*/
         var mapData : List<PlaylistData> = MappingHelper.mapListPlaylistSongToArrayList(
                 MainActivity.db?.queryCustomById(bundleData.id!!, DatabaseContract.PlaylistDB.IDUSER, DatabaseContract.PlaylistDB.TABLE_NAME)
         )
@@ -137,9 +146,14 @@ class UserProfileFragment : Fragment() {
             if(i.urlimagecover == ""){
                 i.urlimagecover = "http://18.140.59.14/static/playlist_default.jpg"
             }
-            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "", i.urlimagecover,  i.nameplaylist, i.datecreated.substring(0, 4))
+            var follower: Int? = 0
+            if(i.userfollowing.isNullOrEmpty()){
+                follower = i.userfollowing?.size
+            }
+            val thumb = Thumbnail(i.idplaylist.toString(), "Playlist", "", i.urlimagecover,  i.nameplaylist,""+ follower + " followers")
             list.add(thumb)
         }
+        playlists = "" + mapData.size + ""
         rv_listPublicPlaylists.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
         val listHeroAdapter = ListMusicAlbumAdapter(list)
         rv_listPublicPlaylists.adapter = listHeroAdapter

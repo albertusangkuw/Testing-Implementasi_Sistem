@@ -26,6 +26,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -37,6 +38,7 @@ class HomeFragment : Fragment()  {
 
     private val listRecently = ArrayList<Thumbnail>()
     private val listRecommendedPlaylist = ArrayList<Thumbnail>()
+    private val listNewReleased = ArrayList<Thumbnail>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,11 +86,22 @@ class HomeFragment : Fragment()  {
                 showRecyclerListBigMusicAlbum()
             }
         }
-
         handler.postDelayed(run,(100).toLong())
+
+        var albumDBNewest = MappingHelper.mapListAlbumToArrayList(MainActivity.db?.queryAll(DatabaseContract.AlbumDB.TABLE_NAME))
+        if(!albumDBNewest.isNullOrEmpty()) {
+            albumDBNewest.sortBy { ZonedDateTime.parse(it.daterelease) }
+            albumDBNewest.reverse()
+            for (i in albumDBNewest) {
+                val zonedDateTime = ZonedDateTime.parse(i.daterelease)
+                listNewReleased.add(Thumbnail(i.idalbum.toString(),"Album","",HTTPClientManager.host + "album/" +  i.idalbum + "/photo",  i.namealbum, "" + zonedDateTime.month  + " "  + zonedDateTime.year))
+            }
+        }
+
+
+
         return view
     }
-
 
 
     private fun laucherWaiting(){
@@ -164,16 +177,15 @@ class HomeFragment : Fragment()  {
                 trackAlbum++
             }
         }
-        //listRecommendedPlaylist.shuffle()
-
         Log.e("Abstract", "hasil Album " + listRecommendedPlaylist)
         Log.e("Abstract", "hasil history " + listRecently)
 
         val listRecentlyAdapter = ListBigMusicAlbumAdapter(listRecently)
         val listRecommendedAdapter = ListBigMusicAlbumAdapter(listRecommendedPlaylist)
+        val listRelease = ListMusicAlbumAdapter(listNewReleased)
         rv_bigmusicalbum_recently.adapter = listRecentlyAdapter
         rv_bigmusicalbum_recommended.adapter = listRecommendedAdapter
-        rv_bigmusicalbum_new_release.adapter = ListMusicAlbumAdapter(listRecently)
+        rv_bigmusicalbum_new_release.adapter = listRelease
     }
 
     fun dayGreeting(): String {

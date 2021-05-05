@@ -141,6 +141,46 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/dark_gray"
+                android:background="@drawable/bck_rounded"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Relate User"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/Id_const_reguser_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_item_relatedreguser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:listitem="@layout/item_user_list"
+                        app:layout_constrainedHeight="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/Id_const_reguser_layout"
+                        app:layout_constraintEnd_toEndOf="@+id/Id_const_reguser_layout"
+                        app:layout_constraintHeight_max="240dp"
+                        app:layout_constraintHeight_min="15dp"
+                        app:layout_constraintStart_toStartOf="@+id/Id_const_reguser_layout"
+                        app:layout_constraintTop_toTopOf="@+id/Id_const_reguser_layout"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
