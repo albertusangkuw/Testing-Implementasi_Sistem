@@ -53,7 +53,7 @@
                         android:layout_marginLeft="225dp"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/bck_soft_square"
-                        android:textColor="@color/bright_gray"
+                        android:textColor="@color/white"
                         android:textOff="FOLLOW"
                         android:textOn="FOLLOWING"
                         android:textSize="12dp" />
