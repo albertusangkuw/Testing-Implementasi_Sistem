@@ -89,6 +89,7 @@ class EditMyProfileFragment : Fragment() {
         }
         view.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
             Log.e("Abstract", "Button Cancel was Clicked")
+            (context as MainActivity).openFragment(LibraryFragment())
         }
         return view
     }

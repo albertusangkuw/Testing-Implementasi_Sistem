@@ -1,5 +1,6 @@
 package com.tubes.emusic.ui.playbar
 
+import android.app.AlertDialog
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -7,21 +8,18 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tubes.emusic.MainActivity
 import com.tubes.emusic.MainActivity.Companion.detailUser
 import com.tubes.emusic.MainActivity.Companion.getMusicByIdSong
 import com.tubes.emusic.R
-import com.tubes.emusic.api.HTTPClientManager
-import com.tubes.emusic.api.ResponseMusic
-import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.api.*
 import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Playbar
 import com.tubes.emusic.entity.Playbar.Companion.mapData
@@ -29,9 +27,11 @@ import com.tubes.emusic.entity.Playbar.Companion.mediaPlayer
 import com.tubes.emusic.entity.Playbar.Companion.sequenceNow
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.ui.component.ArtistProfileFragment
+import com.tubes.emusic.ui.component.ListMusicAlbumAdapter
 import com.tubes.emusic.ui.home.HomeFragment
 import com.tubes.emusic.ui.library.LibraryFragment
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -96,6 +96,43 @@ class PlaybarFragment : Fragment() {
                 }
             }
 
+        }
+
+        val button = view.findViewById<ImageButton>(R.id.img_more_menu_icon)
+        button.setOnClickListener { v: View ->
+            val popup = PopupMenu(view.context, v)
+            popup.menuInflater.inflate(R.menu.overflow_item_menu, popup.menu)
+
+            popup.menu.getItem(0).setVisible(false)
+            popup.menu.getItem(1).setVisible(false)
+            popup.menu.getItem(2).setVisible(true)
+            popup.menu.getItem(3).setVisible(false)
+            popup.menu.getItem(4).setVisible(false)
+
+            if (MainActivity.playlistUser != null) {
+                for (i in MainActivity.playlistUser!!) {
+                    if (i.listsong != null) {
+                        val res = i.listsong!!.find { s -> s.idsong.toString() == bundleData.id }
+                        if (res != null) {
+                            popup.menu.getItem(3).setVisible(true)
+                            break
+                        }
+                    }
+
+                }
+            }
+
+            popup.setOnMenuItemClickListener { item: MenuItem ->
+                if (item.itemId == R.id.add_playlist_item) {
+                    Log.e("Abstract", "Add Playlist Item")
+                    addtomyplaylist(view, bundleData)
+                } else if (item.itemId == R.id.remove_playlist_item) {
+                    Log.e("Abstract", "Remove Playlist Item")
+                    removeFromPlaylist(view, bundleData)
+                }
+                true
+            }
+            popup.show()
         }
 
         // Seek bar change listener
@@ -165,7 +202,7 @@ class PlaybarFragment : Fragment() {
         playBtn.setOnClickListener{
             if(mediaPlayer != null) {
                 if (Playbar.pause) {
-                    mediaPlayer!!.seekTo(Playbar.mediaPlayer!!.currentPosition)
+                    mediaPlayer!!.seekTo(mediaPlayer!!.currentPosition)
                     mediaPlayer!!.start()
                     Playbar.pause = false
                     playBtn.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
@@ -233,6 +270,9 @@ class PlaybarFragment : Fragment() {
                     Log.e("Abstract", "Previous Music is playing")
                     playMusic(view, mapData[sequenceNow])
                 }
+                mediaPlayer!!.setOnCompletionListener {
+                    playMusic(view, mapData[sequenceNow])
+                }
                 Playbar.repeat = true
             } else {
                 Log.e("Abstract", "Repeat Music OFF")
@@ -245,16 +285,70 @@ class PlaybarFragment : Fragment() {
         }
     }
 
+    private fun addLikedThumb(thumb: Thumbnail): Boolean{
+        if(thumb.type == "Album"){
+            GlobalScope.launch {
+                AlbumApi.addFollowingAlbum(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Playlist"){
+            GlobalScope.launch {
+                PlaylistApi.addFollowingPlaylist(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Music"){
+            GlobalScope.launch {
+                MusicApi.addLikedMusic(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }
+        return false
+    }
+
+    private fun removeLikedThumb(thumb: Thumbnail): Boolean{
+        if(thumb.type == "Album"){
+            GlobalScope.launch {
+                AlbumApi.deleteFollowingAlbum(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Playlist"){
+            GlobalScope.launch {
+                PlaylistApi.deleteFollowingPlaylist(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }else if(thumb.type =="Music"){
+            GlobalScope.launch {
+                MusicApi.deleteLikedMusic(thumb.id!!.toInt(), MainActivity.detailUser!!.id)
+            }
+            Thread.sleep(550)
+            MainActivity.synchronizeObject()
+            return true
+        }
+        return false
+    }
+
     private fun likeMusic(view: View, bundleData: Thumbnail){
         view.findViewById<ImageButton>(R.id.img_like_icon).setOnClickListener {
             var likeBtn : ImageButton = view.findViewById(R.id.img_like_icon)
             if (Playbar.like == false) {
                 Log.e("Abstract", "Like Music")
                 likeBtn.setImageResource(R.drawable.ic_baseline_favorite_24)
+                addLikedThumb(bundleData)
                 Playbar.like = true
             }else{
                 Log.e("Abstract", "Unlike Music")
                 likeBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                removeLikedThumb(bundleData)
                 Playbar.like = false
             }
         }
@@ -315,4 +409,83 @@ class PlaybarFragment : Fragment() {
             return this.currentPosition/1000
         }
 
+    private fun addtomyplaylist(view: View,itemsong: Thumbnail) {
+        if(MainActivity.playlistUser == null){
+            return
+        }
+        val itemsThumb = ArrayList<Thumbnail>()
+        val items = Array<String>(MainActivity.playlistUser!!.size){""}
+        val selectedList =  ArrayList<Int>()
+        val builder = AlertDialog.Builder(view.context)
+
+        var c = 0
+
+        for(i in MainActivity.playlistUser!!){
+            itemsThumb.add(Thumbnail(i.idplaylist.toString(),"Playlist","","",i.nameplaylist, ""))
+            items.set(c,i.nameplaylist)
+            c++
+        }
+
+        builder.setTitle("List your playlist")
+        builder.setMultiChoiceItems(items, null
+        ) { dialog, which, isChecked ->
+            if (isChecked) {
+                selectedList.add(which)
+            } else if (selectedList.contains(which)) {
+                selectedList.remove(Integer.valueOf(which))
+            }
+        }
+
+        builder.setPositiveButton("Add") {
+            dialogInterface, i ->
+            for (j in selectedList.indices) {
+                GlobalScope.launch{
+                    PlaylistApi.addSongPlaylist(itemsThumb.get(selectedList[j]).id!!.toInt()  , itemsong.id!!.toInt())
+                }
+            }
+        }
+        builder.show()
+    }
+
+    private fun removeFromPlaylist(view: View,itemsong: Thumbnail) {
+        if(MainActivity.playlistUser == null){
+            return
+        }
+        val itemsThumb = ArrayList<Thumbnail>()
+        val items = Array<String>(MainActivity.playlistUser!!.size){""}
+        val selectedList =  ArrayList<Int>()
+        val builder = AlertDialog.Builder(view.context)
+
+        var c = 0
+        Log.e("Abstract", "RSeaerhc")
+        for(i in MainActivity.playlistUser!!){
+            itemsThumb.add(Thumbnail(i.idplaylist.toString(),"Playlist","","",i.nameplaylist, ""))
+            items.set(c,i.nameplaylist)
+            c++
+        }
+        Log.e("Abstract", "dada" + items )
+
+        builder.setTitle("List your playlist")
+        builder.setMultiChoiceItems(items, null
+        ) { dialog, which, isChecked ->
+            if (isChecked) {
+                selectedList.add(which)
+            } else if (selectedList.contains(which)) {
+                selectedList.remove(Integer.valueOf(which))
+            }
+        }
+
+        builder.setPositiveButton("Ok") {
+            dialogInterface, i ->
+            for (j in selectedList.indices) {
+                GlobalScope.launch{
+                    PlaylistApi.deleteSongPlaylist(itemsThumb.get(selectedList[j]).id!!.toInt()  , itemsong.id!!.toInt())
+                    delay(500)
+                    PlaylistApi.getPlaylistById(itemsThumb.get(selectedList[j]).id!!.toInt())
+                    MainActivity.synchronizeObject()
+                }
+            }
+        }
+        builder.show()
+    }
 }
