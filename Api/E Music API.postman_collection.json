@@ -1,0 +1,1058 @@
+{
+	"info": {
+		"_postman_id": "ad02d646-4cfa-4117-89f3-cbe0d4d6287e",
+		"name": "E Music API",
+		"description": "PEMROGRAMAN BERBASIS PLATFORM\r\nSimple Restful Web Service ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/users",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "BolXYSAang@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "iu",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "8a3dd3b66ed731573b8e6c288c732396",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "tetsingada1223",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tetsingada122@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "s",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Indonesia",
+									"type": "text"
+								},
+								{
+									"key": "dateJoin",
+									"value": "2021-10-11",
+									"type": "text"
+								},
+								{
+									"key": "categories",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "urlphotoprofile",
+									"value": "elangel.jpg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/registrasi",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"registrasi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "Albertus",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "BolXYSAang@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "87654321",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Indonesia",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "dateJoin",
+									"value": "2015-10-09",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "categories",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "urlphotoprofile",
+									"value": "bolang.jpg",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "L",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/c2d14ceeb62257774d6ea9d74025d085/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users",
+								"c2d14ceeb62257774d6ea9d74025d085",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/users/c2d14ceeb62257774d6ea9d74025d085/delete",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"c2d14ceeb62257774d6ea9d74025d085",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Following User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/users/d709aeb80bcb424ef7bd5b883db1f901/following/9bae2f2f9ef38400a34cb761588500f9",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"d709aeb80bcb424ef7bd5b883db1f901",
+								"following",
+								"9bae2f2f9ef38400a34cb761588500f9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Following User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/users/8a3dd3b66ed731573b8e6c288c732396/following/ac5efcda3b54ab857671c1513f57ed09/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"8a3dd3b66ed731573b8e6c288c732396",
+								"following",
+								"ac5efcda3b54ab857671c1513f57ed09",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Photo Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/users/ac5efcda3b54ab857671c1513f57ed09/photo",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"ac5efcda3b54ab857671c1513f57ed09",
+								"photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/users/d709aeb80bcb424ef7bd5b883db1f901/detail",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"d709aeb80bcb424ef7bd5b883db1f901",
+								"detail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get History User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/users/d709aeb80bcb424ef7bd5b883db1f901/history",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"d709aeb80bcb424ef7bd5b883db1f901",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add History User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "idlist",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "2021-04-25 03:43:40",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/users/f2d9315704144bc3c97bda14cbdf2871/history",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"users",
+								"f2d9315704144bc3c97bda14cbdf2871",
+								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Music",
+			"item": [
+				{
+					"name": "Get Music",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/music/140",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"music",
+								"140"
+							],
+							"query": [
+								{
+									"key": "idsong",
+									"value": "12",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Bo",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "Ta",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "Electronic",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Music File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/music/20/data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"music",
+								"20",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liked Music",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/music/96/likes/8a3dd3b66ed731573b8e6c288c732396",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"music",
+								"96",
+								"likes",
+								"8a3dd3b66ed731573b8e6c288c732396"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Liked Music",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/music/1/likes/5ab51ac3f0cee808b35c4cd2652a4315/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"music",
+								"1",
+								"likes",
+								"5ab51ac3f0cee808b35c4cd2652a4315",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Playlist",
+			"item": [
+				{
+					"name": "Get Alll Playlist",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist?iduser=d709aeb80bcb424ef7bd5b883db1f901",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist"
+							],
+							"query": [
+								{
+									"key": "iduser",
+									"value": "d709aeb80bcb424ef7bd5b883db1f901"
+								},
+								{
+									"key": "nameplaylist",
+									"value": "coba update 2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Playlist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/5/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"5",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Playlist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "iduser",
+									"value": "8a3dd3b66ed731573b8e6c288c732396",
+									"type": "text"
+								},
+								{
+									"key": "namePlaylist",
+									"value": "New Playlist Albert",
+									"type": "text"
+								},
+								{
+									"key": "urlImageCover",
+									"value": "/cover/test.jpg21",
+									"type": "text"
+								},
+								{
+									"key": "dateCreated",
+									"value": "2021-04-09 18:17:00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Playlist",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "iduser",
+									"value": "5ab51ac3f0cee808b35c4cd2652a4315",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "nameplaylist",
+									"value": "coba update 2 AWS",
+									"type": "text"
+								},
+								{
+									"key": "urlImageCover",
+									"value": "/cover/test.jpg2",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "dateCreated",
+									"value": "2021-04-09 18:17:00",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/5/update",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"5",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Song to Playlist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Kantong Kresek",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/10/music/140",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"10",
+								"music",
+								"140"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Song to Playlist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Kantong Kresek",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/5/music/5/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"5",
+								"music",
+								"5",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Followed Playlist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/4/following/8a3dd3b66ed731573b8e6c288c732396",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"4",
+								"following",
+								"8a3dd3b66ed731573b8e6c288c732396"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Kantong Kresek",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "5000000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollowed Playlist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/playlist/5/following/8a3dd3b66ed731573b8e6c288c732396/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"playlist",
+								"5",
+								"following",
+								"8a3dd3b66ed731573b8e6c288c732396",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "price",
+									"value": "5000000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Album",
+			"item": [
+				{
+					"name": "Get All Album",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/album?iduser=58b9da9aa861671bed9174fafb251036",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"album"
+							],
+							"query": [
+								{
+									"key": "namealbum",
+									"value": "Yes",
+									"disabled": true
+								},
+								{
+									"key": "iduser",
+									"value": "58b9da9aa861671bed9174fafb251036"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Following User to Album",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Kantong Kresek",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/album/3/likes/8a3dd3b66ed731573b8e6c288c732396",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"album",
+								"3",
+								"likes",
+								"8a3dd3b66ed731573b8e6c288c732396"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete  Following User to Album",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Kantong Kresek",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/album/3/likes/8a3dd3b66ed731573b8e6c288c732396/remove",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"album",
+								"3",
+								"likes",
+								"8a3dd3b66ed731573b8e6c288c732396",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Photo Album",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/album/1/photo",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"album",
+								"1",
+								"photo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Logout User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/logout",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://{{Server AWS}}/login?email=albertus@gmail.com&password=albertus",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"login"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "albertus@gmail.com"
+								},
+								{
+									"key": "password",
+									"value": "albertus"
+								},
+								{
+									"key": "quantity",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Cookie Session",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{Server AWS}}/checkcookie",
+							"protocol": "http",
+							"host": [
+								"{{Server AWS}}"
+							],
+							"path": [
+								"checkcookie"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "Server AWS",
+			"value": "18.140.59.14:8081"
+		}
+	]
+}
