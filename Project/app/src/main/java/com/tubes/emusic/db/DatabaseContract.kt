@@ -104,6 +104,7 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
              const val URLPHOTOPROFILE = "urlphotoprofile"
              const val DATEJOIN = "datejoin"
              const val CATEGORIES = "categories"
+             const val LOGGED = "logged"
          }
      }
 
@@ -180,7 +181,8 @@ import com.tubes.emusic.db.DatabaseContract.SongDB.Companion.TABLE_NAME
                      " ${DatabaseContract.UserDB.COUNTRY} TEXT ," +
                      " ${DatabaseContract.UserDB.URLPHOTOPROFILE} TEXT ," +
                      " ${DatabaseContract.UserDB.DATEJOIN} TEXT ," +
-                     " ${DatabaseContract.UserDB.CATEGORIES} INTEGER )"
+                     " ${DatabaseContract.UserDB.CATEGORIES} INTEGER ,"+
+                     " ${DatabaseContract.UserDB.LOGGED} INTEGER )"
              private val SQL_CREATE_TABLE_USER_FOLLOWING =  "CREATE TABLE "  + DatabaseContract.UserFollowingDB.TABLE_NAME +
                      " (${DatabaseContract.UserFollowingDB.ID} INTEGER PRIMARY KEY ," +
                      " ${DatabaseContract.UserFollowingDB.USERID} TEXT ," +

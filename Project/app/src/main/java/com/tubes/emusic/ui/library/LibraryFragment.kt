@@ -1,5 +1,6 @@
 package com.tubes.emusic.ui.library
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.MainActivity.Companion.detailUser
 import com.tubes.emusic.R
 import com.tubes.emusic.api.*
+import com.tubes.emusic.db.DatabaseContract
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.entity.User
 import com.tubes.emusic.ui.component.UserProfileFragment
@@ -68,6 +70,9 @@ class LibraryFragment : Fragment() {
             (context as MainActivity).openFragment(MyArtistFragment())
         }
         view.findViewById<RelativeLayout>(R.id.rl_logout_library).setOnClickListener {
+            val values = ContentValues()
+            values.put(DatabaseContract.UserDB.LOGGED, "0")
+            MainActivity.db?.update(MainActivity.currentUser?.iduser!!, values , DatabaseContract.UserDB.TABLE_NAME)
             GlobalScope.launch {
                 if( SessionApi.logoutUser()){
                     val intent = Intent(context, LoginActivity::class.java)

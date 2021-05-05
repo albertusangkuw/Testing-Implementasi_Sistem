@@ -1,5 +1,6 @@
 package com.tubes.emusic.ui.login
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.tubes.emusic.MainActivity
 import com.tubes.emusic.R
 import com.tubes.emusic.api.SessionApi
 import com.tubes.emusic.api.UserApi
+import com.tubes.emusic.db.DatabaseContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -54,7 +56,7 @@ class LoginFragment  : Fragment(), View.OnClickListener {
             val password = view.findViewById<com.google.android.material.textfield.TextInputLayout>(
                 R.id.text_input_password_login
             ).editText?.text.toString()
-
+            val statusRememberMe = view.findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switch_button).isChecked
             GlobalScope.launch(Dispatchers.IO) {
                 var status = SessionApi.loginUser(email, password)
                 Log.e("Abstract", "Login  : " + status)
@@ -62,6 +64,11 @@ class LoginFragment  : Fragment(), View.OnClickListener {
                     Log.e("Abstract", "Redirect Mainactivity")
                     MainActivity.loggedEmail = email
                     MainActivity.currentUser = UserApi.getSingleUser(email)
+                    if(statusRememberMe) {
+                        val values = ContentValues()
+                        values.put(DatabaseContract.UserDB.LOGGED, "1")
+                        MainActivity.db?.update(MainActivity.currentUser?.iduser!!, values , DatabaseContract.UserDB.TABLE_NAME)
+                    }
                     startActivity(Intent(context, MainActivity::class.java))
                 }else{
                     //Toast.makeText(view.context, "Failed Login", Toast.LENGTH_LONG).show()

@@ -1,6 +1,7 @@
 package com.tubes.emusic
 
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.tubes.emusic.entity.Music
 import com.tubes.emusic.entity.Thumbnail
 import com.tubes.emusic.entity.User
 import com.tubes.emusic.helper.MappingHelper
+import com.tubes.emusic.helper.MappingHelper.mapListUserToArrayString
 import com.tubes.emusic.ui.login.LoginActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -187,8 +189,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         db = DBManager(this)
         db?.open()
+        val savedUser = checkUserSavedLogin()
         GlobalScope.launch{
-            //Check is user can access api
+            if(savedUser.iduser != ""){
+                SessionApi.forgotPasswrod(savedUser.email!!)
+                loggedEmail = savedUser.email!!
+            }
+            Thread.sleep(310)
             var statusCookie  = SessionApi.checkCookie()
             Thread.sleep(310)
             //statusCookie  = true
@@ -253,6 +260,12 @@ class MainActivity : AppCompatActivity() {
         ,f.arguments?.getString("title")
         ,f.arguments?.getString("desctiption"))
     }
+
+    private fun checkUserSavedLogin(): User{
+        var loggedUser = mapListUserToArrayString(db?.queryCustomById("1", DatabaseContract.UserDB.LOGGED,DatabaseContract.UserDB.TABLE_NAME ))
+        return loggedUser
+    }
+
 
 
 }
