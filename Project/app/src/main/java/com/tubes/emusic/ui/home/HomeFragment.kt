@@ -78,7 +78,12 @@ class HomeFragment : Fragment()  {
         val run = object : Runnable {
             override fun run() {
                 if(MainActivity.currentUser?.urlphotoprofile != "" &&  MainActivity.currentUser?.iduser != null) {
-                    Glide.with(view.context).load(HTTPClientManager.host + "users/" + MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))
+                    if(MainActivity.currentUser?.categories == 1){
+                        Glide.with(view.context).load(com.tubes.emusic.api.HTTPClientManager.host + "users/" + com.tubes.emusic.MainActivity.currentUser?.iduser + "/photo").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(com.tubes.emusic.R.id.img_profile_home))
+                    }else{
+                        Glide.with(view.context).load(MainActivity.currentUser?.urlphotoprofile).into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(com.tubes.emusic.R.id.img_profile_home))
+                    }
+
                 }else{
                     Glide.with(view.context).load("https://www.jobstreet.co.id/en/cms/employer/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png").into(view.findViewById<de.hdodenhof.circleimageview.CircleImageView>(R.id.img_profile_home))
                 }
@@ -92,13 +97,15 @@ class HomeFragment : Fragment()  {
         if(!albumDBNewest.isNullOrEmpty()) {
             albumDBNewest.sortBy { ZonedDateTime.parse(it.daterelease) }
             albumDBNewest.reverse()
+
             for (i in albumDBNewest) {
                 val zonedDateTime = ZonedDateTime.parse(i.daterelease)
-                listNewReleased.add(Thumbnail(i.idalbum.toString(),"Album","",HTTPClientManager.host + "album/" +  i.idalbum + "/photo",  i.namealbum, "" + zonedDateTime.month  + " "  + zonedDateTime.year))
+                listNewReleased.add(Thumbnail(i.idalbum.toString(),"Album", i.iduser,HTTPClientManager.host + "album/" +  i.idalbum + "/photo",  i.namealbum, "" + zonedDateTime.month  + " "  + zonedDateTime.year))
+                if(listNewReleased.size > 9){
+                    break
+                }
             }
         }
-
-
 
         return view
     }
@@ -182,7 +189,7 @@ class HomeFragment : Fragment()  {
 
         val listRecentlyAdapter = ListBigMusicAlbumAdapter(listRecently)
         val listRecommendedAdapter = ListBigMusicAlbumAdapter(listRecommendedPlaylist)
-        val listRelease = ListMusicAlbumAdapter(listNewReleased)
+        val listRelease = ListNewReleaseAdapter(listNewReleased)
         rv_bigmusicalbum_recently.adapter = listRecentlyAdapter
         rv_bigmusicalbum_recommended.adapter = listRecommendedAdapter
         rv_bigmusicalbum_new_release.adapter = listRelease

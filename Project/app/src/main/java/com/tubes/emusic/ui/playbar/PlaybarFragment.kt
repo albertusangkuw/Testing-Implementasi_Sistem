@@ -218,7 +218,9 @@ class PlaybarFragment : Fragment() {
         }
 
         mediaPlayer!!.setOnCompletionListener {
-            sequenceNow++
+            if(!Playbar.repeat){
+                sequenceNow++
+            }
             if(sequenceNow > mapData.size-1){
                 sequenceNow = 0
             }
