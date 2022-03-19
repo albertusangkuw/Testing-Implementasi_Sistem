@@ -1,2 +1,2 @@
- cd "C:\Users\Albert PC\go\src\github.com\APIE-Music"
- $Env:GOOS = "linux"; $Env:GOARCH = "arm64" ; $Env:GOARM = "5"
+cd "C:\Users\Albert PC\go\src\github.com\APIE-Music"
+$Env:GOOS = "linux"; $Env:GOARCH = "arm64" ; $Env:GOARM = "5"

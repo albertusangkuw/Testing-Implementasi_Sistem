@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	model "github.com/APIE-Music/models"
+	model "github.com/Testing-Implementasi_Sistem/models"
 )
 
 //UserLogin untuk melakukan pengecekan pada password dan email yang dimasukan

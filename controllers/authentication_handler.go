@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	model "github.com/SimpleRestfulWebService/model"
+	model "github.com/Testing-Implementasi_Sistem/models"
 	"github.com/dgrijalva/jwt-go"
 )
 
