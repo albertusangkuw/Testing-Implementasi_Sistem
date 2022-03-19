@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	model "github.com/Testing-Implementasi_Sistem/models"
+	model "github.com/Testing-Implementasi_Sistem/model"
 	"github.com/gorilla/mux"
 )
 

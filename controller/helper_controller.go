@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"net/http"
 
-	model "github.com/Testing-Implementasi_Sistem/models"
+	model "github.com/Testing-Implementasi_Sistem/model"
 )
 
 func GenerateSQLWhere(r *http.Request, listColumn []string, logic string, requestParams string) (string, []interface{}) {

@@ -9,7 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	model "github.com/Testing-Implementasi_Sistem/models"
+	model "github.com/Testing-Implementasi_Sistem/model"
 )
 
 //Get MetaData Song

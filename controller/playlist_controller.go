@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	model "github.com/Testing-Implementasi_Sistem/models"
+	model "github.com/Testing-Implementasi_Sistem/model"
 )
 
 //GetAllUsers or get user by some criteria

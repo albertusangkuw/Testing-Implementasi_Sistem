@@ -1,4 +1,4 @@
-package models
+package model
 
 type Music struct {
 	IDsong   uint32 `form:"idsong" json:"idsong"`

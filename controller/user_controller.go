@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	model "github.com/Testing-Implementasi_Sistem/models"
+	model "github.com/Testing-Implementasi_Sistem/model"
 )
 
 //UserLogin untuk melakukan pengecekan pada password dan email yang dimasukan
