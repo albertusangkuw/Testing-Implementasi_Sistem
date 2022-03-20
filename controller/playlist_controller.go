@@ -235,43 +235,22 @@ func UpdatePlaylist(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func FollowedPlaylist(w http.ResponseWriter, r *http.Request) {
+func FollowedPlaylist(IDplaylist string, IDuser string) error {
 	db := connect()
 	defer db.Close()
-	var response model.Response
-
-	err := r.ParseForm()
-	if err != nil {
-		ResponseManager(&response, 400, "Failed Insert Following Playlist"+err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
-
-	vars := mux.Vars(r)
-	IDplaylist := vars["IDplaylist"]
-	IDuser := vars["IDuser"]
 
 	if len(IDplaylist) > 0 && len(IDuser) > 0 {
 		_, errQuery := db.Exec("INSERT INTO playlist_following(idplaylist,iduser) VALUES(?,?)",
 			IDplaylist, IDuser,
 		)
 		if errQuery == nil {
-			ResponseManager(&response, 200, "Success Insert Following Playlist")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
+			return nil
 		} else {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("500")
 		}
 	} else {
-		ResponseManager(&response, 400, "Failed Insert Following Playlist")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return errors.New("400")
 	}
-
 }
 
 func UnFollowedPlaylist(w http.ResponseWriter, r *http.Request) {

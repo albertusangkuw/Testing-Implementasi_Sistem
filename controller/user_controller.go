@@ -86,44 +86,20 @@ func CheckCookie(w http.ResponseWriter, r *http.Request) {
 }
 
 //GetAllUsers or get user by some criteria
-func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+func GetAllUsers(filterBY string) ([]model.Artist, []model.RegularUser, error) {
 	db := connect()
 	defer db.Close()
 
 	//query := "SELECT iduser,username,email,country,urlphotoprofile,datejoin,categories FROM user"
-	query := "SELECT iduser,email,username,urlphotoprofile,datejoin,categories FROM user"
-	err := r.ParseForm()
-	if err != nil {
-		return
+	query := "SELECT iduser,email,username,urlphotoprofile,datejoin,categories FROM user "
+
+	if filterBY != "" {
+		query += "WHERE  " + filterBY
 	}
-
-	vars := mux.Vars(r)
-	userID := vars["userID"]
-
-	if len(userID) == 0 {
-		//Searching Features
-		parseUsername := r.URL.Query()["username"]
-		parseId := r.URL.Query()["userId"]
-		if parseUsername != nil {
-			query += " WHERE " + " username LIKE   '%" + parseUsername[0] + "%'"
-		} else if parseId != nil {
-			query += " WHERE " + " iduser ='" + parseId[0] + "'"
-		}
-	} else {
-		// Select one id
-		query += " WHERE " + " email='" + userID + "'"
-	}
-
-	println(query)
-
 	rows, err := db.Query(query)
 
-	var response model.UserResponse
 	if err != nil {
-		ResponseManager(&response.Response, 500, err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return nil, nil, errors.New("500")
 	}
 
 	// Convert data result set of user to data type user
@@ -137,10 +113,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 			if user.Categories == 1 {
 				artistrs, err := db.Query("SELECT bio FROM artist WHERE iduser=?", user.IDuser)
 				if err != nil {
-					ResponseManager(&response.Response, 500, err.Error())
-					w.Header().Set("Content-Type", "application/json")
-					json.NewEncoder(w).Encode(response)
-					return
+					return nil, nil, errors.New("500")
 				}
 				var artistData model.Artist
 				artistData.Bio = ""
@@ -154,10 +127,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 			} else {
 				regulerrs, err := db.Query("SELECT dateofbirth,gender FROM regular_user WHERE iduser=?", user.IDuser)
 				if err != nil {
-					ResponseManager(&response.Response, 500, err.Error())
-					w.Header().Set("Content-Type", "application/json")
-					json.NewEncoder(w).Encode(response)
-					return
+					return nil, nil, errors.New("500")
 				}
 				var regulerData model.RegularUser
 				regulerData.Gender = ""
@@ -171,19 +141,11 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 	// Convert data result set of user to data type
 	if len(reguler) > 0 || len(artist) > 0 {
-		response.DataArtis = artist
-		response.DataRegular = reguler
-		ResponseManager(&response.Response, 200, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-
+		return artist, reguler, errors.New("200")
 	} else {
-		ResponseManager(&response.Response, 404, "Data Not Found")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return nil, nil, errors.New("404")
 	}
 }
 
@@ -377,26 +339,16 @@ func RegisterRegularUser(username string, email string, password string, country
 }
 
 //DeleteUser is delete user by id user
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
+func DeleteUser(userID string) error {
 	db := connect()
 	defer db.Close()
-
-	err := r.ParseForm()
-	if err != nil {
-		return
-	}
-	vars := mux.Vars(r)
-	userID := vars["userID"]
 
 	// Asumsi Data hanya ada di table users dan regular_user
 	res, errQuery := db.Exec("DELETE FROM regular_user WHERE iduser=?",
 		userID,
 	)
-	var response model.UserResponse
 	if errQuery != nil {
-		ResponseManager(&response.Response, 500, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return errors.New("500")
 	} else {
 		resUser, _ := db.Exec("DELETE FROM users WHERE iduser=?",
 			userID,
@@ -404,13 +356,9 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		nums, _ := res.RowsAffected()
 		nums2, _ := resUser.RowsAffected()
 		if nums > 0 && nums2 > 0 {
-			ResponseManager(&response.Response, 200, "Delete Success")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return nil
 		} else {
-			ResponseManager(&response.Response, 400, "No Row was Deleted")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("400")
 		}
 	}
 }

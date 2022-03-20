@@ -72,6 +72,54 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//GetAllUsers or get user by some criteria
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		return
+	}
+
+	vars := mux.Vars(r)
+	userID := vars["userID"]
+	filterBY := ""
+	if len(userID) == 0 {
+		//Searching Features
+		parseUsername := r.URL.Query()["username"]
+		parseId := r.URL.Query()["userId"]
+		if parseUsername != nil {
+			filterBY += " username LIKE   '%" + parseUsername[0] + "%'"
+		} else if parseId != nil {
+			filterBY += " iduser ='" + parseId[0] + "'"
+		}
+	} else {
+		// Select one id
+		filterBY += " email='" + userID + "'"
+	}
+
+	artist, reguler, err := controller.GetAllUsers(filterBY)
+
+	var response model.UserResponse
+
+	// Convert data result set of user to data type
+	if len(reguler) > 0 || len(artist) > 0 {
+		response.DataArtis = artist
+		response.DataRegular = reguler
+		controller.ResponseManager(&response.Response, 200, "")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+
+	} else if err.Error() == "500" {
+		controller.ResponseManager(&response.Response, 500, err.Error())
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	} else {
+		controller.ResponseManager(&response.Response, 404, "Data Not Found")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
+}
+
 func Logout(w http.ResponseWriter, r *http.Request) {
 	resetUserToken(w)
 	var response model.Response
@@ -171,6 +219,36 @@ func InsertHistoryUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 	} else {
 		controller.ResponseManager(&response, 400, "Failed Insert History User ")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
+}
+
+//DeleteUser is delete user by id user
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	var response model.UserResponse
+	err := r.ParseForm()
+	if err != nil {
+		controller.ResponseManager(&response.Response, 400, "No Row was Deleted")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	vars := mux.Vars(r)
+	userID := vars["userID"]
+
+	errQuery := controller.DeleteUser(userID)
+
+	if errQuery == nil {
+		controller.ResponseManager(&response.Response, 200, "Delete Success")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else if errQuery.Error() == "500" {
+		controller.ResponseManager(&response.Response, 500, "")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else {
+		controller.ResponseManager(&response.Response, 400, "No Row was Deleted")
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}

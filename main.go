@@ -23,12 +23,12 @@ func main() {
 	router.HandleFunc("/registrasi", handler.RegisterRegularUser).Methods("POST")
 	router.HandleFunc("/resetpassword", handler.ResetPassword).Methods("GET")
 
-	router.HandleFunc("/users", c.GetAllUsers).Methods("GET")
-	router.HandleFunc("/users/{userID}", c.GetAllUsers).Methods("GET")
+	router.HandleFunc("/users", handler.GetAllUsers).Methods("GET")
+	router.HandleFunc("/users/{userID}", handler.GetAllUsers).Methods("GET")
 	router.HandleFunc("/users/{userID}/photo", c.GetPhotoProfile).Methods("GET")
 	router.HandleFunc("/users/{userID}/detail", handler.Authenticate(c.GetDetailUser, 0)).Methods("GET")
 	router.HandleFunc("/users/{IDuser}/update", handler.Authenticate(c.UpdateUser, 0)).Methods("PUT")
-	router.HandleFunc("/users/{userID}/delete", handler.Authenticate(c.DeleteUser, 0)).Methods("DELETE")
+	router.HandleFunc("/users/{userID}/delete", handler.Authenticate(handler.DeleteUser, 0)).Methods("DELETE")
 	router.HandleFunc("/users/{userID}/history", handler.Authenticate(handler.GetHistoryUser, 0)).Methods("GET")
 	router.HandleFunc("/users/{userID}/history", handler.Authenticate(handler.InsertHistoryUser, 0)).Methods("POST")
 
@@ -50,7 +50,7 @@ func main() {
 
 	router.HandleFunc("/playlist/{IDplaylist}/music/{IDmusic}", handler.Authenticate(handler.AddSongPlaylist, 0)).Methods("POST")
 	router.HandleFunc("/playlist/{IDplaylist}/music/{IDmusic}/remove", handler.Authenticate(c.RemoveSongPlaylist, 0)).Methods("DELETE")
-	router.HandleFunc("/playlist/{IDplaylist}/following/{IDuser}", handler.Authenticate(c.FollowedPlaylist, 0)).Methods("POST")
+	router.HandleFunc("/playlist/{IDplaylist}/following/{IDuser}", handler.Authenticate(handler.FollowedPlaylist, 0)).Methods("POST")
 	router.HandleFunc("/playlist/{IDplaylist}/following/{IDuser}/remove", handler.Authenticate(c.UnFollowedPlaylist, 0)).Methods("DELETE")
 
 	router.HandleFunc("/album", handler.Authenticate(c.GetAllAlbum, 0)).Methods("GET")

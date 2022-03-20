@@ -39,5 +39,36 @@ func AddSongPlaylist(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}
+}
 
+//Followed Playlist
+func FollowedPlaylist(w http.ResponseWriter, r *http.Request) {
+	var response model.Response
+
+	err := r.ParseForm()
+	if err != nil {
+		controller.ResponseManager(&response, 400, "Failed Insert Following Playlist"+err.Error())
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	vars := mux.Vars(r)
+	IDplaylist := vars["IDplaylist"]
+	IDuser := vars["IDuser"]
+
+	errQuery := controller.FollowedPlaylist(IDplaylist, IDuser)
+	if errQuery == nil {
+		controller.ResponseManager(&response, 200, "Success Insert Following Playlist")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else if errQuery.Error() == "500" {
+		controller.ResponseManager(&response, 500, errQuery.Error())
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else {
+		controller.ResponseManager(&response, 400, "Failed Insert Following Playlist")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
 }
