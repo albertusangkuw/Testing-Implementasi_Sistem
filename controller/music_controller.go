@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -13,38 +14,12 @@ import (
 )
 
 //Get MetaData Song
-func GetSong(w http.ResponseWriter, r *http.Request) {
+func GetSong(searhing bool, filterBY string, valuesList ...interface{}) ([]model.Music, error) {
 	db := connect()
 	defer db.Close()
 
-	//query := "SELECT * FROM song"
 	query := "SELECT * FROM song"
-	errparse := r.ParseForm()
-	if errparse != nil {
-		return
-	}
-	filterBY := ""
-	var valuesList []interface{}
 
-	vars := mux.Vars(r)
-	IDmusic := vars["IDmusic"]
-	searhing := false
-	if len(IDmusic) == 0 {
-		//Searching Features
-		parseTitle := r.URL.Query()["title"]
-		if parseTitle != nil {
-			filterBY = " title LIKE   '%" + parseTitle[0] + "%'"
-			searhing = true
-		} else {
-			//Searching Features
-			filterBY, valuesList = GenerateSQLWhere(r, []string{"idsong", "idalbum", "genre"}, "OR", "GET")
-		}
-
-	} else {
-		// Select one id
-		filterBY = " idsong=?"
-		valuesList = append(valuesList, IDmusic)
-	}
 	if filterBY != "" {
 		query += " WHERE " + filterBY
 	}
@@ -52,18 +27,15 @@ func GetSong(w http.ResponseWriter, r *http.Request) {
 	println(query)
 	var rows *sql.Rows
 	var err error
+
 	if searhing {
 		rows, err = db.Query(query)
 	} else {
 		rows, err = db.Query(query, valuesList...)
 	}
 
-	var response model.MusicResponse
 	if err != nil {
-		ResponseManager(&response.Response, 500, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return nil, errors.New("500")
 	}
 
 	// Convert data result set of user to data type user
@@ -78,18 +50,10 @@ func GetSong(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Convert data result set of user to data type
 	if len(musics) > 0 {
-		response.Data = musics
-		ResponseManager(&response.Response, 200, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-
-	} else {
-		ResponseManager(&response.Response, 404, "Data Not Found")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return musics, nil
 	}
+	return nil, errors.New("404")
 }
 
 //Get Data Song
@@ -149,43 +113,21 @@ func GetSongFile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func LikeSong(w http.ResponseWriter, r *http.Request) {
+func LikeSong(IDmusic string, anotherID string) error {
 	db := connect()
 	defer db.Close()
-	var response model.Response
-
-	err := r.ParseForm()
-	if err != nil {
-		ResponseManager(&response, 400, "Failed Insert Liked Song "+err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
-
-	vars := mux.Vars(r)
-	IDmusic := vars["IDmusic"]
-	anotherID := vars["anotherID"]
 
 	if len(IDmusic) > 0 && len(anotherID) > 0 {
 		_, errQuery := db.Exec("INSERT INTO song_like(iduser,idsong) VALUES(?,?)",
 			anotherID, IDmusic,
 		)
 		if errQuery == nil {
-			ResponseManager(&response, 200, "Success Insert Liked Song")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
+			return nil
 		} else {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("500")
 		}
-	} else {
-		ResponseManager(&response, 400, "Failed Insert Liked Song ")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
 	}
-
+	return errors.New("400")
 }
 
 func UnLikeSong(w http.ResponseWriter, r *http.Request) {
@@ -230,5 +172,4 @@ func UnLikeSong(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}
-
 }

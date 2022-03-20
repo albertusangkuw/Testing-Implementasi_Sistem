@@ -1,40 +1,24 @@
-package controller
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"net/http"
 	"time"
 
+	controller "github.com/Testing-Implementasi_Sistem/controller"
 	model "github.com/Testing-Implementasi_Sistem/model"
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte(RandStringBytesRmndr(128))
+var jwtKey = []byte(controller.RandStringBytesRmndr(128))
 var tokenName = "token"
 
-type Claims struct {
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	UserType int    `json:"usertype"`
-	jwt.StandardClaims
-}
-
-func RandStringBytesRmndr(n int) string {
-	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
-	}
-	return string(b)
-}
-
-func generateToken(w http.ResponseWriter, id string, name string, userType int) {
+func GenerateToken(w http.ResponseWriter, id string, name string, userType int) {
 	// Expire in 1 day
 	tokenExpiryTime := time.Now().Add(60 * 24 * time.Minute)
 
-	claims := &Claims{
+	claims := &controller.Claims{
 		ID:       id,
 		Name:     name,
 		UserType: userType,
@@ -99,7 +83,7 @@ func validateUserToken(w http.ResponseWriter, r *http.Request, accessType int) b
 func validateUserTokenFromCookies(r *http.Request) (bool, string, string, int) {
 	if cookie, err := r.Cookie(tokenName); err == nil {
 		accessToken := cookie.Value
-		accessClaims := &Claims{}
+		accessClaims := &controller.Claims{}
 		parsedToken, err := jwt.ParseWithClaims(accessToken, accessClaims, func(accessToken *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})

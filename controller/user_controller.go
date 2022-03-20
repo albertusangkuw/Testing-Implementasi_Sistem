@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,33 +15,20 @@ import (
 )
 
 //UserLogin untuk melakukan pengecekan pada password dan email yang dimasukan
-func UserLogin(w http.ResponseWriter, r *http.Request) {
+func UserLogin(email string, password string) (string, string, error) {
 	db := connect()
 	defer db.Close()
 
 	query := "SELECT iduser,username FROM user WHERE email=? AND password=? "
 
-	email := r.URL.Query()["email"]
-	password := r.URL.Query()["password"]
-
-	var response model.Response
-	if len(email) == 0 || len(password) == 0 {
-		ResponseManager(&response, 400, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
 	sha := sha256.New()
-	sha.Write([]byte(password[0]))
+	sha.Write([]byte(password))
 	sha_password := hex.EncodeToString(sha.Sum(nil))
 
-	rows, err := db.Query(query, email[0], sha_password)
+	rows, err := db.Query(query, email, sha_password)
 
 	if err != nil {
-		ResponseManager(&response, 500, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return "", "", errors.New("500")
 	}
 
 	//Check user login by name
@@ -52,41 +40,27 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 			log.Print(err.Error())
 		}
 	}
-
 	if len(name) > 0 {
-		generateToken(w, id, name, 0)
-		ResponseManager(&response, 200, "Success Login")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-	} else {
-		ResponseManager(&response, 404, "Login Failed")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(&response)
+		return id, name, nil
 	}
+	return "", "", errors.New("404")
+
 }
-func ResetPassword(w http.ResponseWriter, r *http.Request) {
+
+func ResetPassword(email string) (string, string, error) {
 	db := connect()
 	defer db.Close()
 
 	query := "SELECT iduser,username FROM user WHERE email=? "
 
-	email := r.URL.Query()["email"]
-
-	var response model.Response
 	if len(email) == 0 {
-		ResponseManager(&response, 400, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return "", "", errors.New("404")
 	}
 
-	rows, err := db.Query(query, email[0])
+	rows, err := db.Query(query, email)
 
 	if err != nil {
-		ResponseManager(&response, 500, "")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return "", "", errors.New("500")
 	}
 
 	//Check user login by name
@@ -99,23 +73,9 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if len(name) > 0 {
-		generateToken(w, id, name, 0)
-		ResponseManager(&response, 200, "Success Login")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-	} else {
-		ResponseManager(&response, 404, "Login Failed")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(&response)
+		return id, name, nil
 	}
-}
-
-func Logout(w http.ResponseWriter, r *http.Request) {
-	resetUserToken(w)
-	var response model.Response
-	ResponseManager(&response, 200, "Success Logout")
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	return "", "", errors.New("404")
 }
 
 func CheckCookie(w http.ResponseWriter, r *http.Request) {
@@ -395,25 +355,11 @@ func GetPhotoProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 //Register Regular User to database
-func RegisterRegularUser(w http.ResponseWriter, r *http.Request) {
+func RegisterRegularUser(username string, email string, password string, country string, urlphotoprofile string, dateJoin string, categories int) error {
 	db := connect()
 	defer db.Close()
 
-	err := r.ParseForm()
-	if err != nil {
-		return
-	}
-	username := r.Form.Get("username")
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
-	country := r.Form.Get("country")
-	urlphotoprofile := r.Form.Get("urlphotoprofile")
-	dateJoin := r.Form.Get("dateJoin")
-	categories := 2
-
-	var response model.UserResponse
 	if len(username) > 0 && len(email) > 0 && len(password) > 0 && len(dateJoin) > 0 {
-
 		newIdUser := GetMD5Hash(username + email + GetMD5Hash(password))
 		sha := sha256.New()
 		sha.Write([]byte(password))
@@ -421,22 +367,13 @@ func RegisterRegularUser(w http.ResponseWriter, r *http.Request) {
 		_, errQuery := db.Exec("INSERT INTO user VALUES (?,?,?,?,?,?,?,?)",
 			newIdUser, username, email, password, country, urlphotoprofile, dateJoin, categories,
 		)
-		if errQuery == nil {
-			db.Exec("INSERT INTO regular_user(iduser) VALUES (?)", newIdUser)
-			ResponseManager(&response.Response, 200, "")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
-		} else {
-			ResponseManager(&response.Response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+		_, errQuery2 := db.Exec("INSERT INTO regular_user(iduser) VALUES (?)", newIdUser)
+		if errQuery == nil && errQuery2 == nil {
+			return nil
 		}
-	} else {
-		ResponseManager(&response.Response, 400, "Insert Failed ")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return errors.New("500")
 	}
+	return errors.New("400")
 }
 
 //DeleteUser is delete user by id user
@@ -631,33 +568,18 @@ func UnFollowedUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetHistoryUser(w http.ResponseWriter, r *http.Request) {
+func GetHistoryUser(userID string) ([]model.Recently, error) {
 	db := connect()
 	defer db.Close()
 
-	err := r.ParseForm()
-	if err != nil {
-		return
-	}
-
 	queryUserHistory := "SELECT id_list,type,date FROM user_history WHERE id_user=? ORDER BY date DESC"
-
-	vars := mux.Vars(r)
-	userID := vars["userID"]
 
 	rowsHistory, err := db.Query(queryUserHistory, userID)
 
-	var response model.RecentlyResponse
-
 	if err != nil {
-		ResponseManager(&response.Response, 500, err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
+		return nil, errors.New("500")
 	}
-
 	// Convert data result set of user to data type user
-
 	var DataRecently []model.Recently
 	var data model.Recently
 	counter := 0
@@ -672,51 +594,22 @@ func GetHistoryUser(w http.ResponseWriter, r *http.Request) {
 		}
 		counter++
 	}
-
-	response.Data = DataRecently
-	ResponseManager(&response.Response, 200, "")
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-
+	return DataRecently, errors.New("500")
 }
 
-func InsertHistoryUser(w http.ResponseWriter, r *http.Request) {
+func InsertHistoryUser(userID string, idlist string, tipe string, date string) error {
 	db := connect()
 	defer db.Close()
-	var response model.Response
-
-	err := r.ParseForm()
-	if err != nil {
-		ResponseManager(&response, 400, "Failed Insert History User "+err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
-
-	vars := mux.Vars(r)
-	userID := vars["userID"]
-	idlist := r.Form.Get("idlist")
-	tipe := r.Form.Get("type")
-	date := r.Form.Get("date")
 
 	if len(userID) > 0 {
 		_, errQuery := db.Exec("INSERT INTO user_history(id_user,id_list,type,date) VALUES(?,?,?,?)",
 			userID, idlist, tipe, date,
 		)
 		if errQuery == nil {
-			ResponseManager(&response, 200, "Success Insert History User")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
+			return nil
 		} else {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("500")
 		}
-	} else {
-		ResponseManager(&response, 400, "Failed Insert History User ")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
 	}
-
+	return errors.New("400")
 }

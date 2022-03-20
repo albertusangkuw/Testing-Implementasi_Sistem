@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 
@@ -319,43 +320,18 @@ func UnFollowedPlaylist(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func AddSongPlaylist(w http.ResponseWriter, r *http.Request) {
+func AddSongPlaylist(IDplaylist string, IDmusic string) error {
 	db := connect()
 	defer db.Close()
-	var response model.Response
 
-	err := r.ParseForm()
-	if err != nil {
-		ResponseManager(&response, 400, "Failed Insert Song to Playlist"+err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
-
-	vars := mux.Vars(r)
-	IDplaylist := vars["IDplaylist"]
-	IDmusic := vars["IDmusic"]
-
-	if len(IDplaylist) > 0 && len(IDmusic) > 0 {
-		_, errQuery := db.Exec("INSERT INTO playlist_song(idplaylist,idsong) VALUES(?,?)",
-			IDplaylist, IDmusic,
-		)
-		if errQuery == nil {
-			ResponseManager(&response, 200, "Success Insert Song to Playlist")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
-		} else {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-		}
+	_, errQuery := db.Exec("INSERT INTO playlist_song(idplaylist,idsong) VALUES(?,?)",
+		IDplaylist, IDmusic,
+	)
+	if errQuery == nil {
+		return nil
 	} else {
-		ResponseManager(&response, 400, "Failed Insert Song to Playlist")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return errors.New("500")
 	}
-
 }
 
 func RemoveSongPlaylist(w http.ResponseWriter, r *http.Request) {
