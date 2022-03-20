@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
-
 	model "github.com/Testing-Implementasi_Sistem/model"
+
+	"github.com/gorilla/mux"
 )
 
 //UserLogin untuk melakukan pengecekan pada password dan email yang dimasukan
