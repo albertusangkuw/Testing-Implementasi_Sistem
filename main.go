@@ -45,7 +45,7 @@ func main() {
 	router.HandleFunc("/playlist", handler.Authenticate(c.AddPlaylist, 0)).Methods("POST")
 	router.HandleFunc("/playlist", handler.Authenticate(c.GetAllPlaylist, 0)).Methods("GET")
 	router.HandleFunc("/playlist/{IDplaylist}", handler.Authenticate(c.GetAllPlaylist, 0)).Methods("GET")
-	router.HandleFunc("/playlist/{IDplaylist}/update", handler.Authenticate(c.UpdatePlaylist, 0)).Methods("PUT")
+	router.HandleFunc("/playlist/{IDplaylist}/update", handler.Authenticate(handler.UpdatePlaylist, 0)).Methods("PUT")
 	router.HandleFunc("/playlist/{IDplaylist}/remove", handler.Authenticate(c.DeletePlaylist, 0)).Methods("DELETE")
 
 	router.HandleFunc("/playlist/{IDplaylist}/music/{IDmusic}", handler.Authenticate(handler.AddSongPlaylist, 0)).Methods("POST")
@@ -56,7 +56,7 @@ func main() {
 	router.HandleFunc("/album", handler.Authenticate(c.GetAllAlbum, 0)).Methods("GET")
 	router.HandleFunc("/album/{IDalbum}", handler.Authenticate(c.GetAllAlbum, 0)).Methods("GET")
 	router.HandleFunc("/album/{IDalbum}/photo", c.GetPhotoAlbum).Methods("GET")
-	router.HandleFunc("/album/{IDalbum}/likes/{IDuser}", handler.Authenticate(c.LikedAlbum, 0)).Methods("POST")
+	router.HandleFunc("/album/{IDalbum}/likes/{IDuser}", handler.Authenticate(handler.LikedAlbum, 0)).Methods("POST")
 	router.HandleFunc("/album/{IDalbum}/likes/{IDuser}/remove", handler.Authenticate(c.UnLikedAlbum, 0)).Methods("DELETE")
 
 	corsHandler := cors.New(cors.Options{

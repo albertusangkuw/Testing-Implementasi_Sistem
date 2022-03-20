@@ -45,7 +45,6 @@ func UserLogin(email string, password string) (string, string, error) {
 		return id, name, nil
 	}
 	return "", "", errors.New("404")
-
 }
 
 func ResetPassword(email string) (string, string, error) {
