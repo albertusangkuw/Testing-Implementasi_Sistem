@@ -1,9 +1,16 @@
-# Tugas Besar Android E-Music
+# Tugas Besar Android E-Music - Testing Implementasi Sistem
 
 #### Anggota Kelompok:
 
 - 1119002 – Albertus Septian Angkuw
 - 1119038 – Elangel Neilea Shaday
+
+### Struktur Folder 
+- model -> model pada aplikasi
+- handler -> mengatur http dan api
+- docs -> dokumentasi aplikasi dan database sql
+- controller -> logic pada aplikasi dan database
+- tools -> pembantu pada saat development
 
 #### Tema: Music
 

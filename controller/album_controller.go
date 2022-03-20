@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -122,7 +123,6 @@ func GetAllAlbum(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}
-
 }
 
 //Get Photo Profile
@@ -171,43 +171,23 @@ func GetPhotoAlbum(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 	}
 }
-func LikedAlbum(w http.ResponseWriter, r *http.Request) {
+
+func LikedAlbum(IDalbum string, IDuser string) error {
 	db := connect()
 	defer db.Close()
-	var response model.Response
-
-	err := r.ParseForm()
-	if err != nil {
-		ResponseManager(&response, 400, "Failed Insert Liked Album"+err.Error())
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-		return
-	}
-
-	vars := mux.Vars(r)
-	IDalbum := vars["IDalbum"]
-	IDuser := vars["IDuser"]
 
 	if len(IDalbum) > 0 && len(IDuser) > 0 {
 		_, errQuery := db.Exec("INSERT INTO album_following(idalbum,iduser) VALUES(?,?)",
 			IDalbum, IDuser,
 		)
 		if errQuery == nil {
-			ResponseManager(&response, 200, "Success Insert Liked Album")
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-
+			return nil
 		} else {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("500")
 		}
 	} else {
-		ResponseManager(&response, 400, "Failed Insert Liked Album")
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+		return errors.New("400")
 	}
-
 }
 
 func UnLikedAlbum(w http.ResponseWriter, r *http.Request) {
@@ -253,5 +233,4 @@ func UnLikedAlbum(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	}
-
 }

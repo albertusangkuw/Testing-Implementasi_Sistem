@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	model "github.com/Testing-Implementasi_Sistem/model"
 
@@ -266,7 +267,6 @@ func GetDetailUser(w http.ResponseWriter, r *http.Request) {
 	ResponseManager(&response.Response, 200, "")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
-
 }
 
 //Get Photo Profile
@@ -322,7 +322,7 @@ func RegisterRegularUser(username string, email string, password string, country
 	defer db.Close()
 
 	if len(username) > 0 && len(email) > 0 && len(password) > 0 && len(dateJoin) > 0 {
-		newIdUser := GetMD5Hash(username + email + GetMD5Hash(password))
+		newIdUser := GetMD5Hash(username + email + GetMD5Hash(password) + string(time.Now().Nanosecond()))
 		sha := sha256.New()
 		sha.Write([]byte(password))
 		password = hex.EncodeToString(sha.Sum(nil))

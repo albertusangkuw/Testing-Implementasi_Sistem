@@ -72,3 +72,39 @@ func FollowedPlaylist(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
+//UpdateUser is update data user like name, age, and address by id user
+func UpdatePlaylist(w http.ResponseWriter, r *http.Request) {
+	var response model.Response
+
+	err := r.ParseForm()
+	if err != nil {
+		controller.ResponseManager(&response, 400, "Cannot parse request")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	vars := mux.Vars(r)
+	IDplaylist := vars["IDplaylist"]
+
+	updatedList := ""
+	var valuesList []interface{}
+	updatedList, valuesList = controller.GenerateSQLWhere(r, []string{"iduser", "nameplaylist", "urlimagecover"}, ",", "POST")
+	valuesList = append(valuesList, IDplaylist)
+
+	errQuery := controller.UpdatePlaylist(updatedList, valuesList)
+	if errQuery == nil {
+		controller.ResponseManager(&response, 200, "Success Update")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else if errQuery != nil {
+		controller.ResponseManager(&response, 500, errQuery.Error())
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	} else {
+		controller.ResponseManager(&response, 400, "No Row was Updated")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	}
+}

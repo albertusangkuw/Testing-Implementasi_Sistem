@@ -191,48 +191,26 @@ func DeletePlaylist(w http.ResponseWriter, r *http.Request) {
 }
 
 //UpdateUser is update data user like name, age, and address by id user
-func UpdatePlaylist(w http.ResponseWriter, r *http.Request) {
+func UpdatePlaylist(updatedList string, valuesList ...interface{}) error {
 	db := connect()
 	defer db.Close()
-
-	err := r.ParseForm()
-	if err != nil {
-		return
-	}
-
-	vars := mux.Vars(r)
-	IDplaylist := vars["IDplaylist"]
-	println("Test : " + IDplaylist)
-	var response model.Response
-
-	// Using Variadic Function to pass
-	updatedList := ""
-	var valuesList []interface{}
-	updatedList, valuesList = GenerateSQLWhere(r, []string{"iduser", "nameplaylist", "urlimagecover"}, ",", "POST")
-	valuesList = append(valuesList, IDplaylist)
 
 	if updatedList != "" {
 		res, errQuery := db.Exec("UPDATE playlist SET "+updatedList+" WHERE idplaylist=?",
 			valuesList...,
 		)
 		if errQuery != nil {
-			ResponseManager(&response, 500, errQuery.Error())
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			return errors.New("500")
 		} else {
 			nums, _ := res.RowsAffected()
 			if nums > 0 {
-				ResponseManager(&response, 200, "Success Update")
-				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(response)
+				return nil
 			} else {
-				ResponseManager(&response, 400, "No Row was Updated")
-				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(response)
+				return errors.New("400")
 			}
 		}
 	}
-
+	return errors.New("400")
 }
 
 func FollowedPlaylist(IDplaylist string, IDuser string) error {

@@ -69,7 +69,6 @@ func ResponseManager(response *model.Response, status int16, message string) {
 		response.Message = "Not Implemented"
 	}
 	response.Message += message
-
 }
 
 func GetMD5Hash(text string) string {
