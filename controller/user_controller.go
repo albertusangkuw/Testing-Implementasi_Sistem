@@ -349,9 +349,12 @@ func DeleteUser(userID string) error {
 	if errQuery != nil {
 		return errors.New("500")
 	} else {
-		resUser, _ := db.Exec("DELETE FROM users WHERE iduser=?",
+		resUser, errQuery2 := db.Exec("DELETE FROM user WHERE iduser=?",
 			userID,
 		)
+		if errQuery2 != nil {
+			return errors.New("500")
+		}
 		nums, _ := res.RowsAffected()
 		nums2, _ := resUser.RowsAffected()
 		if nums > 0 && nums2 > 0 {

@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -191,7 +192,7 @@ func DeletePlaylist(w http.ResponseWriter, r *http.Request) {
 }
 
 //UpdateUser is update data user like name, age, and address by id user
-func UpdatePlaylist(updatedList string, valuesList ...interface{}) error {
+func UpdatePlaylist(updatedList string, valuesList []interface{}) error {
 	db := connect()
 	defer db.Close()
 
@@ -200,6 +201,8 @@ func UpdatePlaylist(updatedList string, valuesList ...interface{}) error {
 			valuesList...,
 		)
 		if errQuery != nil {
+			fmt.Println(errQuery.Error())
+			fmt.Println(valuesList[0])
 			return errors.New("500")
 		} else {
 			nums, _ := res.RowsAffected()
