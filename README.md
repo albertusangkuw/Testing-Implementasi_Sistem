@@ -1,9 +1,12 @@
 # Tugas Besar Android E-Music - Testing Implementasi Sistem
 
+#### Original Source Code
+[Tugas Besar Android E-Music](https://github.com/albertusangkuw/TugasBesarAndroidEMusic)
 #### Anggota Kelompok:
 
 - 1119002 – Albertus Septian Angkuw
 - 1119038 – Elangel Neilea Shaday
+- 1119019 - William Surjana
 
 ### Struktur Folder 
 - model -> model pada aplikasi
