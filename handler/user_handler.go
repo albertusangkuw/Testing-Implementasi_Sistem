@@ -93,7 +93,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		// Select one id
-		filterBY += " email='" + userID + "'"
+		filterBY += " IDuser='" + userID + "'"
 	}
 
 	artist, reguler, err := controller.GetAllUsers(filterBY)

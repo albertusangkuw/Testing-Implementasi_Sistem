@@ -304,10 +304,10 @@ func GetPhotoProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user.IDuser != "" && user.UrlPhotoProfile != "" {
-		println("Photo Profile :" + user.IDuser + " is requested")
+		println("Photo Profile :"+user.IDuser+" is requested", strconv.Quote(user.IDuser+".jpg"))
 		w.Header().Set("Content-Disposition", "inline; filename="+strconv.Quote(user.IDuser+".jpg"))
 		w.Header().Set("Content-Type", "image/png")
-		http.ServeFile(w, r, user.UrlPhotoProfile)
+		http.ServeFile(w, r, user.IDuser+".jpg")
 	} else {
 		ResponseManager(&response, 404, "Data Not Found")
 		w.Header().Set("Content-Type", "application/json")
@@ -544,7 +544,7 @@ func GetHistoryUser(userID string) ([]model.Recently, error) {
 		}
 		counter++
 	}
-	return DataRecently, errors.New("500")
+	return DataRecently, nil
 }
 
 func InsertHistoryUser(userID string, idlist string, tipe string, date string) error {

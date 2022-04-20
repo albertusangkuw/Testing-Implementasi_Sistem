@@ -164,7 +164,7 @@ func GetPhotoAlbum(w http.ResponseWriter, r *http.Request) {
 		println("Photo Profile :" + album.IDuser + " is requested")
 		w.Header().Set("Content-Disposition", "inline; filename="+strconv.Quote(album.IDuser+".jpg"))
 		w.Header().Set("Content-Type", "image/png")
-		http.ServeFile(w, r, album.UrlImageCover)
+		http.ServeFile(w, r, album.IDuser+".jpg")
 	} else {
 		ResponseManager(&response, 404, "Data Not Found")
 		w.Header().Set("Content-Type", "application/json")
