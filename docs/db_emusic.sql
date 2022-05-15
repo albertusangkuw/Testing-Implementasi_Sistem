@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 20, 2022 at 01:40 PM
+-- Generation Time: May 15, 2022 at 03:08 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -55,6 +55,13 @@ CREATE TABLE `album_following` (
   `iduser` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `album_following`
+--
+
+INSERT INTO `album_following` (`idalbum`, `iduser`) VALUES
+(1, '7c20f5ef71c38abb1d0c1f1b6eb4459f');
+
 -- --------------------------------------------------------
 
 --
@@ -93,7 +100,7 @@ CREATE TABLE `playlist` (
 --
 
 INSERT INTO `playlist` (`IDplaylist`, `DateCreated`, `IDuser`, `NamePlaylist`, `UrlImageCover`) VALUES
-(1, '2021-04-09 18:17:00', '8ec98a070542086d414860c3269f3e87', 'Update playlist elangel', '/cover/test.jpg21');
+(1, '2021-04-09 18:17:00', '8ec98a070542086d414860c3269f3e87', 'Fun Playlist', 'https://image.shutterstock.com/723500997.jpg');
 
 -- --------------------------------------------------------
 
@@ -106,6 +113,13 @@ CREATE TABLE `playlist_following` (
   `iduser` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `playlist_following`
+--
+
+INSERT INTO `playlist_following` (`idplaylist`, `iduser`) VALUES
+(1, '7c20f5ef71c38abb1d0c1f1b6eb4459f');
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +130,13 @@ CREATE TABLE `playlist_song` (
   `idsong` int(11) NOT NULL,
   `idplaylist` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `playlist_song`
+--
+
+INSERT INTO `playlist_song` (`idsong`, `idplaylist`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -134,7 +155,25 @@ CREATE TABLE `regular_user` (
 --
 
 INSERT INTO `regular_user` (`IDuser`, `Gender`, `DateofBirth`) VALUES
-('7d75b89967463de95fe37c55686a63e0', NULL, NULL);
+('372446c64e386411e888644c6502c67c', NULL, NULL),
+('4390dc0fd0869dd1f58b023d8ef7389e', NULL, NULL),
+('5843db749839d079ef22e6cb58c8017f', NULL, NULL),
+('5a29e2a2ae7dcedca268c033650d87a0', NULL, NULL),
+('5c643aab88a26211fc76f8eec7557956', NULL, NULL),
+('5e0751331ff864be755d8b4b173e5b27', NULL, NULL),
+('66241ac344006611068928f48d87cb70', NULL, NULL),
+('6d925e647d60f3271a645acd4f4deeee', NULL, NULL),
+('7c20f5ef71c38abb1d0c1f1b6eb4459f', NULL, NULL),
+('7d75b89967463de95fe37c55686a63e0', NULL, NULL),
+('8564161a18df6b6be8a21d045ab6cdf7', NULL, NULL),
+('a8ff3921f69bc329294d85c39661abd8', NULL, NULL),
+('aeb35c6e48bd8813c116d995947530b8', NULL, NULL),
+('b0bee0c6f68809a5e41e240571591ca8', NULL, NULL),
+('b7b6a253106fcd2975af505aad818855', NULL, NULL),
+('d465653240fd23f90bf3b60277b330e2', NULL, NULL),
+('deab81169d76c574912b64e6464e36f3', NULL, NULL),
+('e8014d1c070bb02b0332eb551ad4a34b', NULL, NULL),
+('f3f2ab9896df1b239eba6d8600fdb891', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -156,7 +195,7 @@ CREATE TABLE `song` (
 
 INSERT INTO `song` (`IDsong`, `IDalbum`, `Title`, `Urlsongs`, `Genre`) VALUES
 (1, 1, 'Knock knock', 'http://knockknock.mp4', 'Happy'),
-(2, 1, 'Fall Again', 'http://fallagain.mp4', 'Drama'),
+(2, 1, 'Fall Again', 'fallagan.mp4', 'Drama'),
 (3, 2, 'Playing with fire', 'http://playingwithfire.mp4', 'Dance'),
 (4, 2, 'Ice Cream', 'http://icecream.mp4', 'Happy');
 
@@ -170,6 +209,13 @@ CREATE TABLE `song_like` (
   `iduser` varchar(64) NOT NULL,
   `idsong` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `song_like`
+--
+
+INSERT INTO `song_like` (`iduser`, `idsong`) VALUES
+('7c20f5ef71c38abb1d0c1f1b6eb4459f', 1);
 
 -- --------------------------------------------------------
 
@@ -194,12 +240,30 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`IDuser`, `Username`, `Email`, `Password`, `Country`, `UrlPhotoProfile`, `DateJoin`, `Categories`) VALUES
 ('0ee6d02530649ef3c3c2a81da45f72a0', 'iu', 'iu@gmail.com', '12345678', 'Korea', 'https://i.pinimg.com/564x/88/4c/67/884c6726d75b4639fbcbecf15743e568.jpg', '2022-03-20 11:52:32', 1),
-('14681392a8f78ab96843bd595657a668', 'albertusaa', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2021-10-11 00:00:00', 2),
+('14681392a8f78ab96843bd595657a668', 'albertusaa', 'albertus3a@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2021-10-11 00:00:00', 2),
 ('365aaaf8834f326e5d3925cc82693605', 'blackpink', 'blackpink@gmail.com', '12345678', 'Korea', 'https://i.pinimg.com/564x/c8/64/17/c86417a904551d0bd685f5f2ebace360.jpg', '2022-03-20 11:57:11', 1),
+('372446c64e386411e888644c6502c67c', 'a1lbertus2aa222', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('4390dc0fd0869dd1f58b023d8ef7389e', 'xOncHnBuams', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('5843db749839d079ef22e6cb58c8017f', 'NfvGjNQovXh', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('5a29e2a2ae7dcedca268c033650d87a0', 'lYVceUoNuoi', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('5c643aab88a26211fc76f8eec7557956', 'KmoSAPVpKFK', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('5e0751331ff864be755d8b4b173e5b27', 'vyqWm', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('66241ac344006611068928f48d87cb70', 'albertusaa113123', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2021-10-11 00:00:00', 2),
+('6d925e647d60f3271a645acd4f4deeee', 'tHtnPpRjmmp', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('7c20f5ef71c38abb1d0c1f1b6eb4459f', 'albertusaa222', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2021-10-11 00:00:00', 2),
 ('7d75b89967463de95fe37c55686a63e0', 'albetgf', 'dahdkj@gmail', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'India', 'photo.jpg', '2021-10-11 00:00:00', 2),
 ('82921e4e534a3709e6dc6b1db41a1977', 'shaday', 'shaday@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2022-01-11 00:00:00', 2),
+('8564161a18df6b6be8a21d045ab6cdf7', 'OfvRNgSdoKe', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
 ('8ec98a070542086d414860c3269f3e87', 'elangel', 'elangel@gmail.com', 'e24df920078c3dd4e7e8d2442f00e5c9ab2a231bb3918d65cc50906e49ecaef4', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2022-01-11 00:00:00', 2),
-('9f44c64241f6095571dea1b73144a5fb', 'neilea', 'neilea@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2022-01-11 00:00:00', 2);
+('9f44c64241f6095571dea1b73144a5fb', 'neilea', 'neilea@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2022-01-11 00:00:00', 2),
+('a8ff3921f69bc329294d85c39661abd8', 'albertusaa111222', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn', '2021-10-11 00:00:00', 2),
+('aeb35c6e48bd8813c116d995947530b8', 'vYrcOYBSVIn', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('b0bee0c6f68809a5e41e240571591ca8', 'ZIsfzboEZyT', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('b7b6a253106fcd2975af505aad818855', 'jaAbRuQZDxc', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('d465653240fd23f90bf3b60277b330e2', 'YtAgOCoOPxE', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('deab81169d76c574912b64e6464e36f3', 'NEQAMiuuvzL', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('e8014d1c070bb02b0332eb551ad4a34b', 'EAcLFWfoCpm', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2),
+('f3f2ab9896df1b239eba6d8600fdb891', 'vTOknDnaMUl', 'albertusaaa@gmail.com', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 'Indonesia', 'domain.com/img.jpg', '2021-10-11 00:00:00', 2);
 
 -- --------------------------------------------------------
 
@@ -230,6 +294,7 @@ CREATE TABLE `user_history` (
 --
 
 INSERT INTO `user_history` (`id_user`, `id_list`, `type`, `date`) VALUES
+('7d75b89967463de95fe37c55686a63e0', '1', '2', '2022-07-05'),
 ('8ec98a070542086d414860c3269f3e87', '2', '2', '2021-04-25 03:43:40');
 
 --

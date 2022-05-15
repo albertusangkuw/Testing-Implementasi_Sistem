@@ -1,0 +1,1401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0 (Python 3.9.7 on linux)" generated="20220420 18:11:16.319" rpa="false" schemaversion="3">
+<suite id="s1" name="Test" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test">
+<suite id="s1-s1" name="Home" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/Home.robot">
+<test id="s1-s1-t1" name="Melihat Menu Home dengan informasi sudah login" line="15">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:16.818" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:16.817" endtime="20220420 18:11:16.818"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:16.829" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.829" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3Nn0.q-ltjeli1UD-8AqMVNjqLRSN2UXynsydn5Ctw1d5sUI; Expires=Thu, 21 Apr 2022 11:11:16 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:16 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:16.829" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:16.818" endtime="20220420 18:11:16.829"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:16.830" endtime="20220420 18:11:16.831"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:16.837" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3Nn0.q-ltjeli1UD-8AqMVNjqLRSN2UXynsydn5Ctw1d5sUI'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.837" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:16 GMT', 'Content-Length': '296'} 
+ body={"status":200,"message":"OK","artist":null,"regularuser":[{"iduser":"7d75b89967463de95fe37c55686a63e0","username":"albetgf","email":"dahdkj@gmail","country":"","urlphotoprofile":"photo.jpg","datejoin":"2021-10-11T00:00:00+07:00","categories":2,"gender":"","dateofbirth":"0001-01-01T00:00:00Z"}]}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:16.837" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:16.831" endtime="20220420 18:11:16.837"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:16.837" endtime="20220420 18:11:16.838"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:16.875" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:16.838" endtime="20220420 18:11:16.875"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:16.876" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:16.875" endtime="20220420 18:11:16.876"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:16.876" endtime="20220420 18:11:16.877"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:16.882" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3Nn0.q-ltjeli1UD-8AqMVNjqLRSN2UXynsydn5Ctw1d5sUI'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.882" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="7d75b89967463de95fe37c55686a63e0.jpg"', 'Content-Length': '0', 'Content-Type': 'image/png', 'Last-Modified': 'Mon, 18 Apr 2022 06:54:02 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:16 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.882" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:16.877" endtime="20220420 18:11:16.882"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:16.882" endtime="20220420 18:11:16.883"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/history</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:16.895" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/history 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/history 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3Nn0.q-ltjeli1UD-8AqMVNjqLRSN2UXynsydn5Ctw1d5sUI'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.896" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/history 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:16 GMT', 'Content-Length': '42'} 
+ body={"status":200,"message":"OK","data":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:16.896" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:16.883" endtime="20220420 18:11:16.896"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:16.896" endtime="20220420 18:11:16.897"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:16.927" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:16.897" endtime="20220420 18:11:16.927"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:16.928" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:16.927" endtime="20220420 18:11:16.928"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:16.928" endtime="20220420 18:11:16.928"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/detail</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:16.955" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/detail 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3Nn0.q-ltjeli1UD-8AqMVNjqLRSN2UXynsydn5Ctw1d5sUI'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:16.955" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:16 GMT', 'Content-Length': '233'} 
+ body={"status":200,"message":"OK","id":"7d75b89967463de95fe37c55686a63e0","datafollowers":null,"datafollowingregular":null,"datafollowingartis":null,"datalikedsong":null,"dataplaylistowned":null,"dataplaylistliked":null,"dataalbum":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:16.955" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:16.928" endtime="20220420 18:11:16.955"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:16.956" endtime="20220420 18:11:16.956"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:16.987" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:16.957" endtime="20220420 18:11:16.987"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:16.988" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:16.987" endtime="20220420 18:11:16.988"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:16.988" endtime="20220420 18:11:16.989"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam proses untuk mendapatkan informasi pada
+Menu Home seperti history dan data detail dapat didapatkan dengan syarat login terlebih dahulu</doc>
+<tag>Home</tag>
+<status status="PASS" starttime="20220420 18:11:16.815" endtime="20220420 18:11:16.989"/>
+</test>
+<doc>Scenario Testing Home</doc>
+<status status="PASS" starttime="20220420 18:11:16.347" endtime="20220420 18:11:16.990"/>
+</suite>
+<suite id="s1-s2" name="LibraryPage" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/LibraryPage.robot">
+<test id="s1-s2-t1" name="Melihat Menu Library dengan informasi sudah login" line="15">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.002" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.002" endtime="20220420 18:11:17.003"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.008" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.008" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0; Expires=Thu, 21 Apr 2022 11:11:17 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.008" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.003" endtime="20220420 18:11:17.008"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.008" endtime="20220420 18:11:17.008"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.016" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.016" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '296'} 
+ body={"status":200,"message":"OK","artist":null,"regularuser":[{"iduser":"7d75b89967463de95fe37c55686a63e0","username":"albetgf","email":"dahdkj@gmail","country":"","urlphotoprofile":"photo.jpg","datejoin":"2021-10-11T00:00:00+07:00","categories":2,"gender":"","dateofbirth":"0001-01-01T00:00:00Z"}]}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.016" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.009" endtime="20220420 18:11:17.016"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.018" endtime="20220420 18:11:17.018"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.056" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.019" endtime="20220420 18:11:17.056"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.057" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.056" endtime="20220420 18:11:17.057"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.057" endtime="20220420 18:11:17.058"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.063" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.063" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="7d75b89967463de95fe37c55686a63e0.jpg"', 'Content-Length': '0', 'Content-Type': 'image/png', 'Last-Modified': 'Mon, 18 Apr 2022 06:54:02 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.064" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.058" endtime="20220420 18:11:17.064"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.064" endtime="20220420 18:11:17.064"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/detail</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.077" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/detail 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.077" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '233'} 
+ body={"status":200,"message":"OK","id":"7d75b89967463de95fe37c55686a63e0","datafollowers":null,"datafollowingregular":null,"datafollowingartis":null,"datalikedsong":null,"dataplaylistowned":null,"dataplaylistliked":null,"dataalbum":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.078" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.065" endtime="20220420 18:11:17.078"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.078" endtime="20220420 18:11:17.078"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.103" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.079" endtime="20220420 18:11:17.103"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.104" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.103" endtime="20220420 18:11:17.104"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.104" endtime="20220420 18:11:17.104"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam pengaksesan data Library
+bisa mendapatkan informasi yang dibutuhkan untuk menampilkan menu dengan syarat sudah login</doc>
+<tag>MenuLibrary</tag>
+<status status="PASS" starttime="20220420 18:11:17.001" endtime="20220420 18:11:17.105"/>
+</test>
+<doc>Scenario Testing Library Page</doc>
+<status status="PASS" starttime="20220420 18:11:16.991" endtime="20220420 18:11:17.106"/>
+</suite>
+<suite id="s1-s3" name="Login" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/Login.robot">
+<test id="s1-s3-t1" name="Melakukan Login dengan Valid Kredensial" line="14">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.114" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.113" endtime="20220420 18:11:17.114"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.120" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.120" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0; Expires=Thu, 21 Apr 2022 11:11:17 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.120" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.114" endtime="20220420 18:11:17.120"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.120" endtime="20220420 18:11:17.121"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.165" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.121" endtime="20220420 18:11:17.165"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.166" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.165" endtime="20220420 18:11:17.166"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.166" endtime="20220420 18:11:17.167"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam melakukan login dengan data pengguna benar yang
+sudah diregistrasi sebelumnya bisa melakukan login</doc>
+<tag>Login</tag>
+<status status="PASS" starttime="20220420 18:11:17.112" endtime="20220420 18:11:17.167"/>
+</test>
+<test id="s1-s3-t2" name="Melakukan Login dengan Password Salah" line="26">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.170" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.170" endtime="20220420 18:11:17.172"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=wrongpwd</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.179" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=wrongpwd 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=wrongpwd 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.179" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=wrongpwd 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '52'} 
+ body={"status":404,"message":"Not Found - Login Failed"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.179" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.172" endtime="20220420 18:11:17.179"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.212" level="INFO">${status} = [404]</msg>
+<status status="PASS" starttime="20220420 18:11:17.180" endtime="20220420 18:11:17.213"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.214" level="INFO">${intStatus} = 404</msg>
+<status status="PASS" starttime="20220420 18:11:17.213" endtime="20220420 18:11:17.214"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'404'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.214" endtime="20220420 18:11:17.215"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam melakukan login dengan data pengguna salah yang
+sudah diregistrasi sebelumnya tidak bisa melakukan login karena memberikan informasi password salah</doc>
+<tag>Login</tag>
+<status status="PASS" starttime="20220420 18:11:17.168" endtime="20220420 18:11:17.215"/>
+</test>
+<test id="s1-s3-t3" name="Melakukan Login dengan Pengguna Belum Terdaftar" line="37">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.218" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.217" endtime="20220420 18:11:17.219"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=noregister@test.com&amp;password=12345678</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.224" level="INFO">GET Request : url=http://localhost:8081/login?email=noregister@test.com&amp;password=12345678 
+ path_url=/login?email=noregister@test.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.224" level="INFO">GET Response : url=http://localhost:8081/login?email=noregister@test.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '52'} 
+ body={"status":404,"message":"Not Found - Login Failed"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.225" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.219" endtime="20220420 18:11:17.225"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.252" level="INFO">${status} = [404]</msg>
+<status status="PASS" starttime="20220420 18:11:17.225" endtime="20220420 18:11:17.252"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.253" level="INFO">${intStatus} = 404</msg>
+<status status="PASS" starttime="20220420 18:11:17.253" endtime="20220420 18:11:17.253"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'404'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.254" endtime="20220420 18:11:17.254"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam melakukan login dengan data pengguna yang
+belum diregistrasi sebelumnya maka tidak bisa melakukan login</doc>
+<tag>Login</tag>
+<status status="PASS" starttime="20220420 18:11:17.216" endtime="20220420 18:11:17.255"/>
+</test>
+<doc>Scenario Testing Login</doc>
+<status status="PASS" starttime="20220420 18:11:17.107" endtime="20220420 18:11:17.256"/>
+</suite>
+<suite id="s1-s4" name="OnGoingPlaying" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/OnGoingPlaying.robot">
+<test id="s1-s4-t1" name="Melihat Menu On Going Playing dengan informasi sudah login" line="17">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.268" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.267" endtime="20220420 18:11:17.268"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.275" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.275" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0; Expires=Thu, 21 Apr 2022 11:11:17 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.276" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.268" endtime="20220420 18:11:17.276"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.276" endtime="20220420 18:11:17.277"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/music/${IDmusic}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.284" level="INFO">GET Request : url=http://localhost:8081/music/2 
+ path_url=/music/2 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.284" level="INFO">GET Response : url=http://localhost:8081/music/2 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '127'} 
+ body={"status":200,"message":"OK","data":[{"idsong":2,"idalbum":1,"title":"Fall Again","urlsongs":"fallagan.mp4","genre":"Drama"}]}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.284" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.277" endtime="20220420 18:11:17.284"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.284" endtime="20220420 18:11:17.285"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.320" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.285" endtime="20220420 18:11:17.320"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.320" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.320" endtime="20220420 18:11:17.320"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.321" endtime="20220420 18:11:17.321"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/album/${IDAlbum}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.328" level="INFO">GET Request : url=http://localhost:8081/album/1/photo 
+ path_url=/album/1/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.328" level="INFO">GET Response : url=http://localhost:8081/album/1/photo 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="0ee6d02530649ef3c3c2a81da45f72a0.jpg"', 'Content-Length': '0', 'Content-Type': 'image/png', 'Last-Modified': 'Mon, 18 Apr 2022 10:57:39 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.328" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.321" endtime="20220420 18:11:17.328"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.328" endtime="20220420 18:11:17.329"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/music/${IDmusic}/data</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.339" level="INFO">GET Request : url=http://localhost:8081/music/2/data 
+ path_url=/music/2/data 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.339" level="INFO">GET Response : url=http://localhost:8081/music/2/data 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="2.mp3"', 'Content-Length': '0', 'Content-Type': 'audio/mp3', 'Last-Modified': 'Mon, 18 Apr 2022 12:11:08 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.339" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.329" endtime="20220420 18:11:17.339"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.340" endtime="20220420 18:11:17.342"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/history</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.353" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/history 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/history 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.353" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/history 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '42'} 
+ body={"status":200,"message":"OK","data":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.353" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.343" endtime="20220420 18:11:17.353"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.354" endtime="20220420 18:11:17.354"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.388" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.355" endtime="20220420 18:11:17.388"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.390" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.389" endtime="20220420 18:11:17.390"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.390" endtime="20220420 18:11:17.391"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dapat dilakukan pengambilan data music berdasarkan
+IDMusic dan dilakukan pencatatan lagu dengan syarat sudah terdapat pengguna yang login</doc>
+<tag>Smoke</tag>
+<status status="PASS" starttime="20220420 18:11:17.266" endtime="20220420 18:11:17.391"/>
+</test>
+<doc>Scenario Testing On Going Playing</doc>
+<status status="PASS" starttime="20220420 18:11:17.258" endtime="20220420 18:11:17.392"/>
+</suite>
+<suite id="s1-s5" name="ProfileArtist" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/ProfileArtist.robot">
+<test id="s1-s5-t1" name="Melihat Profil Artist dengan informasi sudah login" line="15">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.402" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.401" endtime="20220420 18:11:17.402"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.407" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.407" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0; Expires=Thu, 21 Apr 2022 11:11:17 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.407" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.402" endtime="20220420 18:11:17.407"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.408" endtime="20220420 18:11:17.408"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.422" level="INFO">GET Request : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0 
+ path_url=/users/0ee6d02530649ef3c3c2a81da45f72a0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.422" level="INFO">GET Response : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '330'} 
+ body={"status":200,"message":"OK","artist":[{"iduser":"0ee6d02530649ef3c3c2a81da45f72a0","username":"iu","email":"iu@gmail.com","country":"","urlphotoprofile":"https://i.pinimg.com/564x/88/4c/67/884c6726d75b4639fbcbecf15743e568.jpg","datejoin":"2022-03-20T11:52:32+07:00","categories":1,"bio":"Solo K-POP singer"}],"regularuser":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.422" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.408" endtime="20220420 18:11:17.422"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.423" endtime="20220420 18:11:17.424"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.453" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.424" endtime="20220420 18:11:17.453"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.453" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.453" endtime="20220420 18:11:17.453"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.454" endtime="20220420 18:11:17.454"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.460" level="INFO">GET Request : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0/photo 
+ path_url=/users/0ee6d02530649ef3c3c2a81da45f72a0/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.460" level="INFO">GET Response : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0/photo 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="0ee6d02530649ef3c3c2a81da45f72a0.jpg"', 'Content-Length': '0', 'Content-Type': 'image/png', 'Last-Modified': 'Mon, 18 Apr 2022 10:57:39 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.460" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.454" endtime="20220420 18:11:17.460"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.461" endtime="20220420 18:11:17.461"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/detail</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.472" level="INFO">GET Request : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0/detail 
+ path_url=/users/0ee6d02530649ef3c3c2a81da45f72a0/detail 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.472" level="INFO">GET Response : url=http://localhost:8081/users/0ee6d02530649ef3c3c2a81da45f72a0/detail 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '233'} 
+ body={"status":200,"message":"OK","id":"0ee6d02530649ef3c3c2a81da45f72a0","datafollowers":null,"datafollowingregular":null,"datafollowingartis":null,"datalikedsong":null,"dataplaylistowned":null,"dataplaylistliked":null,"dataalbum":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.472" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.461" endtime="20220420 18:11:17.472"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.473" endtime="20220420 18:11:17.473"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.503" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.474" endtime="20220420 18:11:17.503"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.504" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.503" endtime="20220420 18:11:17.504"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.504" endtime="20220420 18:11:17.504"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/album</arg>
+<arg>params=iduser=${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.512" level="INFO">GET Request : url=http://localhost:8081/album?iduser=0ee6d02530649ef3c3c2a81da45f72a0 
+ path_url=/album?iduser=0ee6d02530649ef3c3c2a81da45f72a0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.512" level="INFO">GET Response : url=http://localhost:8081/album?iduser=0ee6d02530649ef3c3c2a81da45f72a0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '747'} 
+ body={"status":200,"message":"OK","data":[{"idalbum":1,"iduser":"0ee6d02530649ef3c3c2a81da45f72a0","namealbum":"Lilac","urlimagecover":"https://e17b5d43518b7a8412449ca642127094.jpg","genre":"Love Song","daterelease":"2022-03-20T12:00:18+07:00","listsong":[{"idsong":1,"idalbum":1,"title":"Knock knock","urlsongs":"http://knockknock.mp4","genre":"Happy"},{"idsong":2,"idalbum":1,"title":"Fall Again","urlsongs":"fallagan.mp4","genre":"Drama"}],"userfollowing":[{"iduser":"7c20f5ef71c38abb1d0c1f1b6eb4459f","username":"albertusaa222","email":"","country":"","urlphotoprofile":"https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn","datejoin":"0001-01-01T00:00:00Z","categories":0}]}]}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.512" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.505" endtime="20220420 18:11:17.512"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.513" endtime="20220420 18:11:17.513"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.552" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.513" endtime="20220420 18:11:17.552"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.553" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.553" endtime="20220420 18:11:17.553"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.553" endtime="20220420 18:11:17.554"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam pengaksesan data profile artist
+bisa mendapatkan informasi yang dibutuhkan untuk menampilkan menu artist dengan syarat sudah login</doc>
+<tag>Artist</tag>
+<status status="PASS" starttime="20220420 18:11:17.400" endtime="20220420 18:11:17.555"/>
+</test>
+<doc>Scenario Testing Profile Artist</doc>
+<status status="PASS" starttime="20220420 18:11:17.394" endtime="20220420 18:11:17.557"/>
+</suite>
+<suite id="s1-s6" name="ProfileRegularUser" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/ProfileRegularUser.robot">
+<test id="s1-s6-t1" name="Melihat Profil Regular User dengan informasi sudah login" line="15">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.568" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.568" endtime="20220420 18:11:17.569"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/login</arg>
+<arg>params=email=${LOGIN_EMAIL}&amp;password=${LOGIN_PASSWORD}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.574" level="INFO">GET Request : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ path_url=/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.574" level="INFO">GET Response : url=http://localhost:8081/login?email=albertusaaa@gmail.com&amp;password=12345678 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Set-Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0; Expires=Thu, 21 Apr 2022 11:11:17 GMT; HttpOnly', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '46'} 
+ body={"status":200,"message":"OK - Success Login"}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.574" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.569" endtime="20220420 18:11:17.574"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.575" endtime="20220420 18:11:17.576"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.587" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.588" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '296'} 
+ body={"status":200,"message":"OK","artist":null,"regularuser":[{"iduser":"7d75b89967463de95fe37c55686a63e0","username":"albetgf","email":"dahdkj@gmail","country":"","urlphotoprofile":"photo.jpg","datejoin":"2021-10-11T00:00:00+07:00","categories":2,"gender":"","dateofbirth":"0001-01-01T00:00:00Z"}]}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.588" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.578" endtime="20220420 18:11:17.588"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.588" endtime="20220420 18:11:17.589"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.625" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.590" endtime="20220420 18:11:17.625"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.626" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.626" endtime="20220420 18:11:17.626"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.627" endtime="20220420 18:11:17.627"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.634" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.634" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ status=200, reason=OK 
+ headers={'Accept-Ranges': 'bytes', 'Content-Disposition': 'inline; filename="7d75b89967463de95fe37c55686a63e0.jpg"', 'Content-Length': '0', 'Content-Type': 'image/png', 'Last-Modified': 'Mon, 18 Apr 2022 06:54:02 GMT', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.635" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.628" endtime="20220420 18:11:17.635"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.635" endtime="20220420 18:11:17.636"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/detail</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.648" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/detail 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjJhYjk4OTZkZjFiMjM5ZWJhNmQ4NjAwZmRiODkxIiwibmFtZSI6InZUT2tuRG5hTVVsIiwidXNlcnR5cGUiOjAsImV4cCI6MTY1MDUzOTQ3N30.NtMM8WBjtBS08PHKjjPMQ2-hB5O8H376qEV1k0zpa-0'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.648" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/detail 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '233'} 
+ body={"status":200,"message":"OK","id":"7d75b89967463de95fe37c55686a63e0","datafollowers":null,"datafollowingregular":null,"datafollowingartis":null,"datalikedsong":null,"dataplaylistowned":null,"dataplaylistliked":null,"dataalbum":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.648" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.636" endtime="20220420 18:11:17.648"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.649" endtime="20220420 18:11:17.650"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.685" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.651" endtime="20220420 18:11:17.685"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.685" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.685" endtime="20220420 18:11:17.685"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.686" endtime="20220420 18:11:17.686"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam pengaksesan data profile regular user
+bisa mendapatkan informasi yang dibutuhkan untuk menampilkan menu dengan syarat sudah login</doc>
+<tag>RegularUser</tag>
+<status status="PASS" starttime="20220420 18:11:17.566" endtime="20220420 18:11:17.686"/>
+</test>
+<test id="s1-s6-t2" name="Melihat Profil Regular User tanpa informasi login" line="44">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.689" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.688" endtime="20220420 18:11:17.689"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.694" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.694" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '80'} 
+ body={"status":401,"message":"Unauthorized Access","artist":null,"regularuser":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.695" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.689" endtime="20220420 18:11:17.695"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.725" level="INFO">${status} = [401]</msg>
+<status status="PASS" starttime="20220420 18:11:17.695" endtime="20220420 18:11:17.725"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.727" level="INFO">${intStatus} = 401</msg>
+<status status="PASS" starttime="20220420 18:11:17.726" endtime="20220420 18:11:17.727"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'401'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.727" endtime="20220420 18:11:17.728"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/users/${userID}/photo</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.733" level="INFO">GET Request : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ path_url=/users/7d75b89967463de95fe37c55686a63e0/photo 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220420 18:11:17.733" level="INFO">GET Response : url=http://localhost:8081/users/7d75b89967463de95fe37c55686a63e0/photo 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '80'} 
+ body={"status":401,"message":"Unauthorized Access","artist":null,"regularuser":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.734" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.728" endtime="20220420 18:11:17.734"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.768" level="INFO">${status} = [401]</msg>
+<status status="PASS" starttime="20220420 18:11:17.734" endtime="20220420 18:11:17.768"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.768" level="INFO">${intStatus} = 401</msg>
+<status status="PASS" starttime="20220420 18:11:17.768" endtime="20220420 18:11:17.768"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'401'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.769" endtime="20220420 18:11:17.769"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam pengaksesan data profile regular user
+harus dilakukan dengan informasi login yang valid</doc>
+<tag>RegularUser</tag>
+<status status="PASS" starttime="20220420 18:11:17.687" endtime="20220420 18:11:17.769"/>
+</test>
+<doc>Scenario Testing Profile Regular User</doc>
+<status status="PASS" starttime="20220420 18:11:17.558" endtime="20220420 18:11:17.770"/>
+</suite>
+<suite id="s1-s7" name="Registrasi" source="/home/asa/go/src/github.com/Testing-Implementasi_Sistem/test/Registrasi.robot">
+<test id="s1-s7-t1" name="Melakukan Dengan data lengkap" line="13">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.782" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.781" endtime="20220420 18:11:17.783"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${RANUSER}</var>
+<arg>11</arg>
+<arg>[LETTERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20220420 18:11:17.784" level="INFO">${RANUSER} = ZIsfzboEZyT</msg>
+<status status="PASS" starttime="20220420 18:11:17.783" endtime="20220420 18:11:17.784"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{body}</var>
+<arg>username=${RANUSER}</arg>
+<arg>email=albertusaaa@gmail.com</arg>
+<arg>password=12345678</arg>
+<arg>country=Indonesia</arg>
+<arg>dateJoin=2021-10-11</arg>
+<arg>categories=1</arg>
+<arg>urlphotoprofile=domain.com/img.jpg</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220420 18:11:17.787" level="INFO">&amp;{body} = { username=ZIsfzboEZyT | email=albertusaaa@gmail.com | password=12345678 | country=Indonesia | dateJoin=2021-10-11 | categories=1 | urlphotoprofile=domain.com/img.jpg }</msg>
+<status status="PASS" starttime="20220420 18:11:17.785" endtime="20220420 18:11:17.787"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{header}</var>
+<arg>Content-Type=application/x-www-form-urlencoded</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220420 18:11:17.788" level="INFO">&amp;{header} = { Content-Type=application/x-www-form-urlencoded }</msg>
+<status status="PASS" starttime="20220420 18:11:17.788" endtime="20220420 18:11:17.789"/>
+</kw>
+<kw name="POST On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/registrasi</arg>
+<arg>headers=${header}</arg>
+<arg>data=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.819" level="INFO">POST Request : url=http://localhost:8081/registrasi 
+ path_url=/registrasi 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '156'} 
+ body=username=ZIsfzboEZyT&amp;email=albertusaaa%40gmail.com&amp;password=12345678&amp;country=Indonesia&amp;dateJoin=2021-10-11&amp;categories=1&amp;urlphotoprofile=domain.com%2Fimg.jpg 
+ </msg>
+<msg timestamp="20220420 18:11:17.819" level="INFO">POST Response : url=http://localhost:8081/registrasi 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '63'} 
+ body={"status":200,"message":"OK","artist":null,"regularuser":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.820" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.789" endtime="20220420 18:11:17.820"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<arg>${response}</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20220420 18:11:17.821" endtime="20220420 18:11:17.824"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.865" level="INFO">${status} = [200]</msg>
+<status status="PASS" starttime="20220420 18:11:17.825" endtime="20220420 18:11:17.865"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.866" level="INFO">${intStatus} = 200</msg>
+<status status="PASS" starttime="20220420 18:11:17.866" endtime="20220420 18:11:17.866"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'200'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.867" endtime="20220420 18:11:17.867"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam melakukan registrasi bisa dilakukan
+dengan data yang lengkap</doc>
+<tag>Registrasi</tag>
+<status status="PASS" starttime="20220420 18:11:17.780" endtime="20220420 18:11:17.868"/>
+</test>
+<test id="s1-s7-t2" name="Melakukan Dengan data tidak lengkap" line="30">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${URL_API}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220420 18:11:17.870" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8081, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220420 18:11:17.870" endtime="20220420 18:11:17.871"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${RANUSER}</var>
+<arg>11</arg>
+<arg>[LETTERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20220420 18:11:17.871" level="INFO">${RANUSER} = vfHWgfwkGta</msg>
+<status status="PASS" starttime="20220420 18:11:17.871" endtime="20220420 18:11:17.871"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{body}</var>
+<arg>username=${RANUSER}</arg>
+<arg>email=albertusaaa@gmail.com</arg>
+<arg>password=12345678</arg>
+<arg>urlphotoprofile=domain.com/img.jpg</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220420 18:11:17.873" level="INFO">&amp;{body} = { username=vfHWgfwkGta | email=albertusaaa@gmail.com | password=12345678 | urlphotoprofile=domain.com/img.jpg }</msg>
+<status status="PASS" starttime="20220420 18:11:17.872" endtime="20220420 18:11:17.873"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{header}</var>
+<arg>Content-Type=application/x-www-form-urlencoded</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220420 18:11:17.874" level="INFO">&amp;{header} = { Content-Type=application/x-www-form-urlencoded }</msg>
+<status status="PASS" starttime="20220420 18:11:17.873" endtime="20220420 18:11:17.874"/>
+</kw>
+<kw name="POST On Session" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/registrasi</arg>
+<arg>headers=${header}</arg>
+<arg>data=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<msg timestamp="20220420 18:11:17.879" level="INFO">POST Request : url=http://localhost:8081/registrasi 
+ path_url=/registrasi 
+ headers={'User-Agent': 'python-requests/2.26.0', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '105'} 
+ body=username=vfHWgfwkGta&amp;email=albertusaaa%40gmail.com&amp;password=12345678&amp;urlphotoprofile=domain.com%2Fimg.jpg 
+ </msg>
+<msg timestamp="20220420 18:11:17.879" level="INFO">POST Response : url=http://localhost:8081/registrasi 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json', 'Date': 'Wed, 20 Apr 2022 11:11:17 GMT', 'Content-Length': '89'} 
+ body={"status":400,"message":"Bad Request - Insert Failed ","artist":null,"regularuser":null}
+ 
+ </msg>
+<msg timestamp="20220420 18:11:17.883" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220420 18:11:17.874" endtime="20220420 18:11:17.883"/>
+</kw>
+<kw name="Get Value From Json" library="JSONLibrary">
+<var>${status}</var>
+<arg>${response.json()}</arg>
+<arg>status</arg>
+<doc>Get Value From JSON using JSONPath</doc>
+<msg timestamp="20220420 18:11:17.913" level="INFO">${status} = [400]</msg>
+<status status="PASS" starttime="20220420 18:11:17.883" endtime="20220420 18:11:17.913"/>
+</kw>
+<kw name="Get From List" library="Collections">
+<var>${intStatus}</var>
+<arg>${status}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<msg timestamp="20220420 18:11:17.914" level="INFO">${intStatus} = 400</msg>
+<status status="PASS" starttime="20220420 18:11:17.913" endtime="20220420 18:11:17.914"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${intStatus}'</arg>
+<arg>'400'</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220420 18:11:17.914" endtime="20220420 18:11:17.915"/>
+</kw>
+<doc>Test case ini untuk memastikan bahwa dalam melakukan registrasi tidak bisa dilakukan
+dengan data yang tidak lengkap</doc>
+<tag>Registrasi</tag>
+<status status="PASS" starttime="20220420 18:11:17.869" endtime="20220420 18:11:17.916"/>
+</test>
+<doc>Scenario Testing Registrasi</doc>
+<status status="PASS" starttime="20220420 18:11:17.772" endtime="20220420 18:11:17.917"/>
+</suite>
+<status status="PASS" starttime="20220420 18:11:16.320" endtime="20220420 18:11:17.918"/>
+</suite>
+<statistics>
+<total>
+<stat pass="11" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">Artist</stat>
+<stat pass="1" fail="0" skip="0">Home</stat>
+<stat pass="3" fail="0" skip="0">Login</stat>
+<stat pass="1" fail="0" skip="0">MenuLibrary</stat>
+<stat pass="2" fail="0" skip="0">Registrasi</stat>
+<stat pass="2" fail="0" skip="0">RegularUser</stat>
+<stat pass="1" fail="0" skip="0">Smoke</stat>
+</tag>
+<suite>
+<stat pass="11" fail="0" skip="0" id="s1" name="Test">Test</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1" name="Home">Test.Home</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s2" name="LibraryPage">Test.LibraryPage</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s3" name="Login">Test.Login</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s4" name="OnGoingPlaying">Test.OnGoingPlaying</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s5" name="ProfileArtist">Test.ProfileArtist</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s6" name="ProfileRegularUser">Test.ProfileRegularUser</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s7" name="Registrasi">Test.Registrasi</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

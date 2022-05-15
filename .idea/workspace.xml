@@ -20,12 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1fef3574-82fc-43ef-b366-b839fd2051db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Testing-Implementasi_Sistem.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/user_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +49,7 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.updates" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
@@ -68,6 +64,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -77,5 +74,9 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="690" y="344" width="530" height="384" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1650256445924" />
+    <state x="464" y="174" key="SettingsEditor" timestamp="1652576726776">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="464" y="174" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1652576726776" />
   </component>
 </project>
